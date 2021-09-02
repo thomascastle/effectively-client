@@ -1,24 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { IssueCreatePage } from "./pages/IssueCreatePage";
+import { IssueDetailsPage } from "./pages/IssueDetailsPage";
+import { IssueIndexPage } from "./pages/IssueIndexPage";
+import { LabelIndexPage } from "./pages/LabelIndexPage";
+import { MilestoneCreatePage } from "./pages/MilestoneCreatePage";
+import { MilestoneDetailsPage } from "./pages/MilestoneDetailsPage";
+import { MilestoneEditPage } from "./pages/MilestoneEditPage";
+import { MilestoneIndexPage } from "./pages/MilestoneIndexPage";
+import { ProjectIndexPage } from "./pages/ProjectIndexPage";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/issues/new">
+          <IssueCreatePage />
+        </Route>
+        <Route path="/issues/:number">
+          <IssueDetailsPage />
+        </Route>
+        <Route path="/issues">
+          <IssueIndexPage />
+        </Route>
+        <Route path="/labels">
+          <LabelIndexPage />
+        </Route>
+        <Route path="/milestones/new">
+          <MilestoneCreatePage />
+        </Route>
+        <Route path="/milestones/:number/edit">
+          <MilestoneEditPage />
+        </Route>
+        <Route path="/milestones/:number">
+          <MilestoneDetailsPage />
+        </Route>
+        <Route path="/milestones">
+          <MilestoneIndexPage />
+        </Route>
+        <Route path="/projects">
+          <ProjectIndexPage />
+        </Route>
+        <Route path="/">
+          <Redirect to="/issues" />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
