@@ -4,10 +4,12 @@ import { gql, useQuery } from "@apollo/client";
 export const LABELS_QUERY = gql`
   query GetLabels {
     labels {
-      color
-      description
-      id
-      name
+      nodes {
+        color
+        description
+        id
+        name
+      }
     }
   }
 `;
@@ -23,11 +25,11 @@ export function LabelList() {
     return <div>{error.message}</div>;
   }
 
-  const { labels } = data;
+  const { nodes } = data.labels;
 
   return (
     <>
-      {labels.map((label) => (
+      {nodes.map((label) => (
         <LabelListItem key={label.id} label={label} />
       ))}
     </>

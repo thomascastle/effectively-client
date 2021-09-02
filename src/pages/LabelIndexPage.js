@@ -1,3 +1,7 @@
+import { LabelCreate } from "../components/LabelCreate";
+import { LabelList } from "../components/LabelList";
+import { Layout } from "../components/Layout";
+import { gql, useQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -19,9 +23,14 @@ import {
   TagIcon,
 } from "@primer/octicons-react";
 import * as React from "react";
-import { LabelCreate } from "../components/LabelCreate";
-import { LabelList } from "../components/LabelList";
-import { Layout } from "../components/Layout";
+
+export const LABELS_COUNT_QUERY = gql`
+  query GetLabelsCount {
+    labels {
+      totalCount
+    }
+  }
+`;
 
 export function LabelIndexPage() {
   const [onFormLabelCreate, setOnFormLabelCreate] = React.useState(false);
@@ -103,8 +112,7 @@ export function LabelIndexPage() {
             }}
           >
             <Heading className="f5" as="h3">
-              <span>3 </span>
-              <span>labels</span>
+              <TotalCount />
             </Heading>
             <SelectMenu sx={{ display: "inline-block", position: "relative" }}>
               <ButtonTableList>Sort</ButtonTableList>
@@ -126,4 +134,20 @@ export function LabelIndexPage() {
       </Box>
     </Layout>
   );
+}
+
+function TotalCount() {
+  const { data, error, loading } = useQuery(LABELS_COUNT_QUERY);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  const { totalCount } = data.labels;
+
+  return <span>{totalCount} labels</span>;
 }
