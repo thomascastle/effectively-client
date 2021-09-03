@@ -1,5 +1,6 @@
 import { Layout } from "../components/Layout";
 import { MilestoneList } from "../components/MilestoneList";
+import { useQueryParams } from "../hooks";
 import { gql, useQuery } from "@apollo/client";
 import {
   Box,
@@ -12,7 +13,6 @@ import {
 } from "@primer/components";
 import { CheckIcon, MilestoneIcon, TagIcon } from "@primer/octicons-react";
 import * as React from "react";
-import { useLocation } from "react-router-dom";
 
 export const MILESTONES_COUNT_BY_STATE_QUERY = gql`
   query GetMilestonesCountByState {
@@ -24,10 +24,6 @@ export const MILESTONES_COUNT_BY_STATE_QUERY = gql`
     }
   }
 `;
-
-function useQueryParams() {
-  return new URLSearchParams(useLocation().search);
-}
 
 export function MilestoneIndexPage() {
   const queryParams = useQueryParams();
