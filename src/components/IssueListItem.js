@@ -11,6 +11,7 @@ import {
 } from "@primer/components";
 import {
   CommentIcon,
+  IssueClosedIcon,
   IssueOpenedIcon,
   MilestoneIcon,
 } from "@primer/octicons-react";
@@ -30,8 +31,14 @@ export function IssueListItem({ issue }) {
         <input type="checkbox" />
       </Box>
       <Box flexShrink={0} pl={3} pt={2}>
-        <Tooltip aria-label="Open issue" direction="e">
-          <StyledOcticon icon={IssueOpenedIcon} />
+        <Tooltip
+          aria-label={(issue.closed ? "Closed" : "Open") + " issue"}
+          direction="e"
+        >
+          <StyledOcticon
+            icon={issue.closed ? IssueClosedIcon : IssueOpenedIcon}
+            sx={{ color: issue.closed ? "text.danger" : "icon.success" }}
+          />
         </Tooltip>
       </Box>
       <Box flex="auto" minWidth="0" p={2} pr={[1, 2, 2]}>
@@ -65,21 +72,57 @@ export function IssueListItem({ issue }) {
           className="text-small"
           sx={{ display: "flex", mt: 1, color: "text.secondary" }}
         >
-          <span className="opened-by">
-            #{issue.number} opened{" "}
-            <time
-              dateTime={issue.createdAt}
-              title="Jul 31, 2021, 2:09 PM GMT+6:30"
-            >
-              {formatDistance(new Date(issue.createdAt), new Date(), {
-                addSuffix: true,
-              })}
-            </time>{" "}
-            by{" "}
-            <Link href="/issues?q=author%Athomascastle">
-              {issue.createdBy.username}
-            </Link>
-          </span>
+          {issue.closed ? (
+            <span className="closed-at">
+              #{issue.number} by{" "}
+              <Link
+                href="/issues?q=author%Athomascastle"
+                sx={{
+                  color: "inherit",
+                  ":hover": {
+                    color: "text.link",
+                    textDecoration: "none",
+                  },
+                }}
+              >
+                {issue.createdBy.username}
+              </Link>{" "}
+              was closed{" "}
+              <time
+                dateTime={issue.closedAt}
+                title={new Date(issue.closedAt).toString()}
+              >
+                {formatDistance(new Date(issue.closedAt), new Date(), {
+                  addSuffix: true,
+                })}
+              </time>
+            </span>
+          ) : (
+            <span className="opened-by">
+              #{issue.number} opened{" "}
+              <time
+                dateTime={issue.createdAt}
+                title={new Date(issue.createdAt).toString()}
+              >
+                {formatDistance(new Date(issue.createdAt), new Date(), {
+                  addSuffix: true,
+                })}
+              </time>{" "}
+              by{" "}
+              <Link
+                href="/issues?q=author%Athomascastle"
+                sx={{
+                  color: "inherit",
+                  ":hover": {
+                    color: "text.link",
+                    textDecoration: "none",
+                  },
+                }}
+              >
+                {issue.createdBy.username}
+              </Link>
+            </span>
+          )}
           {issue.milestone && (
             <span className="issue-milestone">
               <Link>

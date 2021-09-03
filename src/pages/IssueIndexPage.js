@@ -1,3 +1,7 @@
+import { IssueList } from "../components/IssueList";
+import { Layout } from "../components/Layout";
+import { useQueryParams } from "../hooks";
+import { gql, useQuery } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,
@@ -18,10 +22,22 @@ import {
   SearchIcon,
   TagIcon,
 } from "@primer/octicons-react";
-import { IssueList } from "../components/IssueList";
-import { Layout } from "../components/Layout";
+
+export const ISSUES_COUNT_BY_STATE_QUERY = gql`
+  query GetIssuesCountByState {
+    closed: issues(states: CLOSED) {
+      totalCount
+    }
+    open: issues(states: OPEN) {
+      totalCount
+    }
+  }
+`;
 
 export function IssueIndexPage() {
+  const queryParams = useQueryParams();
+  const q = queryParams.get("q");
+
   return (
     <Layout>
       <Box
@@ -102,16 +118,7 @@ export function IssueIndexPage() {
               <input type="checkbox" />
             </Box>
             <Box display="flex" flex="auto" minWidth="0">
-              <Box flex="auto">
-                <Link href="/?q=eafe">
-                  <StyledOcticon icon={IssueOpenedIcon} mr="4px" />
-                  Open
-                </Link>
-                <Link href="/?q=eefeef" ml="10px">
-                  <StyledOcticon icon={CheckIcon} mr="4px" />
-                  Closed
-                </Link>
-              </Box>
+              <CountByStateNav state={q} />
               <Box
                 display="flex"
                 flex="auto"
@@ -221,7 +228,7 @@ export function IssueIndexPage() {
             </Box>
           </Box>
           <Box className="list">
-            <IssueList />
+            <IssueList filter={{ state: q }} />
           </Box>
         </Box>
       </Box>
@@ -231,5 +238,57 @@ export function IssueIndexPage() {
         justifyContent={["center"]}
       ></Box>
     </Layout>
+  );
+}
+
+function CountByStateNav({ state }) {
+  const { data, error, loading } = useQuery(ISSUES_COUNT_BY_STATE_QUERY);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  const { totalCount: countClosed } = data.closed;
+  const { totalCount: countOpen } = data.open;
+
+  return (
+    <Box flex="auto">
+      <Link
+        href="/issues?q=is%3Aopen"
+        sx={{
+          color:
+            !state || state === "is:open" ? "text.primary" : "text.secondary",
+          fontWeight: !state || state === "is:open" ? 600 : 400,
+          ":hover": {
+            color: "text.primary",
+            textDecoration: "none",
+          },
+        }}
+      >
+        <span>
+          <StyledOcticon icon={IssueOpenedIcon} mr="4px" /> {countOpen} Open
+        </span>
+      </Link>
+      <Link
+        href="/issues?q=is%3Aclosed"
+        sx={{
+          color: state === "is:closed" ? "text.primary" : "text.secondary",
+          fontWeight: state === "is:closed" ? 600 : 400,
+          ml: "10px",
+          ":hover": {
+            color: "text.primary",
+            textDecoration: "none",
+          },
+        }}
+      >
+        <span>
+          <StyledOcticon icon={CheckIcon} mr="4px" /> {countClosed} Closed
+        </span>
+      </Link>
+    </Box>
   );
 }
