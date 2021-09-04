@@ -1,6 +1,7 @@
 import { IssueList } from "../components/IssueList";
 import { Layout } from "../components/Layout";
 import { useQueryParams } from "../hooks";
+import { LABELS_COUNT_QUERY } from "./LabelIndexPage";
 import { gql, useQuery } from "@apollo/client";
 import {
   Box,
@@ -34,6 +35,14 @@ export const ISSUES_COUNT_BY_STATE_QUERY = gql`
   }
 `;
 
+export const MILESTONES_OPEN_COUNT_QUERY = gql`
+  query GetMilestonesOpenCount {
+    milestones(states: OPEN) {
+      totalCount
+    }
+  }
+`;
+
 export function IssueIndexPage() {
   const queryParams = useQueryParams();
   const q = queryParams.get("q");
@@ -52,10 +61,9 @@ export function IssueIndexPage() {
             display: "flex",
             flex: "auto",
             my: [4, 3, 0],
-            width: "100%",
           }}
         >
-          <FilteredSearch sx={{ width: "100%" }}>
+          <FilteredSearch sx={{ flexGrow: 1 }}>
             <Dropdown>
               <Dropdown.Button>Filters</Dropdown.Button>
               <Dropdown.Menu direction="se" sx={{ width: "auto" }}>
@@ -71,22 +79,7 @@ export function IssueIndexPage() {
               sx={{ bg: "bg.secondary", width: "100%" }}
             />
           </FilteredSearch>
-          <Box sx={{ display: ["none", "none", "flex"], ml: 2, pl: 2 }}>
-            <SubNav>
-              <SubNav.Links>
-                <SubNav.Link href="/labels">
-                  <StyledOcticon icon={TagIcon} />
-                  labels
-                  <CounterLabel>3</CounterLabel>
-                </SubNav.Link>
-                <SubNav.Link href="/milestones">
-                  <StyledOcticon icon={MilestoneIcon} />
-                  milestones
-                  <CounterLabel>1</CounterLabel>
-                </SubNav.Link>
-              </SubNav.Links>
-            </SubNav>
-          </Box>
+          <SubNavWithCount />
         </Box>
         <Box display="flex" justifyContent="space-between" ml={3} width="auto">
           <ButtonPrimary as="a" href="/issues/new">
@@ -289,6 +282,52 @@ function CountByStateNav({ state }) {
           <StyledOcticon icon={CheckIcon} mr="4px" /> {countClosed} Closed
         </span>
       </Link>
+    </Box>
+  );
+}
+
+function SubNavWithCount() {
+  // TODO Combine the queries
+  const { data, error, loading } = useQuery(LABELS_COUNT_QUERY);
+  const {
+    data: dataMilestones,
+    error: errorMilestones,
+    loading: loadingMilestones,
+  } = useQuery(MILESTONES_OPEN_COUNT_QUERY);
+
+  if (loading || loadingMilestones) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || errorMilestones) {
+    return (
+      <div>
+        {error.message} {errorMilestones.message}
+      </div>
+    );
+  }
+
+  const { totalCount } = data.labels;
+  const { totalCount: totalCountMilestones } = dataMilestones.milestones;
+
+  return (
+    <Box sx={{ display: ["none", "none", "flex"], ml: 2, pl: 2 }}>
+      <SubNav>
+        <SubNav.Links>
+          <SubNav.Link href="/labels">
+            <span>
+              <StyledOcticon icon={TagIcon} /> labels{" "}
+              <CounterLabel>{totalCount}</CounterLabel>
+            </span>
+          </SubNav.Link>
+          <SubNav.Link href="/milestones">
+            <span>
+              <StyledOcticon icon={MilestoneIcon} /> milestones{" "}
+              <CounterLabel>{totalCountMilestones}</CounterLabel>
+            </span>
+          </SubNav.Link>
+        </SubNav.Links>
+      </SubNav>
     </Box>
   );
 }
