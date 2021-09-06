@@ -1,3 +1,5 @@
+import { LabelEdit } from "./LabelEdit";
+import { LABELS_PAGINATED_QUERY } from "./LabelListContainer";
 import { gql, useMutation } from "@apollo/client";
 import {
   Box,
@@ -8,8 +10,6 @@ import {
   Text,
 } from "@primer/components";
 import * as React from "react";
-import { LabelEdit } from "./LabelEdit";
-import { LABELS_QUERY } from "./LabelList";
 
 export const LABELS_DELETE_MUTATION = gql`
   mutation DeleteLabel($deleteLabelId: ID!) {
@@ -29,7 +29,7 @@ export function LabelListItem({ label }) {
   };
 
   const [deleteLabel] = useMutation(LABELS_DELETE_MUTATION, {
-    refetchQueries: [LABELS_QUERY],
+    refetchQueries: [LABELS_PAGINATED_QUERY],
     variables: {
       deleteLabelId: label.id,
     },
