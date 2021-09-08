@@ -329,10 +329,10 @@ export function IssueDetails({ issue }) {
             }}
           >
             <StateLabel
-              status={issue.status === "open" ? "issueOpened" : "issueClosed"}
+              status={issue.state === "OPEN" ? "issueOpened" : "issueClosed"}
               sx={{ mr: 2 }}
             >
-              {issue.status === "open" ? "Open" : "Closed"}
+              {issue.state === "OPEN" ? "Open" : "Closed"}
             </StateLabel>
           </Box>
           <Box sx={{ flex: "auto", minWidth: 0, mb: 2 }}>

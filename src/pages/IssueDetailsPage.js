@@ -1,7 +1,7 @@
 import { IssueDetails } from "../components/IssueDetails";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
 import { Layout } from "../components/Layout";
+import { gql, useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
 export const ISSUE_BY_NUMBER_QUERY = gql`
   query getByNumber($issueNumber: Int!) {
@@ -28,7 +28,7 @@ export const ISSUE_BY_NUMBER_QUERY = gql`
         title
       }
       number
-      status
+      state
       title
     }
   }
