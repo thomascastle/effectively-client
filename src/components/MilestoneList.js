@@ -1,6 +1,6 @@
 import { Blankslate } from "./Blankslate";
 import { MilestoneListItem } from "./MilestoneListItem";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const MILESTONES_QUERY = gql`
   query GetMilestones($milestonesStates: [MilestoneState!]) {
@@ -20,33 +20,11 @@ export const MILESTONES_QUERY = gql`
   }
 `;
 
-export function MilestoneList({ filter }) {
-  const { state } = filter;
-  const { data, error, loading } = useQuery(MILESTONES_QUERY, {
-    variables: {
-      milestonesStates: state ? state.toUpperCase() : "OPEN",
-    },
-  });
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <div>{error.message}</div>
-        <div>Refine your search query parameters</div>
-      </div>
-    );
-  }
-
-  const { nodes } = data.milestones;
-
+export function MilestoneList({ milestones }) {
   return (
     <>
-      {nodes.length > 0 ? (
-        nodes.map((milestone) => (
+      {milestones.length > 0 ? (
+        milestones.map((milestone) => (
           <MilestoneListItem key={milestone.id} milestone={milestone} />
         ))
       ) : (
