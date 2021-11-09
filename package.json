@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.10",
-    "@primer/components": "^28.4.0",
+    "@primer/components": "^31.1.0",
     "@primer/octicons-react": "^15.0.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -15,7 +15,7 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.1",
     "react-scripts": "4.0.3",
-    "styled-components": "^5.3.1",
+    "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -41,5 +41,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-primer-react": "^0.6.1",
+    "eslint-plugin-react": "^7.26.1"
   }
 }

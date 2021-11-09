@@ -22,6 +22,13 @@ ul {
   width: 0;
 }
 
+.dropdown-divider {
+  border-top: 1px solid #d0d7de;
+  display: block;
+  height: 0;
+  margin: 8px 0;
+}
+
 .f5 {
   font-size: 14px !important;
 }
