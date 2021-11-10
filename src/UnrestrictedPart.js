@@ -27,11 +27,20 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
+const SIGNUP_MUTATION = gql`
+  mutation SignUp($input: SignUpInput) {
+    signup(input: $input) {
+      token
+    }
+  }
+`;
+
 export function UnrestrictedPart() {
   return (
     <Router>
       <Switch>
-        <Route path="/login" component={Login} />
+        <Route path="/login" component={LogIn} />
+        <Route path="/signup" component={SignUp} />
         <Route path="/">
           <Redirect to="/login" />
         </Route>
@@ -40,7 +49,7 @@ export function UnrestrictedPart() {
   );
 }
 
-function Login() {
+function LogIn() {
   const { updateToken } = useAuth();
   const history = useHistory();
   const [formData, setFormData] = React.useState({
@@ -150,6 +159,134 @@ function Login() {
               </FormGroup>
               <ButtonPrimary sx={{ mt: 20, width: "100%" }} type="submit">
                 Sign in
+              </ButtonPrimary>
+            </form>
+          </Box>
+        </Box>
+      </main>
+    </>
+  );
+}
+
+function SignUp() {
+  const { updateToken } = useAuth();
+  const history = useHistory();
+  const [formData, setFormData] = React.useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+
+  const [signup, { client }] = useMutation(SIGNUP_MUTATION, {
+    onCompleted: ({ signup }) => {
+      localStorage.setItem("token", signup.token);
+      updateToken(signup.token);
+
+      client.clearStore();
+
+      history.push("/");
+    },
+    variables: {
+      input: {
+        email: formData.email,
+        password: formData.password,
+        username: formData.username,
+      },
+    },
+  });
+
+  const handleFormSubmitted = async (e) => {
+    e.preventDefault();
+
+    await signup();
+  };
+
+  return (
+    <>
+      <Box sx={{ position: "relative" }}>
+        <Box
+          sx={{
+            backgroundColor: "transparent",
+            borderBottom: 0,
+            pb: 4,
+            pt: 5,
+            width: "100%",
+          }}
+        >
+          <Box sx={{ mx: "auto", textAlign: "center", width: "100%" }}>
+            <Link href="/" sx={{ color: "fg.default" }}>
+              <StyledOcticon icon={MarkGithubIcon} size={48} />
+            </Link>
+          </Box>
+        </Box>
+      </Box>
+      <main>
+        <Box sx={{ mx: "auto", my: 0, px: 3, width: 340 }}>
+          <Box
+            sx={{
+              backgroundColor: "transparent",
+              border: 0,
+              color: "fg.default",
+              m: 0,
+              mb: 15,
+              p: 0,
+              textShadow: "none",
+            }}
+          >
+            <Heading as="h1" sx={{ fontSize: 24, fontWeight: 300 }}>
+              Welcome to GitHub!
+              <br />
+              Let's begin the adventure
+            </Heading>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: "canvas.subtle",
+              borderRadius: 6,
+              borderColor: "border.muted",
+              borderStyle: "solid",
+              borderWidth: 1,
+              fontSize: 14,
+              mt: 3,
+              p: 20,
+            }}
+          >
+            <form method="post" onSubmit={handleFormSubmitted}>
+              <FormGroup sx={{ mt: 0 }}>
+                <FormGroup.Label>E-mail address</FormGroup.Label>
+                <TextInput
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                  }}
+                  sx={{ width: "100%" }}
+                  type="email"
+                  value={formData.email}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormGroup.Label>Password</FormGroup.Label>
+                <TextInput
+                  onChange={(e) => {
+                    setFormData({ ...formData, password: e.target.value });
+                  }}
+                  sx={{ width: "100%" }}
+                  type="password"
+                  value={formData.password}
+                />
+              </FormGroup>
+              <FormGroup sx={{ mb: 0 }}>
+                <FormGroup.Label>Username</FormGroup.Label>
+                <TextInput
+                  onChange={(e) => {
+                    setFormData({ ...formData, username: e.target.value });
+                  }}
+                  sx={{ width: "100%" }}
+                  type="text"
+                  value={formData.username}
+                />
+              </FormGroup>
+              <ButtonPrimary sx={{ mt: 20, width: "100%" }} type="submit">
+                Create account
               </ButtonPrimary>
             </form>
           </Box>
