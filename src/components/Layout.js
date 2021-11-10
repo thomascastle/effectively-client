@@ -116,10 +116,10 @@ export function Layout({ children }) {
       >
         <Box
           sx={{
-            borderTopColor: "border.primary",
+            borderTopColor: "border.default",
             borderTopStyle: "solid",
             borderTopWidth: "1px",
-            color: "text.secondary",
+            color: "fg.muted",
             display: "flex",
             flexDirection: [null, null, null, "row"],
             flexWrap: ["wrap", null, null, "nowrap"],

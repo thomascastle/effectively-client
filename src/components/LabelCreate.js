@@ -105,8 +105,9 @@ export function LabelCreate({ on, onCancel: cancel }) {
     <Box
       sx={{
         backgroundColor: "bg.tertiary",
-        border: "1px solid",
-        borderColor: "border.primary",
+        borderColor: "border.default",
+        borderStyle: "solid",
+        borderWidth: "1px",
         borderRadius: 2,
         display: on ? "block" : "none",
         mb: 3,

@@ -90,7 +90,7 @@ export function MilestoneListItem({ milestone }) {
   return (
     <Box
       sx={{
-        borderTopColor: "border.primary",
+        borderTopColor: "border.default",
         borderTopStyle: "solid",
         borderTopWidth: "1px",
         display: "flex",
@@ -115,7 +115,7 @@ export function MilestoneListItem({ milestone }) {
         >
           <Link
             href={"/milestones/" + milestone.number}
-            sx={{ color: "text.primary", ":hover": { color: "text.link" } }}
+            sx={{ color: "fg.default", ":hover": { color: "accent.fg" } }}
           >
             {milestone.title}
           </Link>
@@ -259,7 +259,7 @@ export function MilestoneListItem({ milestone }) {
                 background: "transparent",
                 border: 0,
                 borderBottom: "1px solid",
-                borderBottomColor: "border.secondary",
+                borderBottomColor: "border.muted",
                 height: 0,
                 mx: 0,
                 overflow: "hidden",

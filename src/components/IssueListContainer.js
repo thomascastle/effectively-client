@@ -49,6 +49,8 @@ export const ISSUES_QUERY = gql`
           name
         }
         milestone {
+          id
+          number
           title
         }
         number
@@ -146,7 +148,7 @@ export function IssueListContainer({ after, before, filter }) {
       </Box>
       <Box>
         <Box
-          borderColor="border.primary"
+          borderColor="border.default"
           borderRadius={6}
           borderStyle="solid"
           borderWidth="1px"
@@ -154,13 +156,13 @@ export function IssueListContainer({ after, before, filter }) {
         >
           <Box
             className="Box-header"
-            display="flex"
-            justifyContent="space-between"
-            p={3}
             sx={{
-              backgroundColor: "bg.tertiary",
+              backgroundColor: "canvas.subtle",
               borderTopLeftRadius: 6,
               borderTopRightRadius: 6,
+              display: "flex",
+              justifyContent: "space-between",
+              p: 3,
             }}
           >
             <Box mr={3}>
@@ -310,7 +312,7 @@ export function IssueListContainer({ after, before, filter }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}
@@ -357,7 +359,7 @@ export function IssueListContainer({ after, before, filter }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}
@@ -410,11 +412,10 @@ function CountByStateNav({ state }) {
       <Link
         href="/issues?q=is%3Aopen"
         sx={{
-          color:
-            !state || state === "is:open" ? "text.primary" : "text.secondary",
+          color: !state || state === "is:open" ? "fg.default" : "fg.muted",
           fontWeight: !state || state === "is:open" ? 600 : 400,
           ":hover": {
-            color: "text.primary",
+            color: "fg.default",
             textDecoration: "none",
           },
         }}
@@ -426,11 +427,11 @@ function CountByStateNav({ state }) {
       <Link
         href="/issues?q=is%3Aclosed"
         sx={{
-          color: state === "is:closed" ? "text.primary" : "text.secondary",
+          color: state === "is:closed" ? "fg.default" : "fg.muted",
           fontWeight: state === "is:closed" ? 600 : 400,
           ml: "10px",
           ":hover": {
-            color: "text.primary",
+            color: "fg.default",
             textDecoration: "none",
           },
         }}

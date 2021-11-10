@@ -94,7 +94,7 @@ export function LabelListContainer({ after, before }) {
             placeholder="Search all labels"
             sx={{
               backgroundColor: "bg.secondary",
-              color: "text.secondary",
+              color: "fg.muted",
               width: ["100%", "100%", "50%", "320px"],
             }}
           />
@@ -116,7 +116,7 @@ export function LabelListContainer({ after, before }) {
       )}
       <Box
         sx={{
-          borderColor: "border.primary",
+          borderColor: "border.default",
           borderRadius: 6,
           borderStyle: "solid",
           borderWidth: "1px",
@@ -177,7 +177,7 @@ export function LabelListContainer({ after, before }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}
@@ -219,7 +219,7 @@ export function LabelListContainer({ after, before }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}

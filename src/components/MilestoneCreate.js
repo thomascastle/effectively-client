@@ -47,7 +47,7 @@ export function MilestoneCreate() {
       <Box
         sx={{
           borderBottom: "1px solid",
-          borderBottomColor: "border.secondary",
+          borderBottomColor: "border.muted",
           display: "flex",
           flexFlow: "row wrap",
           mb: 3,
@@ -66,7 +66,7 @@ export function MilestoneCreate() {
         </Heading>
         <Box
           sx={{
-            color: "text.secondary",
+            color: "fg.muted",
             flex: "1 100%",
             fontSize: "14px",
             mb: 3,
@@ -133,7 +133,7 @@ export function MilestoneCreate() {
             background: "transparent",
             border: 0,
             borderBottom: "1px solid",
-            borderBottomColor: "border.secondary",
+            borderBottomColor: "border.muted",
             height: 0,
             mx: 0,
             my: "15px",

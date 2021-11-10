@@ -110,7 +110,7 @@ function SelectorTarget({ onModalClosed }) {
         m: "-4px 0 4px",
         p: "4px 0",
         ":hover": {
-          color: "text.link",
+          color: "accent.fg",
           cursor: "pointer",
         },
       }}

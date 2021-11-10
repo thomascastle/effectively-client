@@ -5,8 +5,9 @@ export function Blankslate() {
   return (
     <Box
       sx={{
-        borderTop: "1px solid",
-        borderTopColor: "border.primary",
+        borderTopColor: "border.default",
+        borderTopStyle: "solid",
+        borderTopWidth: "1px",
         p: 5,
         position: "relative",
         textAlign: "center",
@@ -19,7 +20,7 @@ export function Blankslate() {
       />
       <Heading
         as="h3"
-        sx={{ color: "text.primary", fontSize: "24px", mb: 1, mt: 3, mx: 0 }}
+        sx={{ color: "fg.default", fontSize: "24px", mb: 1, mt: 3, mx: 0 }}
       >
         We couldn't find anything!
       </Heading>

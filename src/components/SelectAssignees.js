@@ -75,7 +75,7 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
                   setAssignees([]);
                 }}
               >
-                <Text as="span" sx={{ color: "text.primary" }}>
+                <Text as="span" sx={{ color: "fg.default" }}>
                   Clear assignees
                 </Text>
               </SelectMenu.Item>
@@ -95,7 +95,7 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
                   <Text as="span" sx={{ fontSize: "14px", fontWeight: 600 }}>
                     {u.username}
                   </Text>{" "}
-                  <Text as="span" sx={{ color: "text.secondary" }}>
+                  <Text as="span" sx={{ color: "fg.muted" }}>
                     {u.name}
                   </Text>
                 </Text>
@@ -120,9 +120,9 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
                 setIsOpen(true);
               }}
               sx={{
-                color: "text.secondary",
+                color: "fg.muted",
                 ":hover": {
-                  color: "text.link",
+                  color: "accent.fg",
                   textDecoration: "none",
                 },
               }}
@@ -173,7 +173,7 @@ function SelectorTarget({ onModalClosed }) {
         m: "-4px 0 4px",
         p: "4px 0",
         ":hover": {
-          color: "text.link",
+          color: "accent.fg",
           cursor: "pointer",
         },
       }}

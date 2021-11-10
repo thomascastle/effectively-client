@@ -20,7 +20,7 @@ import { formatDistance } from "date-fns";
 export function IssueListItem({ issue }) {
   return (
     <Box
-      borderTopColor="border.secondary"
+      borderTopColor="border.muted"
       borderTopStyle="solid"
       borderTopWidth="1px"
       display="flex"
@@ -37,7 +37,7 @@ export function IssueListItem({ issue }) {
         >
           <StyledOcticon
             icon={issue.closed ? IssueClosedIcon : IssueOpenedIcon}
-            sx={{ color: issue.closed ? "text.danger" : "icon.success" }}
+            sx={{ color: issue.closed ? "done.fg" : "success.fg" }}
           />
         </Tooltip>
       </Box>
@@ -46,8 +46,8 @@ export function IssueListItem({ issue }) {
           className="h4 v-align-middle"
           href={"/issues/" + issue.number}
           sx={{
-            color: "text.primary",
-            ":hover": { color: "text.link", textDecoration: "none" },
+            color: "fg.default",
+            ":hover": { color: "accent.fg", textDecoration: "none" },
           }}
         >
           {issue.title}
@@ -70,7 +70,7 @@ export function IssueListItem({ issue }) {
         )}
         <Box
           className="text-small"
-          sx={{ display: "flex", mt: 1, color: "text.secondary" }}
+          sx={{ display: "flex", mt: 1, color: "fg.muted" }}
         >
           {issue.closed ? (
             <span className="closed-at">
@@ -80,7 +80,7 @@ export function IssueListItem({ issue }) {
                 sx={{
                   color: "inherit",
                   ":hover": {
-                    color: "text.link",
+                    color: "accent.fg",
                     textDecoration: "none",
                   },
                 }}
@@ -114,7 +114,7 @@ export function IssueListItem({ issue }) {
                 sx={{
                   color: "inherit",
                   ":hover": {
-                    color: "text.link",
+                    color: "accent.fg",
                     textDecoration: "none",
                   },
                 }}
@@ -124,12 +124,24 @@ export function IssueListItem({ issue }) {
             </span>
           )}
           {issue.milestone && (
-            <span className="issue-milestone">
-              <Link>
+            <Text
+              className="issue-milestone"
+              sx={{ display: ["none", null, "inline"], maxWidth: 240, ml: 2 }}
+            >
+              <Link
+                href={"/milestones/" + issue.milestone.number}
+                sx={{
+                  color: "fg.muted",
+                  ":hover": {
+                    color: "accent.fg",
+                    textDecoration: "none",
+                  },
+                }}
+              >
                 <StyledOcticon icon={MilestoneIcon} />{" "}
                 <span className="truncate-target">{issue.milestone.title}</span>
               </Link>
-            </span>
+            </Text>
           )}
         </Box>
       </Box>
@@ -165,7 +177,7 @@ export function IssueListItem({ issue }) {
           )}
         </Box>
         <Box sx={{ flex: 1, flexShrink: 0, ml: 2 }}>
-          <Link sx={{ color: "text.secondary" }}>
+          <Link sx={{ color: "fg.muted" }}>
             <StyledOcticon icon={CommentIcon} verticalAlign="middle" />{" "}
             <Text as="span" sx={{ fontSize: "12px", fontWeight: 600 }}>
               1

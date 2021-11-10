@@ -56,7 +56,7 @@ export function SelectMilestone({ initial, onChange }) {
             m: "-4px 0 4px",
             p: "4px 0",
             ":hover": {
-              color: "text.link",
+              color: "accent.fg",
               cursor: "pointer",
             },
           }}
@@ -98,7 +98,7 @@ export function SelectMilestone({ initial, onChange }) {
                   >
                     {m.title}
                   </Text>
-                  <Text as="p" sx={{ color: "text.secondary", my: 0 }}>
+                  <Text as="p" sx={{ color: "fg.muted", my: 0 }}>
                     {m.dueOn ? (
                       <>
                         <StyledOcticon icon={CalendarIcon} /> Due on{" "}
@@ -125,7 +125,7 @@ export function SelectMilestone({ initial, onChange }) {
           <Link
             href="/somewhere"
             sx={{
-              color: "text.secondary",
+              color: "fg.muted",
               display: "block",
               fontWeight: 600,
               mt: 1,

@@ -111,7 +111,7 @@ export function MilestoneEdit({ milestone }) {
           background: "transparent",
           border: 0,
           borderBottom: "1px solid",
-          borderBottomColor: "border.secondary",
+          borderBottomColor: "border.muted",
           height: 0,
           mx: 0,
           my: "15px",

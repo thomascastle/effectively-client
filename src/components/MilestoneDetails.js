@@ -32,7 +32,7 @@ export function MilestoneDetails({ milestone }) {
         </Heading>
         <Box sx={{ width: "75%" }}>
           <ProgressBar barSize="large" sx={{ mb: 2, mt: 1, width: "420px" }} />
-          <Text as="span" sx={{ color: "text.primary", mr: 3 }}>
+          <Text as="span" sx={{ color: "fg.default", mr: 3 }}>
             {milestone.dueOn ? (
               <>
                 <StyledOcticon icon={CalendarIcon} /> Due on{" "}
@@ -44,17 +44,17 @@ export function MilestoneDetails({ milestone }) {
               "No due date"
             )}
           </Text>
-          <Text as="span" sx={{ color: "text.primary" }}>
+          <Text as="span" sx={{ color: "fg.default" }}>
             <strong>0%</strong> complete
           </Text>
-          <Box sx={{ color: "text.secondary", mt: "5px" }}>
+          <Box sx={{ color: "fg.muted", mt: "5px" }}>
             <Text>{milestone.description}</Text>
           </Box>
         </Box>
       </Box>
       <Box
         sx={{
-          borderColor: "border.primary",
+          borderColor: "border.default",
           borderRadius: 6,
           borderStyle: "solid",
           borderWidth: "1px",
@@ -90,7 +90,7 @@ export function MilestoneDetails({ milestone }) {
         </Box>
         <Box className="Issues">
           <Box
-            borderTopColor="border.primary"
+            borderTopColor="border.default"
             borderTopStyle="solid"
             borderTopWidth="1px"
             display="flex"
@@ -107,7 +107,7 @@ export function MilestoneDetails({ milestone }) {
             <Box flex="auto" minWidth="0" p={2} pr={[1, 2, 2]}>
               <Link
                 className="h4 v-align-middle"
-                color="text.primary"
+                color="fg.default"
                 href="/issues/3"
               >
                 Title 3
@@ -115,7 +115,7 @@ export function MilestoneDetails({ milestone }) {
               <Label sx={{ ml: 1 }}>question</Label>
               <Box
                 className="text-small"
-                sx={{ display: "flex", mt: 1, color: "text.secondary" }}
+                sx={{ display: "flex", mt: 1, color: "fg.muted" }}
               >
                 <span className="opened-by">
                   #4 opened{" "}
@@ -147,7 +147,7 @@ export function MilestoneDetails({ milestone }) {
               <Box sx={{ flex: 1, flexShrink: 0, ml: 2 }}></Box>
               <Box sx={{ flex: 1, flexShrink: 0, ml: 2 }}></Box>
               <Box sx={{ flex: 1, flexShrink: 0, ml: 2 }}>
-                <Link sx={{ color: "text.secondary" }}>
+                <Link sx={{ color: "fg.muted" }}>
                   <StyledOcticon icon={CommentIcon} verticalAlign="middle" />{" "}
                   <Text as="span" sx={{ fontSize: "12px", fontWeight: 600 }}>
                     1

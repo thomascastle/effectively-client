@@ -117,9 +117,9 @@ export function IssueCreate() {
               sx={{
                 backgroundColor: "bg.canvas",
                 border: [0, null, "1px solid"],
-                borderColor: [null, null, "border.primary"],
+                borderColor: [null, null, "border.default"],
                 borderRadius: "6px",
-                color: "text.primary",
+                color: "fg.default",
                 mb: "8px",
                 position: "relative",
               }}
@@ -185,7 +185,7 @@ export function IssueCreate() {
                   >
                     <Link
                       sx={{
-                        color: "text.secondary",
+                        color: "fg.muted",
                         display: "inline-block",
                         fontSize: "12px",
                         m: 0,
@@ -210,14 +210,14 @@ export function IssueCreate() {
           sx={{ flexShrink: 0, px: [0, 2, 3], width: ["100%", null, "25%"] }}
         >
           <Box sx={{ position: "relative" }}>
-            <Box sx={{ color: "text.secondary", fontSize: "12px", pt: 3 }}>
+            <Box sx={{ color: "fg.muted", fontSize: "12px", pt: 3 }}>
               <SelectAssignees onChange={handleSelectedAssigneesChanged} />
             </Box>
             <Box
               sx={{
                 borderTop: "1px solid",
-                borderTopColor: "border.secondary",
-                color: "text.secondary",
+                borderTopColor: "border.muted",
+                color: "fg.muted",
                 fontSize: "12px",
                 mt: 3,
                 pt: 3,
@@ -228,8 +228,8 @@ export function IssueCreate() {
             <Box
               sx={{
                 borderTop: "1px solid",
-                borderTopColor: "border.secondary",
-                color: "text.secondary",
+                borderTopColor: "border.muted",
+                color: "fg.muted",
                 fontSize: "12px",
                 mt: 3,
                 pt: 3,
@@ -243,7 +243,7 @@ export function IssueCreate() {
                     m: "-4px 0 4px",
                     p: "4px 0",
                     ":hover": {
-                      color: "text.link",
+                      color: "accent.fg",
                       cursor: "pointer",
                     },
                   }}
@@ -263,8 +263,8 @@ export function IssueCreate() {
             <Box
               sx={{
                 borderTop: "1px solid",
-                borderTopColor: "border.secondary",
-                color: "text.secondary",
+                borderTopColor: "border.muted",
+                color: "fg.muted",
                 fontSize: "12px",
                 mt: 3,
                 pt: 3,
@@ -275,8 +275,8 @@ export function IssueCreate() {
             <Box
               sx={{
                 borderTop: "1px solid",
-                borderTopColor: "border.secondary",
-                color: "text.secondary",
+                borderTopColor: "border.muted",
+                color: "fg.muted",
                 fontSize: "12px",
                 mt: 3,
                 pt: 3,

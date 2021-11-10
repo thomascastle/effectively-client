@@ -121,7 +121,7 @@ export function MilestoneListContainer({ after, before, filter }) {
       </Box>
       <Box
         sx={{
-          borderColor: "border.primary",
+          borderColor: "border.default",
           borderRadius: 6,
           borderStyle: "solid",
           borderWidth: "1px",
@@ -190,7 +190,7 @@ export function MilestoneListContainer({ after, before, filter }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}
@@ -237,7 +237,7 @@ export function MilestoneListContainer({ after, before, filter }) {
                     transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
                     verticalAlign: "middle",
                     ":hover": {
-                      borderColor: "border.secondary",
+                      borderColor: "border.muted",
                       textDecoration: "none",
                     },
                   }}
@@ -290,10 +290,10 @@ function CountByStateNav({ state }) {
       <Link
         href="/milestones?state=open"
         sx={{
-          color: !state || state === "open" ? "text.primary" : "text.secondary",
+          color: !state || state === "open" ? "fg.default" : "fg.muted",
           fontWeight: !state || state === "open" ? 600 : 400,
           ":hover": {
-            color: "text.primary",
+            color: "fg.default",
             textDecoration: "none",
           },
         }}
@@ -305,11 +305,11 @@ function CountByStateNav({ state }) {
       <Link
         href="/milestones?state=closed"
         sx={{
-          color: state === "closed" ? "text.primary" : "text.secondary",
+          color: state === "closed" ? "fg.default" : "fg.muted",
           fontWeight: state === "closed" ? 600 : 400,
           ml: "10px",
           ":hover": {
-            color: "text.primary",
+            color: "fg.default",
             textDecoration: "none",
           },
         }}

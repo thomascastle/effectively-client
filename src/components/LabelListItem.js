@@ -44,7 +44,7 @@ export function LabelListItem({ label }) {
     <Box
       sx={{
         alignItems: ["center", "center", "baseline"],
-        borderTopColor: "border.primary",
+        borderTopColor: "border.default",
         borderTopStyle: "solid",
         borderTopWidth: "1px",
         display: "flex",
@@ -62,7 +62,7 @@ export function LabelListItem({ label }) {
       <Box
         className="f6"
         sx={{
-          color: "text.secondary",
+          color: "fg.muted",
           display: ["none", "none", "block"],
           pr: 3,
           width: "33.33333%",
@@ -73,7 +73,7 @@ export function LabelListItem({ label }) {
       <Box
         className="f6"
         sx={{
-          color: "text.secondary",
+          color: "fg.muted",
           display: ["none", "none", "block"],
           pr: 3,
           width: "25%",
