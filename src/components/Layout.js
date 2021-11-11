@@ -1,4 +1,5 @@
 import { useAuth } from "../context/auth";
+import { useUser } from "../context/user";
 import { ApolloConsumer } from "@apollo/client";
 import {
   Avatar,
@@ -16,6 +17,7 @@ import { useLocation } from "react-router-dom";
 export function Layout({ children }) {
   const { updateToken } = useAuth();
   const location = useLocation();
+  const { user } = useUser();
 
   const token = localStorage.getItem("token");
 
@@ -43,7 +45,7 @@ export function Layout({ children }) {
                   <Link href="/">
                     Signed in as
                     <br />
-                    <strong>username</strong>
+                    <strong>{user.username}</strong>
                   </Link>
                 </Dropdown.Item>
                 <div className="dropdown-divider"></div>
