@@ -346,7 +346,7 @@ export function IssueDetails({ issue }) {
                   ":hover": { color: "accent.fg" },
                 }}
               >
-                {issue.createdBy.username}
+                {issue.createdBy.login}
               </Link>{" "}
               opened this issue{" "}
               <time

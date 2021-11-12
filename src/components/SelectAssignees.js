@@ -19,7 +19,7 @@ export const USERS_AVAILABLE_TO_ASSIGN_QUERY = gql`
   query GetUsersAvailableToAssign {
     users {
       id
-      username
+      login
       name
     }
   }
@@ -48,7 +48,7 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
       setAssignees(assignees.filter((a) => a.id !== u.id));
     } else {
       // No entry; put the item into the list
-      setAssignees([...assignees, { id: u.id, username: u.username }]);
+      setAssignees([...assignees, { id: u.id, login: u.login }]);
     }
   };
 
@@ -93,7 +93,7 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
               >
                 <Text as="span">
                   <Text as="span" sx={{ fontSize: "14px", fontWeight: 600 }}>
-                    {u.username}
+                    {u.login}
                   </Text>{" "}
                   <Text as="span" sx={{ color: "fg.muted" }}>
                     {u.name}
@@ -107,7 +107,7 @@ export function SelectAssignees({ initial, onChange, onFinish }) {
       {assignees.length > 0 ? (
         <Box>
           {assignees.map((a) => (
-            <p key={a.id}>{a.username}</p>
+            <p key={a.id}>{a.login}</p>
           ))}
         </Box>
       ) : (

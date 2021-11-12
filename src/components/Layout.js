@@ -45,7 +45,7 @@ export function Layout({ children }) {
                   <Link href="/">
                     Signed in as
                     <br />
-                    <strong>{user.username}</strong>
+                    <strong>{user.login}</strong>
                   </Link>
                 </Dropdown.Item>
                 <div className="dropdown-divider"></div>

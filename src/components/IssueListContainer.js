@@ -37,11 +37,11 @@ export const ISSUES_QUERY = gql`
         closedAt
         assignees {
           id
-          username
+          login
         }
         createdAt
         createdBy {
-          username
+          login
         }
         id
         labels {

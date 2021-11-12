@@ -9,11 +9,11 @@ export const ISSUE_BY_NUMBER_QUERY = gql`
       assignees {
         id
         name
-        username
+        login
       }
       createdAt
       createdBy {
-        username
+        login
       }
       id
       labels {

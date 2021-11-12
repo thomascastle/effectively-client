@@ -85,7 +85,7 @@ export function IssueListItem({ issue }) {
                   },
                 }}
               >
-                {issue.createdBy.username}
+                {issue.createdBy.login}
               </Link>{" "}
               was closed{" "}
               <time
@@ -119,7 +119,7 @@ export function IssueListItem({ issue }) {
                   },
                 }}
               >
-                {issue.createdBy.username}
+                {issue.createdBy.login}
               </Link>
             </span>
           )}

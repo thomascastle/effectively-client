@@ -8,8 +8,8 @@ export const VIEWER_QUERY = gql`
     viewer {
       email
       id
+      login
       name
-      username
     }
   }
 `;
