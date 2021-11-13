@@ -1,3 +1,4 @@
+import { DashboardPage } from "./pages/DashboardPage";
 import { IssueCreatePage } from "./pages/IssueCreatePage";
 import { IssueDetailsPage } from "./pages/IssueDetailsPage";
 import { IssueIndexPage } from "./pages/IssueIndexPage";
@@ -46,7 +47,7 @@ export function RestrictedPart() {
           <ProjectIndexPage />
         </Route>
         <Route path="/">
-          <Redirect to="/issues" />
+          <DashboardPage />
         </Route>
       </Switch>
     </Router>
