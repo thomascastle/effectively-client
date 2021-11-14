@@ -8,6 +8,7 @@ import { MilestoneDetailsPage } from "./pages/MilestoneDetailsPage";
 import { MilestoneEditPage } from "./pages/MilestoneEditPage";
 import { MilestoneIndexPage } from "./pages/MilestoneIndexPage";
 import { ProjectIndexPage } from "./pages/ProjectIndexPage";
+import { RepositoryCreatePage } from "./pages/RepositoryCreatePage";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -25,7 +26,7 @@ export function RestrictedPart() {
         <Route path="/issues/:number">
           <IssueDetailsPage />
         </Route>
-        <Route path="/issues">
+        <Route path="/:login/:repositoryName/issues">
           <IssueIndexPage />
         </Route>
         <Route path="/labels">
@@ -42,6 +43,9 @@ export function RestrictedPart() {
         </Route>
         <Route path="/milestones">
           <MilestoneIndexPage />
+        </Route>
+        <Route path="/new">
+          <RepositoryCreatePage />
         </Route>
         <Route path="/projects">
           <ProjectIndexPage />
