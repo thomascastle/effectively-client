@@ -1,3 +1,4 @@
+import { Blankslate } from "../components/Blankslate";
 import { IssueList } from "../components/IssueList";
 import { LABELS_COUNT_QUERY } from "../pages/LabelIndexPage";
 import { gql, useQuery } from "@apollo/client";
@@ -25,42 +26,47 @@ import {
   TagIcon,
 } from "@primer/octicons-react";
 
-export const ISSUES_QUERY = gql`
-  query GetIssues(
+export const QUERY_REPOSITORY_ISSUES = gql`
+  query GetRepositoryIssues(
     $after: String
     $before: String
     $issuesStates: [IssueState!]
+    $name: String!
   ) {
-    issues(after: $after, before: $before, states: $issuesStates) {
-      nodes {
-        closed
-        closedAt
-        assignees {
-          id
-          login
+    viewer {
+      repository(name: $name) {
+        issues(after: $after, before: $before, states: $issuesStates) {
+          nodes {
+            closed
+            closedAt
+            assignees {
+              id
+              login
+            }
+            createdAt
+            createdBy {
+              login
+            }
+            id
+            labels {
+              id
+              name
+            }
+            milestone {
+              id
+              number
+              title
+            }
+            number
+            title
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
         }
-        createdAt
-        createdBy {
-          login
-        }
-        id
-        labels {
-          id
-          name
-        }
-        milestone {
-          id
-          number
-          title
-        }
-        number
-        title
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
       }
     }
   }
@@ -85,13 +91,20 @@ export const MILESTONES_OPEN_COUNT_QUERY = gql`
   }
 `;
 
-export function IssueListContainer({ after, before, filter }) {
+export function IssueListContainer({
+  after,
+  before,
+  filter,
+  login,
+  repositoryName,
+}) {
   const { state } = filter;
-  const { data, loading, error } = useQuery(ISSUES_QUERY, {
+  const { data, loading, error } = useQuery(QUERY_REPOSITORY_ISSUES, {
     variables: {
       after: after,
       before: before,
       issuesStates: state === "is:closed" ? "CLOSED" : "OPEN",
+      name: repositoryName,
     },
   });
 
@@ -103,7 +116,7 @@ export function IssueListContainer({ after, before, filter }) {
     return <div>{error.message}</div>;
   }
 
-  const { nodes, pageInfo } = data.issues;
+  const { nodes, pageInfo } = data.viewer.repository.issues;
 
   return (
     <Box className="list-container">
@@ -140,149 +153,166 @@ export function IssueListContainer({ after, before, filter }) {
           <SubNavWithCount />
         </Box>
         <Box display="flex" justifyContent="space-between" ml={3} width="auto">
-          <ButtonPrimary as="a" href="/issues/new">
+          <ButtonPrimary
+            as="a"
+            href={"/" + login + "/" + repositoryName + "/issues/new"}
+          >
             <Box sx={{ display: ["none", "none", "block"] }}>New issue</Box>
             <Box sx={{ display: ["block", "block", "none"] }}>New</Box>
           </ButtonPrimary>
         </Box>
       </Box>
-      <Box>
-        <Box
-          borderColor="border.default"
-          borderRadius={6}
-          borderStyle="solid"
-          borderWidth="1px"
-          mt={3}
-        >
+      {nodes.length > 0 ? (
+        <Box>
           <Box
-            className="Box-header"
-            sx={{
-              backgroundColor: "canvas.subtle",
-              borderTopLeftRadius: 6,
-              borderTopRightRadius: 6,
-              display: "flex",
-              justifyContent: "space-between",
-              p: 3,
-            }}
+            borderColor="border.default"
+            borderRadius={6}
+            borderStyle="solid"
+            borderWidth="1px"
+            mt={3}
           >
-            <Box mr={3}>
-              <input type="checkbox" />
-            </Box>
-            <Box display="flex" flex="auto" minWidth="0">
-              <CountByStateNav state={state} />
-              <Box
-                display="flex"
-                flex="auto"
-                justifyContent={["flex-start", "space-between", "flex-end"]}
-              >
-                <Box display="inline-block" position="relative">
-                  <SelectMenu display="inline-block" px={3}>
-                    <ButtonTableList>Author</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>Filter by author</SelectMenu.Header>
-                      <SelectMenu.Filter
-                        onChange={(e) => e.preventDefault()}
-                        placeholder="Filter users"
-                        value=""
-                      ></SelectMenu.Filter>
-                      <SelectMenu.List></SelectMenu.List>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
-                </Box>
-                <Box display="inline-block" position="relative">
-                  <SelectMenu display="inline-block" px={3}>
-                    <ButtonTableList>Label</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>Filter by label</SelectMenu.Header>
-                      <SelectMenu.Filter
-                        onChange={(e) => e.preventDefault()}
-                        placeholder="Filter labels"
-                        value=""
-                      ></SelectMenu.Filter>
-                      <SelectMenu.List>
-                        <SelectMenu.Item>Unlabeled</SelectMenu.Item>
-                      </SelectMenu.List>
-                      <SelectMenu.Footer>
-                        Use to exclude labels
-                      </SelectMenu.Footer>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
-                </Box>
-                <Box display="inline-block" position="relative">
-                  <SelectMenu display="inline-block" px={3}>
-                    <ButtonTableList>Projects</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>Filter by project</SelectMenu.Header>
-                      <SelectMenu.Filter
-                        onChange={(e) => e.preventDefault()}
-                        placeholder="Filter projects"
-                        value=""
-                      ></SelectMenu.Filter>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
-                </Box>
-                <Box display="inline-block" position="relative">
-                  <SelectMenu display="inline-block" px={3}>
-                    <ButtonTableList>Milestones</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>Filter by milestone</SelectMenu.Header>
-                      <SelectMenu.Filter
-                        onChange={(e) => e.preventDefault()}
-                        placeholder="Filter milestones"
-                        value=""
-                      ></SelectMenu.Filter>
-                      <SelectMenu.List>
-                        <SelectMenu.Item>
-                          Issues wit no milestone
-                        </SelectMenu.Item>
-                      </SelectMenu.List>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
-                </Box>
-                <Box display="inline-block" position="relative">
-                  <SelectMenu display="inline-block" px={3}>
-                    <ButtonTableList>Assignee</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>
-                        Filter by who's assigned
-                      </SelectMenu.Header>
-                      <SelectMenu.Filter
-                        onChange={(e) => e.preventDefault()}
-                        placeholder="Filter users"
-                        value=""
-                      ></SelectMenu.Filter>
-                      <SelectMenu.List>
-                        <SelectMenu.Item>Assigned to nobody</SelectMenu.Item>
-                      </SelectMenu.List>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
-                </Box>
-                <Box display="inline-block" position="relative">
-                  <SelectMenu pl={3} pr="0">
-                    <ButtonTableList>Sort</ButtonTableList>
-                    <SelectMenu.Modal align="right">
-                      <SelectMenu.Header>Sort by</SelectMenu.Header>
-                      <SelectMenu.List>
-                        <SelectMenu.Item>Newest</SelectMenu.Item>
-                        <SelectMenu.Item>Oldest</SelectMenu.Item>
-                        <SelectMenu.Item>Most commented</SelectMenu.Item>
-                        <SelectMenu.Item>Least commented</SelectMenu.Item>
-                        <SelectMenu.Item>Recently updated</SelectMenu.Item>
-                        <SelectMenu.Item>
-                          Least recently updated
-                        </SelectMenu.Item>
-                      </SelectMenu.List>
-                    </SelectMenu.Modal>
-                  </SelectMenu>
+            <Box
+              className="Box-header"
+              sx={{
+                backgroundColor: "canvas.subtle",
+                borderTopLeftRadius: 6,
+                borderTopRightRadius: 6,
+                display: "flex",
+                justifyContent: "space-between",
+                p: 3,
+              }}
+            >
+              <Box mr={3}>
+                <input type="checkbox" />
+              </Box>
+              <Box display="flex" flex="auto" minWidth="0">
+                <CountByStateNav state={state} />
+                <Box
+                  display="flex"
+                  flex="auto"
+                  justifyContent={["flex-start", "space-between", "flex-end"]}
+                >
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu display="inline-block" px={3}>
+                      <ButtonTableList>Author</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>Filter by author</SelectMenu.Header>
+                        <SelectMenu.Filter
+                          onChange={(e) => e.preventDefault()}
+                          placeholder="Filter users"
+                          value=""
+                        ></SelectMenu.Filter>
+                        <SelectMenu.List></SelectMenu.List>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu display="inline-block" px={3}>
+                      <ButtonTableList>Label</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>Filter by label</SelectMenu.Header>
+                        <SelectMenu.Filter
+                          onChange={(e) => e.preventDefault()}
+                          placeholder="Filter labels"
+                          value=""
+                        ></SelectMenu.Filter>
+                        <SelectMenu.List>
+                          <SelectMenu.Item>Unlabeled</SelectMenu.Item>
+                        </SelectMenu.List>
+                        <SelectMenu.Footer>
+                          Use to exclude labels
+                        </SelectMenu.Footer>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu display="inline-block" px={3}>
+                      <ButtonTableList>Projects</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>Filter by project</SelectMenu.Header>
+                        <SelectMenu.Filter
+                          onChange={(e) => e.preventDefault()}
+                          placeholder="Filter projects"
+                          value=""
+                        ></SelectMenu.Filter>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu display="inline-block" px={3}>
+                      <ButtonTableList>Milestones</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>
+                          Filter by milestone
+                        </SelectMenu.Header>
+                        <SelectMenu.Filter
+                          onChange={(e) => e.preventDefault()}
+                          placeholder="Filter milestones"
+                          value=""
+                        ></SelectMenu.Filter>
+                        <SelectMenu.List>
+                          <SelectMenu.Item>
+                            Issues wit no milestone
+                          </SelectMenu.Item>
+                        </SelectMenu.List>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu display="inline-block" px={3}>
+                      <ButtonTableList>Assignee</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>
+                          Filter by who's assigned
+                        </SelectMenu.Header>
+                        <SelectMenu.Filter
+                          onChange={(e) => e.preventDefault()}
+                          placeholder="Filter users"
+                          value=""
+                        ></SelectMenu.Filter>
+                        <SelectMenu.List>
+                          <SelectMenu.Item>Assigned to nobody</SelectMenu.Item>
+                        </SelectMenu.List>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
+                  <Box display="inline-block" position="relative">
+                    <SelectMenu pl={3} pr="0">
+                      <ButtonTableList>Sort</ButtonTableList>
+                      <SelectMenu.Modal align="right">
+                        <SelectMenu.Header>Sort by</SelectMenu.Header>
+                        <SelectMenu.List>
+                          <SelectMenu.Item>Newest</SelectMenu.Item>
+                          <SelectMenu.Item>Oldest</SelectMenu.Item>
+                          <SelectMenu.Item>Most commented</SelectMenu.Item>
+                          <SelectMenu.Item>Least commented</SelectMenu.Item>
+                          <SelectMenu.Item>Recently updated</SelectMenu.Item>
+                          <SelectMenu.Item>
+                            Least recently updated
+                          </SelectMenu.Item>
+                        </SelectMenu.List>
+                      </SelectMenu.Modal>
+                    </SelectMenu>
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-          <Box className="list">
-            <IssueList issues={nodes} />
+            <Box className="list">
+              <IssueList issues={nodes} />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      ) : (
+        <Blankslate icon={IssueOpenedIcon} title="Welcome to Issues!">
+          Issues are used to track todos, bugs, feature requests, and more. As
+          issues are created, they’ll appear here in a searchable and filterable
+          list. To get started, you should{" "}
+          <Link href={"/" + login + "/" + repositoryName + "/issues/new"}>
+            create an issue
+          </Link>
+          .
+        </Blankslate>
+      )}
       <Box className="pagination">
         {shouldDisplay(pageInfo.hasNextPage, pageInfo.hasPreviousPage) && (
           <Box sx={{ mb: 5, mt: 4, textAlign: "center" }}>
