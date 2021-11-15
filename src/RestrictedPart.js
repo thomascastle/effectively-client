@@ -29,6 +29,10 @@ export function RestrictedPart() {
         <Route path="/:login/:repositoryName/issues">
           <IssueIndexPage />
         </Route>
+        <Redirect
+          from="/:login/:repositoryName"
+          to="/:login/:repositoryName/issues"
+        />
         <Route path="/labels">
           <LabelIndexPage />
         </Route>
