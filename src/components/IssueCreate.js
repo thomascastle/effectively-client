@@ -1,7 +1,8 @@
+import { useUser } from "../context/user";
 import { SelectAssignees } from "./SelectAssignees";
 import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import {
   Avatar,
   Box,
@@ -18,18 +19,17 @@ import * as React from "react";
 import { useHistory } from "react-router-dom";
 
 export const ISSUES_CREATE_MUTATION = gql`
-  mutation CreateIssue($createIssueInput: CreateIssueInput!) {
-    createIssue(input: $createIssueInput) {
-      message
-      success
+  mutation CreateIssue($input: CreateIssueInput) {
+    createIssue(input: $input) {
       issue {
+        id
         number
       }
     }
   }
 `;
 
-export function IssueCreate() {
+export function IssueCreate({ login, repositoryId, repositoryName }) {
   const history = useHistory();
   const inputTitle = React.useRef(null);
   const [assignees, setAssignees] = React.useState([]);
@@ -38,15 +38,16 @@ export function IssueCreate() {
   const [labels, setLabels] = React.useState([]);
   const [milestone, setMilestone] = React.useState(null);
   const [shouldDisable, setShouldDisable] = React.useState(false);
+  const { user } = useUser();
 
   const [createIssue] = useMutation(ISSUES_CREATE_MUTATION, {
     variables: {
-      createIssueInput: {
+      input: {
         assigneeIds: assignees,
         body: body,
-        createdBy: "60f15ffaebd07a3fd83bb2c9", // TODO Replace the default user with current user
         labelIds: labels,
         milestoneId: milestone,
+        repositoryId: repositoryId,
         title: title,
       },
     },
@@ -55,9 +56,16 @@ export function IssueCreate() {
   const handleFormSubmitted = async (e) => {
     e.preventDefault();
 
-    const res = await createIssue();
+    const payload = await createIssue();
 
-    history.push("/issues/" + res.data.createIssue.issue.number);
+    history.push(
+      "/" +
+        login +
+        "/" +
+        repositoryName +
+        "/issues/" +
+        payload.data.createIssue.issue.number
+    );
   };
 
   const handleSelectedAssigneesChanged = (assignees) => {
@@ -198,7 +206,7 @@ export function IssueCreate() {
                       </span>
                     </Link>
                   </Box>
-                  <ButtonPrimary disabled={shouldDisable}>
+                  <ButtonPrimary disabled={shouldDisable} type="submit">
                     Submit new issue
                   </ButtonPrimary>
                 </Box>

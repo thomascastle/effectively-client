@@ -14,19 +14,40 @@ import {
 import { CalendarIcon, GearIcon, MarkdownIcon } from "@primer/octicons-react";
 import { format } from "date-fns";
 import * as React from "react";
+import { useParams } from "react-router-dom";
 
 export const MILESTONES_AVAILABLE_TO_SET_QUERY = gql`
-  query GetMilestonesAvailableToSet {
-    milestones {
-      dueOn
+  query GetMilestonesAvailableToSet(
+    $name: String!
+    $owner: String!
+    $first: Int
+  ) {
+    repository(name: $name, owner: $owner) {
       id
-      title
+      milestones(first: $first) {
+        edges {
+          node {
+            dueOn
+            id
+            title
+          }
+        }
+      }
+      name
+      nameWithOwner
     }
   }
 `;
 
 export function SelectMilestone({ initial, onChange }) {
-  const { data, error, loading } = useQuery(MILESTONES_AVAILABLE_TO_SET_QUERY);
+  const { login, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(MILESTONES_AVAILABLE_TO_SET_QUERY, {
+    variables: {
+      name: repositoryName,
+      first: 100,
+      owner: login,
+    },
+  });
   const [milestone, setMilestone] = React.useState(initial);
 
   const handleItemSelected = (e, m) => {
@@ -44,7 +65,7 @@ export function SelectMilestone({ initial, onChange }) {
 
   if (error) return <p>Error while loading data! {error.message}</p>;
 
-  const { milestones } = data;
+  const { milestones } = data.repository;
 
   return (
     <>
@@ -82,28 +103,28 @@ export function SelectMilestone({ initial, onChange }) {
                 Clear this milestone
               </SelectMenu.Item>
             )}
-            {milestones.map((m) => (
+            {milestones.edges.map((m) => (
               <SelectMenu.Item
                 as="button"
-                key={m.id}
+                key={m.node.id}
                 onClick={(e) => {
-                  handleItemSelected(e, m);
+                  handleItemSelected(e, m.node);
                 }}
-                selected={milestone && milestone.id == m.id}
+                selected={milestone && milestone.id == m.node.id}
               >
                 <Box>
                   <Text
                     as="p"
                     sx={{ fontSize: "14px", fontWeight: 600, my: 0 }}
                   >
-                    {m.title}
+                    {m.node.title}
                   </Text>
                   <Text as="p" sx={{ color: "fg.muted", my: 0 }}>
-                    {m.dueOn ? (
+                    {m.node.dueOn ? (
                       <>
                         <StyledOcticon icon={CalendarIcon} /> Due on{" "}
                         <span>
-                          {format(new Date(m.dueOn), "MMMM dd, yyyy")}
+                          {format(new Date(m.node.dueOn), "MMMM dd, yyyy")}
                         </span>
                       </>
                     ) : (
@@ -113,9 +134,16 @@ export function SelectMilestone({ initial, onChange }) {
                 </Box>
               </SelectMenu.Item>
             ))}
+            {milestones.edges.length === 0 && (
+              <Box sx={{ color: "fg.muted", cursor: "auto", p: "9px" }}>
+                <Text as="span">Nothing to show</Text>
+              </Box>
+            )}
           </SelectMenu.TabPanel>
           <SelectMenu.TabPanel tabName="Closed">
-            <Text as="span">Nothing to show</Text>
+            <Box sx={{ color: "fg.muted", cursor: "auto", p: "9px" }}>
+              <Text as="span">Nothing to show</Text>
+            </Box>
           </SelectMenu.TabPanel>
         </SelectMenu.Modal>
       </SelectMenu>

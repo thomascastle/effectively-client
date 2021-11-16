@@ -20,10 +20,10 @@ export function RestrictedPart() {
   return (
     <Router>
       <Switch>
-        <Route path="/issues/new">
+        <Route path="/:login/:repositoryName/issues/new">
           <IssueCreatePage />
         </Route>
-        <Route path="/issues/:number">
+        <Route path="/:login/:repositoryName/issues/:number">
           <IssueDetailsPage />
         </Route>
         <Route path="/:login/:repositoryName/issues">
