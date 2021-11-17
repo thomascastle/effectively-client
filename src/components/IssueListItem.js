@@ -17,7 +17,7 @@ import {
 } from "@primer/octicons-react";
 import { formatDistance } from "date-fns";
 
-export function IssueListItem({ issue }) {
+export function IssueListItem({ issue, repositoryBaseUrl }) {
   return (
     <Box
       borderTopColor="border.muted"
@@ -44,7 +44,7 @@ export function IssueListItem({ issue }) {
       <Box flex="auto" minWidth="0" p={2} pr={[1, 2, 2]}>
         <Link
           className="h4 v-align-middle"
-          href={"/issues/" + issue.number}
+          href={repositoryBaseUrl + "/issues/" + issue.number}
           sx={{
             color: "fg.default",
             ":hover": { color: "accent.fg", textDecoration: "none" },
