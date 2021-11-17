@@ -3,42 +3,46 @@ import { Layout } from "../components/Layout";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-export const ISSUE_BY_NUMBER_QUERY = gql`
-  query getByNumber($issueNumber: Int!) {
-    issue(number: $issueNumber) {
-      assignees {
+export const QUERY_ISSUE_BY_NUMBER = gql`
+  query findIssueByNumber($name: String!, $owner: String!, $number: Int!) {
+    repository(name: $name, owner: $owner) {
+      issue(number: $number) {
+        assignees {
+          id
+          name
+          login
+        }
+        createdAt
+        createdBy {
+          login
+        }
         id
-        name
-        login
-      }
-      createdAt
-      createdBy {
-        login
-      }
-      id
-      labels {
-        color
-        description
-        id
-        name
-      }
-      milestone {
-        dueOn
-        id
+        labels {
+          color
+          description
+          id
+          name
+        }
+        milestone {
+          dueOn
+          id
+          title
+        }
+        number
+        state
         title
       }
-      number
-      state
-      title
     }
   }
 `;
 
 export function IssueDetailsPage() {
-  const { number } = useParams();
-  const { data, error, loading } = useQuery(ISSUE_BY_NUMBER_QUERY, {
+  const { login, number, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(QUERY_ISSUE_BY_NUMBER, {
     variables: {
-      issueNumber: parseInt(number),
+      name: repositoryName,
+      owner: login,
+      number: parseInt(number),
     },
   });
 
@@ -50,7 +54,7 @@ export function IssueDetailsPage() {
     return <div>{error.message}</div>;
   }
 
-  const { issue } = data;
+  const { issue } = data.repository;
 
   return (
     <Layout>
