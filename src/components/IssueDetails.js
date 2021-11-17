@@ -236,7 +236,7 @@ export function IssueDetails({ issue }) {
               <Text
                 as="span"
                 sx={{
-                  color: "text.tertiary",
+                  color: "fg.muted",
                   fontSize: ["26px", null, "32px"],
                   fontWeight: 300,
                 }}
@@ -412,7 +412,7 @@ export function IssueDetails({ issue }) {
                 </Box>
                 <Box
                   sx={{
-                    color: "timeline.text",
+                    color: "fg.muted",
                     flex: "auto",
                     maxWidth: "100%",
                     minWidth: 0,
@@ -421,9 +421,10 @@ export function IssueDetails({ issue }) {
                 >
                   <Box
                     sx={{
-                      backgroundColor: "bg.primary",
-                      border: "1px solid",
-                      borderColor: "box.borderInfo",
+                      backgroundColor: "canvas.default",
+                      borderColor: "accent.muted",
+                      borderStyle: "solid",
+                      borderWidth: 1,
                       borderRadius: "6px",
                       color: "fg.default",
                       ml: -3,
@@ -433,9 +434,10 @@ export function IssueDetails({ issue }) {
                     <Box
                       sx={{
                         alignItems: "center",
-                        backgroundColor: "bg.info",
-                        borderBottom: "1px solid",
-                        borderBottomColor: "box.borderInfo",
+                        backgroundColor: "accent.subtle",
+                        borderBottomColor: "accent.muted",
+                        borderBottomStyle: "solid",
+                        borderBottomWidth: 1,
                         borderTopLeftRadius: "6px",
                         borderTopRightRadius: "6px",
                         color: "fg.muted",
@@ -451,7 +453,15 @@ export function IssueDetails({ issue }) {
                       <Box
                         sx={{ alignItems: "center", display: ["none", "flex"] }}
                       >
-                        <Label outline small sx={{ fontWeight: 500, ml: 2 }}>
+                        <Label
+                          outline
+                          small
+                          sx={{
+                            borderColor: "accent.muted",
+                            fontWeight: 500,
+                            ml: 2,
+                          }}
+                        >
                           Owner
                         </Label>
                       </Box>
@@ -492,8 +502,9 @@ export function IssueDetails({ issue }) {
                           width: "100%",
                         }}
                       >
-                        <h3>Read this</h3>
-                        <p>Placeholder. Unimplemented feature</p>
+                        <Text as="p" sx={{ color: "fg.muted" }}>
+                          <em>Placeholder. Unimplemented feature</em>
+                        </Text>
                       </Box>
                     </Box>
                   </Box>
