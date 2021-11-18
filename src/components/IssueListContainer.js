@@ -1,6 +1,6 @@
 import { Blankslate } from "../components/Blankslate";
 import { IssueList } from "../components/IssueList";
-import { LABELS_COUNT_QUERY } from "../pages/LabelIndexPage";
+import { QUERY_COUNT_LABELS_AND_OPEN_MILESTONES } from "../datasource/queries";
 import { gql, useQuery } from "@apollo/client";
 import {
   Box,
@@ -25,6 +25,7 @@ import {
   SearchIcon,
   TagIcon,
 } from "@primer/octicons-react";
+import { useParams } from "react-router-dom";
 
 export const QUERY_REPOSITORY_ISSUES = gql`
   query GetRepositoryIssues(
@@ -475,43 +476,44 @@ function CountByStateNav({ state }) {
 }
 
 function SubNavWithCount() {
-  // TODO Combine the queries
-  const { data, error, loading } = useQuery(LABELS_COUNT_QUERY);
-  const {
-    data: dataMilestones,
-    error: errorMilestones,
-    loading: loadingMilestones,
-  } = useQuery(MILESTONES_OPEN_COUNT_QUERY);
+  const { login, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(
+    QUERY_COUNT_LABELS_AND_OPEN_MILESTONES,
+    {
+      variables: {
+        name: repositoryName,
+        owner: login,
+      },
+    }
+  );
 
-  if (loading || loadingMilestones) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (error || errorMilestones) {
-    return (
-      <div>
-        {error.message} {errorMilestones.message}
-      </div>
-    );
+  if (error) {
+    return <div>{error.message}</div>;
   }
 
-  const { totalCount } = data.labels;
-  const { totalCount: totalCountMilestones } = dataMilestones.milestones;
+  const { totalCount: totalCountLabels } = data.repository.labels;
+  const { totalCount: totalCountOpenMilestones } = data.repository.milestones;
 
   return (
     <Box sx={{ display: ["none", "none", "flex"], ml: 2, pl: 2 }}>
       <SubNav>
         <SubNav.Links>
-          <SubNav.Link href="/labels">
+          <SubNav.Link href={"/" + login + "/" + repositoryName + "/labels"}>
             <span>
               <StyledOcticon icon={TagIcon} /> labels{" "}
-              <CounterLabel>{totalCount}</CounterLabel>
+              <CounterLabel>{totalCountLabels}</CounterLabel>
             </span>
           </SubNav.Link>
-          <SubNav.Link href="/milestones">
+          <SubNav.Link
+            href={"/" + login + "/" + repositoryName + "/milestones"}
+          >
             <span>
               <StyledOcticon icon={MilestoneIcon} /> milestones{" "}
-              <CounterLabel>{totalCountMilestones}</CounterLabel>
+              <CounterLabel>{totalCountOpenMilestones}</CounterLabel>
             </span>
           </SubNav.Link>
         </SubNav.Links>
