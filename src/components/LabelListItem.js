@@ -1,5 +1,4 @@
 import { LabelEdit } from "./LabelEdit";
-import { LABELS_PAGINATED_QUERY } from "./LabelListContainer";
 import { gql, useMutation } from "@apollo/client";
 import {
   Box,
@@ -29,7 +28,7 @@ export function LabelListItem({ label }) {
   };
 
   const [deleteLabel] = useMutation(LABELS_DELETE_MUTATION, {
-    refetchQueries: [LABELS_PAGINATED_QUERY],
+    refetchQueries: ["GetPaginatedLabels"],
     variables: {
       deleteLabelId: label.id,
     },

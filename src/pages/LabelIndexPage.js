@@ -1,17 +1,8 @@
+import { LabelListContainer } from "../components/LabelListContainer";
 import { Layout } from "../components/Layout";
 import { useQueryParams } from "../hooks";
 import { gql } from "@apollo/client";
 import * as React from "react";
-import { LabelListContainer } from "../components/LabelListContainer";
-
-// TODO Refector the dependent and delete this
-export const LABELS_COUNT_QUERY = gql`
-  query GetLabelsCount {
-    labels {
-      totalCount
-    }
-  }
-`;
 
 export function LabelIndexPage() {
   const queryParams = useQueryParams();
