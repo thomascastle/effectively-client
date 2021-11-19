@@ -90,12 +90,17 @@ export function LabelListContainer({ after, before }) {
       >
         <SubNav>
           <SubNav.Links>
-            <SubNav.Link href="/labels" selected>
+            <SubNav.Link
+              href={"/" + login + "/" + repositoryName + "/labels"}
+              selected
+            >
               <span>
                 <StyledOcticon icon={TagIcon} /> Labels
               </span>
             </SubNav.Link>
-            <SubNav.Link href="/milestones">
+            <SubNav.Link
+              href={"/" + login + "/" + repositoryName + "/milestones"}
+            >
               <span>
                 <StyledOcticon icon={MilestoneIcon} /> Milestones
               </span>
