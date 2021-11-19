@@ -10,11 +10,10 @@ import {
 } from "@primer/components";
 import { SyncIcon } from "@primer/octicons-react";
 import * as React from "react";
-import { LABELS_QUERY } from "./LabelList";
 
-export const LABELS_CREATE_MUTATION = gql`
-  mutation createLabel($createLabelInput: CreateLabelInput!) {
-    createLabel(input: $createLabelInput) {
+export const MUTATION_CREATE_LABELS = gql`
+  mutation CreateLabel($input: CreateLabelInput!) {
+    createLabel(input: $input) {
       success
       message
       label {
@@ -27,7 +26,7 @@ export const LABELS_CREATE_MUTATION = gql`
   }
 `;
 
-export function LabelCreate({ on, onCancel: cancel }) {
+export function LabelCreate({ on, onCancel: cancel, repositoryId }) {
   const [name, setName] = React.useState("");
   const [previewName, setPreviewName] = React.useState("Label preview");
   const [description, setDescription] = React.useState("");
@@ -58,30 +57,32 @@ export function LabelCreate({ on, onCancel: cancel }) {
   };
 
   const [createLabel, { data, error, loading }] = useMutation(
-    LABELS_CREATE_MUTATION,
+    MUTATION_CREATE_LABELS,
     {
       update: (cache, { data: { createLabel } }) => {
         cache.modify({
+          id: "Repository:" + repositoryId,
           fields: {
             labels(existingLabels = []) {
-              const newLabelRef = cache.writeFragment({
-                data: createLabel.label,
-                fragment: gql`
-                  fragment NewLabel on Label {
-                    id
-                  }
-                `,
-              });
-              return [newLabelRef, ...existingLabels];
+              // const newLabelRef = cache.writeFragment({
+              //   data: createLabel.label,
+              //   fragment: gql`
+              //     fragment NewLabel on Label {
+              //       id
+              //     }
+              //   `,
+              // });
+              // return [newLabelRef, ...existingLabels];
             },
           },
         });
       },
       variables: {
-        createLabelInput: {
-          name: name,
-          description: description,
+        input: {
           color: color,
+          description: description,
+          name: name,
+          repositoryId,
         },
       },
     }
@@ -134,6 +135,7 @@ export function LabelCreate({ on, onCancel: cancel }) {
         >
           <FormGroup.Label htmlFor="label-name">Label name</FormGroup.Label>
           <TextInput
+            autoFocus
             onChange={updateName}
             placeholder="Label name"
             sx={{ width: "100%" }}

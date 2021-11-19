@@ -32,6 +32,7 @@ export const QUERY_PAGINATED_LABELS = gql`
     $owner: String!
   ) {
     repository(name: $name, owner: $owner) {
+      id
       labels(after: $after, before: $before) {
         nodes {
           color
@@ -71,6 +72,7 @@ export function LabelListContainer({ after, before }) {
     return <div>{error.message}</div>;
   }
 
+  const { id: repositoryId } = data.repository;
   const { nodes, pageInfo, totalCount } = data.repository.labels;
 
   const displayFormLabelCreate = () => {
@@ -124,7 +126,11 @@ export function LabelListContainer({ after, before }) {
         </Box>
       </Box>
       {onFormLabelCreate && (
-        <LabelCreate on={onFormLabelCreate} onCancel={displayFormLabelCreate} />
+        <LabelCreate
+          on={onFormLabelCreate}
+          onCancel={displayFormLabelCreate}
+          repositoryId={repositoryId}
+        />
       )}
       {nodes.length < 1 && (
         <Blankslate icon={TagIcon} title="No labels!">
