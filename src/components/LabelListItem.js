@@ -10,7 +10,7 @@ import {
 } from "@primer/components";
 import * as React from "react";
 
-export const LABELS_DELETE_MUTATION = gql`
+export const MUTATION_DELETE_LABELS = gql`
   mutation DeleteLabel($deleteLabelId: ID!) {
     deleteLabel(id: $deleteLabelId) {
       success
@@ -20,14 +20,14 @@ export const LABELS_DELETE_MUTATION = gql`
 `;
 
 export function LabelListItem({ label }) {
-  const [displayEdit, setDisplayEdit] = React.useState(false);
+  const [editing, setEditing] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const cancelEdit = () => {
-    setDisplayEdit(false);
+    setEditing(false);
   };
 
-  const [deleteLabel] = useMutation(LABELS_DELETE_MUTATION, {
+  const [deleteLabel] = useMutation(MUTATION_DELETE_LABELS, {
     refetchQueries: ["GetPaginatedLabels"],
     variables: {
       deleteLabelId: label.id,
@@ -53,67 +53,77 @@ export function LabelListItem({ label }) {
         p: 3,
       }}
     >
-      <Box sx={{ width: ["75%", "75%", "25%"] }}>
-        <Label sx={{}} variant="large">
-          {label.name}
-        </Label>
-      </Box>
-      <Box
-        className="f6"
-        sx={{
-          color: "fg.muted",
-          display: ["none", "none", "block"],
-          pr: 3,
-          width: "33.33333%",
-        }}
-      >
-        <span>{label.description}</span>
-      </Box>
-      <Box
-        className="f6"
-        sx={{
-          color: "fg.muted",
-          display: ["none", "none", "block"],
-          pr: 3,
-          width: "25%",
-        }}
-      ></Box>
-      <Box
-        className="f6"
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          width: ["25%", "25%", "16.66667%"],
-        }}
-      >
-        <Button
-          onClick={(e) => {
-            setDisplayEdit(true);
-          }}
-          variant="small"
-        >
-          Edit
-        </Button>
-        <Button onClick={() => setIsDialogOpen(true)} variant="small">
-          Delete
-        </Button>
-        <Dialog isOpen={isDialogOpen} onDismiss={() => setIsDialogOpen(false)}>
-          <Dialog.Header>Delete</Dialog.Header>
-          <Box p={3}>
-            <Text>
-              Are you sure? Deleting a label will remove it from all issues.
-            </Text>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-              <Button onClick={() => setIsDialogOpen(false)} sx={{ mr: 1 }}>
-                Cancel
-              </Button>
-              <ButtonDanger onClick={handleLabelDeleted}>Delete</ButtonDanger>
-            </Box>
+      {editing ? (
+        <LabelEdit on={editing} label={label} onCancel={cancelEdit} />
+      ) : (
+        <>
+          <Box sx={{ width: ["75%", "75%", "25%"] }}>
+            <Label sx={{}} variant="large">
+              {label.name}
+            </Label>
           </Box>
-        </Dialog>
-      </Box>
-      {displayEdit && (
-        <LabelEdit on={displayEdit} label={label} onCancel={cancelEdit} />
+          <Box
+            className="f6"
+            sx={{
+              color: "fg.muted",
+              display: ["none", "none", "block"],
+              pr: 3,
+              width: "33.33333%",
+            }}
+          >
+            <span>{label.description}</span>
+          </Box>
+          <Box
+            className="f6"
+            sx={{
+              color: "fg.muted",
+              display: ["none", "none", "block"],
+              pr: 3,
+              width: "25%",
+            }}
+          ></Box>
+          <Box
+            className="f6"
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              width: ["25%", "25%", "16.66667%"],
+            }}
+          >
+            <Button
+              onClick={(e) => {
+                setEditing(true);
+              }}
+              variant="small"
+            >
+              Edit
+            </Button>
+            <Button onClick={() => setIsDialogOpen(true)} variant="small">
+              Delete
+            </Button>
+            <Dialog
+              isOpen={isDialogOpen}
+              onDismiss={() => setIsDialogOpen(false)}
+            >
+              <Dialog.Header>Delete</Dialog.Header>
+              <Box p={3}>
+                <Text>
+                  Are you sure? Deleting a label will remove it from all issues.
+                </Text>
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}
+                >
+                  <Button onClick={() => setIsDialogOpen(false)} sx={{ mr: 1 }}>
+                    Cancel
+                  </Button>
+                  <ButtonDanger onClick={handleLabelDeleted}>
+                    Delete
+                  </ButtonDanger>
+                </Box>
+              </Box>
+            </Dialog>
+          </Box>
+        </>
       )}
     </Box>
   );
