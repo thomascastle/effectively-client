@@ -7,29 +7,31 @@ import {
   TextInput,
 } from "@primer/components";
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-export const MILESTONES_CREATE_MUTATION = gql`
-  mutation CreateMilestone($createMilestoneInput: CreateMilestoneInput!) {
-    createMilestone(input: $createMilestoneInput) {
+export const MUTATION_CREATE_MILESTONE = gql`
+  mutation CreateMilestone($input: CreateMilestoneInput) {
+    createMilestone(input: $input) {
       message
       success
     }
   }
 `;
 
-export function MilestoneCreate() {
+export function MilestoneCreate({ repositoryId }) {
   const history = useHistory();
+  const { login, repositoryName } = useParams();
   const [title, setTitle] = React.useState("");
   const [dueDate, setDueDate] = React.useState("");
   const [description, setDescription] = React.useState("");
 
-  const [createMilestone] = useMutation(MILESTONES_CREATE_MUTATION, {
+  const [createMilestone] = useMutation(MUTATION_CREATE_MILESTONE, {
     variables: {
-      createMilestoneInput: {
+      input: {
+        description: description === "" ? null : description, // Quick fix!!!
+        dueOn: dueDate === "" ? null : dueDate, // Quick fix!!!
+        repositoryId: repositoryId,
         title: title,
-        dueOn: dueDate,
-        description: description,
       },
     },
   });
@@ -39,15 +41,16 @@ export function MilestoneCreate() {
 
     await createMilestone();
 
-    history.push("/milestones");
+    history.push("/" + login + "/" + repositoryName + "/milestones");
   };
 
   return (
     <Box>
       <Box
         sx={{
-          borderBottom: "1px solid",
           borderBottomColor: "border.muted",
+          borderBottomStyle: "solid",
+          borderBottomWidth: "1px",
           display: "flex",
           flexFlow: "row wrap",
           mb: 3,
@@ -82,6 +85,7 @@ export function MilestoneCreate() {
           <FormGroup>
             <FormGroup.Label htmlFor="title">Title</FormGroup.Label>
             <TextInput
+              autoFocus
               contrast
               onChange={(e) => {
                 setTitle(e.target.value);
