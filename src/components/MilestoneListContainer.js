@@ -1,4 +1,6 @@
-import { MilestoneList } from "../components/MilestoneList";
+import { Blankslate } from "./Blankslate";
+import { MilestoneList } from "./MilestoneList";
+import { RepoSubNav } from "./RepoSubNav";
 import { gql, useQuery } from "@apollo/client";
 import {
   Box,
@@ -18,6 +20,7 @@ import {
   TagIcon,
 } from "@primer/octicons-react";
 import * as React from "react";
+import { useParams } from "react-router-dom";
 
 export const MILESTONES_COUNT_BY_STATE_QUERY = gql`
   query GetMilestonesCountByState {
@@ -30,42 +33,50 @@ export const MILESTONES_COUNT_BY_STATE_QUERY = gql`
   }
 `;
 
-export const MILESTONES_QUERY = gql`
-  query GetMilestones(
+export const QUERY_PAGINATED_MILESTONES = gql`
+  query GetPaginatedMilestones(
     $after: String
     $before: String
     $milestonesStates: [MilestoneState!]
+    $name: String!
+    $owner: String!
   ) {
-    milestones(after: $after, before: $before, states: $milestonesStates) {
-      nodes {
-        closed
-        closedAt
-        createdAt
-        description
-        dueOn
-        id
-        number
-        title
-        updatedAt
+    repository(name: $name, owner: $owner) {
+      id
+      milestones(after: $after, before: $before, states: $milestonesStates) {
+        nodes {
+          closed
+          closedAt
+          createdAt
+          description
+          dueOn
+          id
+          number
+          title
+          updatedAt
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+        totalCount
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
-      totalCount
     }
   }
 `;
 
 export function MilestoneListContainer({ after, before, filter }) {
   const { state } = filter;
-  const { data, error, loading } = useQuery(MILESTONES_QUERY, {
+  const { login, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(QUERY_PAGINATED_MILESTONES, {
     variables: {
       after: after,
       before: before,
       milestonesStates: state ? state.toUpperCase() : "OPEN",
+      name: repositoryName,
+      owner: login,
     },
   });
 
@@ -82,7 +93,7 @@ export function MilestoneListContainer({ after, before, filter }) {
     );
   }
 
-  const { nodes, pageInfo } = data.milestones;
+  const { nodes, pageInfo } = data.repository.milestones;
 
   return (
     <Box className="list-container">
@@ -93,20 +104,7 @@ export function MilestoneListContainer({ after, before, filter }) {
           mb: "20px",
         }}
       >
-        <SubNav>
-          <SubNav.Links>
-            <SubNav.Link href="/labels">
-              <span>
-                <StyledOcticon icon={TagIcon} /> Labels
-              </span>
-            </SubNav.Link>
-            <SubNav.Link href="/milestones" selected>
-              <span>
-                <StyledOcticon icon={MilestoneIcon} /> Milestones
-              </span>
-            </SubNav.Link>
-          </SubNav.Links>
-        </SubNav>
+        <RepoSubNav />
         <Box
           sx={{
             display: ["none", "none", "block"],
@@ -114,53 +112,68 @@ export function MilestoneListContainer({ after, before, filter }) {
             position: "relative",
           }}
         >
-          <Link href="/milestones/new">
-            <ButtonPrimary>New Milestone</ButtonPrimary>
-          </Link>
+          <ButtonPrimary
+            as="a"
+            href={"/" + login + "/" + repositoryName + "/milestones/new"}
+          >
+            New milestone
+          </ButtonPrimary>
         </Box>
       </Box>
-      <Box
-        sx={{
-          borderColor: "border.default",
-          borderRadius: 6,
-          borderStyle: "solid",
-          borderWidth: "1px",
-        }}
-      >
+      {nodes.length < 1 && (
+        <Blankslate
+          icon={MilestoneIcon}
+          title="You haven’t created any Milestones."
+        >
+          Use Milestones to create collections of Issues for a particular or
+          project. Click on the "New milestone" button above to create one.
+        </Blankslate>
+      )}
+      {nodes.length > 0 && (
         <Box
-          className="Box-header"
           sx={{
-            backgroundColor: "bg.tertiary",
-            borderTopLeftRadius: 6,
-            borderTopRightRadius: 6,
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "16px",
+            backgroundColor: "canvas.default",
+            borderColor: "border.default",
+            borderRadius: 6,
+            borderStyle: "solid",
+            borderWidth: "1px",
           }}
         >
-          <CountByStateNav state={state} />
-          <SelectMenu sx={{ display: "inline-block", position: "relative" }}>
-            <ButtonTableList>Sort</ButtonTableList>
-            <SelectMenu.Modal align="right">
-              <SelectMenu.Header>Sort</SelectMenu.Header>
-              <SelectMenu.List>
-                <SelectMenu.Item>Recently updated</SelectMenu.Item>
-                <SelectMenu.Item>Furthest due date</SelectMenu.Item>
-                <SelectMenu.Item>Closest due date</SelectMenu.Item>
-                <SelectMenu.Item>Lease complete</SelectMenu.Item>
-                <SelectMenu.Item>Most complete</SelectMenu.Item>
-                <SelectMenu.Item>Alphabetically</SelectMenu.Item>
-                <SelectMenu.Item>Reverse alphabetically</SelectMenu.Item>
-                <SelectMenu.Item>Most issues</SelectMenu.Item>
-                <SelectMenu.Item>Least issues</SelectMenu.Item>
-              </SelectMenu.List>
-            </SelectMenu.Modal>
-          </SelectMenu>
+          <Box
+            className="Box-header"
+            sx={{
+              backgroundColor: "canvas.subtle",
+              borderTopLeftRadius: 6,
+              borderTopRightRadius: 6,
+              display: "flex",
+              justifyContent: "space-between",
+              padding: 16,
+            }}
+          >
+            <CountByStateNav state={state} />
+            <SelectMenu sx={{ display: "inline-block", position: "relative" }}>
+              <ButtonTableList>Sort</ButtonTableList>
+              <SelectMenu.Modal align="right">
+                <SelectMenu.Header>Sort</SelectMenu.Header>
+                <SelectMenu.List>
+                  <SelectMenu.Item>Recently updated</SelectMenu.Item>
+                  <SelectMenu.Item>Furthest due date</SelectMenu.Item>
+                  <SelectMenu.Item>Closest due date</SelectMenu.Item>
+                  <SelectMenu.Item>Lease complete</SelectMenu.Item>
+                  <SelectMenu.Item>Most complete</SelectMenu.Item>
+                  <SelectMenu.Item>Alphabetically</SelectMenu.Item>
+                  <SelectMenu.Item>Reverse alphabetically</SelectMenu.Item>
+                  <SelectMenu.Item>Most issues</SelectMenu.Item>
+                  <SelectMenu.Item>Least issues</SelectMenu.Item>
+                </SelectMenu.List>
+              </SelectMenu.Modal>
+            </SelectMenu>
+          </Box>
+          <Box className="list" sx={{ color: "text.tertiary" }}>
+            <MilestoneList milestones={nodes} />
+          </Box>
         </Box>
-        <Box className="list" sx={{ color: "text.tertiary" }}>
-          <MilestoneList milestones={nodes} />
-        </Box>
-      </Box>
+      )}
       <Box className="pagination">
         {shouldDisplay(pageInfo.hasNextPage, pageInfo.hasPreviousPage) && (
           <Box sx={{ mb: 5, mt: 4, textAlign: "center" }}>

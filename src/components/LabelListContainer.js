@@ -1,6 +1,7 @@
 import { Blankslate } from "./Blankslate";
 import { LabelCreate } from "./LabelCreate";
 import { LabelList } from "./LabelList";
+import { RepoSubNav } from "./RepoSubNav";
 import { gql, useQuery } from "@apollo/client";
 import {
   Box,
@@ -88,25 +89,7 @@ export function LabelListContainer({ after, before }) {
           mb: "20px",
         }}
       >
-        <SubNav>
-          <SubNav.Links>
-            <SubNav.Link
-              href={"/" + login + "/" + repositoryName + "/labels"}
-              selected
-            >
-              <span>
-                <StyledOcticon icon={TagIcon} /> Labels
-              </span>
-            </SubNav.Link>
-            <SubNav.Link
-              href={"/" + login + "/" + repositoryName + "/milestones"}
-            >
-              <span>
-                <StyledOcticon icon={MilestoneIcon} /> Milestones
-              </span>
-            </SubNav.Link>
-          </SubNav.Links>
-        </SubNav>
+        <RepoSubNav />
         <Box sx={{ mt: [3, 1, 0], pl: [0, 1, 2], pr: [0, 2, 4] }}>
           <TextInput
             icon={SearchIcon}
@@ -140,7 +123,7 @@ export function LabelListContainer({ after, before }) {
       {nodes.length < 1 && (
         <Blankslate icon={TagIcon} title="No labels!">
           There aren’t any labels for this repository quite yet. Click on the
-          "New Label" button above to create one.
+          "New label" button above to create one.
         </Blankslate>
       )}
       {nodes.length > 0 && (
@@ -156,7 +139,7 @@ export function LabelListContainer({ after, before }) {
           <Box
             className="Box-header"
             sx={{
-              backgroundColor: "bg.tertiary",
+              backgroundColor: "canvas.subtle",
               borderTopLeftRadius: 6,
               borderTopRightRadius: 6,
               display: "flex",

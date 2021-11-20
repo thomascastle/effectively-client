@@ -32,7 +32,7 @@ export function RestrictedPart() {
         <Route path="/:login/:repositoryName/labels">
           <LabelIndexPage />
         </Route>
-        <Route path="/milestones/new">
+        <Route path="/:login/:repositoryName/milestones/new">
           <MilestoneCreatePage />
         </Route>
         <Route path="/milestones/:number/edit">
