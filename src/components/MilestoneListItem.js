@@ -15,7 +15,7 @@ import {
 import { CalendarIcon, ClockIcon } from "@primer/octicons-react";
 import { format, formatDistance } from "date-fns";
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 export const MILESTONES_CLOSE_MUTATION = gql`
   mutation ($closeMilestoneId: ID!) {
@@ -46,6 +46,7 @@ export const MILESTONES_REOPEN_MUTATION = gql`
 
 export function MilestoneListItem({ milestone }) {
   const history = useHistory();
+  const { login, repositoryName } = useParams();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const [closeMilestone] = useMutation(MILESTONES_CLOSE_MUTATION, {
@@ -69,10 +70,14 @@ export function MilestoneListItem({ milestone }) {
     },
   });
 
-  const handleClosed = async () => {
+  const handleClosed = async (e) => {
+    e.preventDefault();
+
     await closeMilestone();
 
-    history.push("/milestones?state=closed");
+    history.push(
+      "/" + login + "/" + repositoryName + "/milestones?state=closed"
+    );
   };
 
   const handleDeleted = async () => {
@@ -81,10 +86,12 @@ export function MilestoneListItem({ milestone }) {
     setIsDialogOpen(false);
   };
 
-  const handleReopened = async () => {
+  const handleReopened = async (e) => {
+    e.preventDefault();
+
     await reopenMilestone();
 
-    history.push("/milestones");
+    history.push("/" + login + "/" + repositoryName + "/milestones");
   };
 
   return (
@@ -99,6 +106,9 @@ export function MilestoneListItem({ milestone }) {
     >
       <Box
         sx={{
+          borderLeftColor: "border.default",
+          borderLeftStyle: "solid",
+          borderLeftWidth: "1px",
           px: "20px",
           py: "15px",
           width: "500px",
@@ -114,7 +124,14 @@ export function MilestoneListItem({ milestone }) {
           }}
         >
           <Link
-            href={"/milestones/" + milestone.number}
+            href={
+              "/" +
+              login +
+              "/" +
+              repositoryName +
+              "/milestones/" +
+              milestone.number
+            }
             sx={{ color: "fg.default", ":hover": { color: "accent.fg" } }}
           >
             {milestone.title}
@@ -167,6 +184,9 @@ export function MilestoneListItem({ milestone }) {
       </Box>
       <Box
         sx={{
+          borderRightColor: "border.default",
+          borderRightStyle: "solid",
+          borderRightWidth: "1px",
           flexGrow: 1,
           px: "20px",
           py: "15px",
@@ -214,27 +234,45 @@ export function MilestoneListItem({ milestone }) {
           </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <Link href={`/milestones/${milestone.number}/edit`}>
-            <ButtonInvisible sx={{ ml: "-12px" }} variant="small">
-              Edit
-            </ButtonInvisible>
+          <Link
+            href={`/${login}/${repositoryName}/milestones/${milestone.number}/edit`}
+            sx={{ display: "inline-block", mr: 2 }}
+          >
+            Edit
           </Link>
           {milestone.closed ? (
-            <ButtonInvisible onClick={handleReopened} variant="small">
+            <Link
+              as="button"
+              onClick={handleReopened}
+              sx={{ display: "inline-block", mr: 2 }}
+            >
               Reopen
-            </ButtonInvisible>
+            </Link>
           ) : (
-            <ButtonInvisible onClick={handleClosed} variant="small">
+            <Link
+              as="button"
+              onClick={handleClosed}
+              sx={{ display: "inline-block", mr: 2 }}
+            >
               Close
-            </ButtonInvisible>
+            </Link>
           )}
-          <ButtonInvisible
-            onClick={() => setIsDialogOpen(true)}
-            sx={{ color: "text.danger" }}
-            variant="small"
+          <Link
+            as="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsDialogOpen(true);
+            }}
+            sx={{
+              color: "danger.fg",
+              display: "inline-block",
+              ":hover": {
+                textDecoration: "none",
+              },
+            }}
           >
             Delete
-          </ButtonInvisible>
+          </Link>
           <Dialog
             isOpen={isDialogOpen}
             onDismiss={() => setIsDialogOpen(false)}

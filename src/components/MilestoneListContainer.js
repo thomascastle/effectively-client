@@ -22,17 +22,6 @@ import {
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-export const MILESTONES_COUNT_BY_STATE_QUERY = gql`
-  query GetMilestonesCountByState {
-    closed: milestones(states: CLOSED) {
-      totalCount
-    }
-    open: milestones(states: OPEN) {
-      totalCount
-    }
-  }
-`;
-
 export const QUERY_PAGINATED_MILESTONES = gql`
   query GetPaginatedMilestones(
     $after: String
@@ -120,60 +109,46 @@ export function MilestoneListContainer({ after, before, filter }) {
           </ButtonPrimary>
         </Box>
       </Box>
-      {nodes.length < 1 && (
-        <Blankslate
-          icon={MilestoneIcon}
-          title="You haven’t created any Milestones."
-        >
-          Use Milestones to create collections of Issues for a particular or
-          project. Click on the "New milestone" button above to create one.
-        </Blankslate>
-      )}
-      {nodes.length > 0 && (
+      <Box
+        sx={{
+          backgroundColor: "canvas.default",
+        }}
+      >
         <Box
+          className="Box-header"
           sx={{
-            backgroundColor: "canvas.default",
+            backgroundColor: "canvas.subtle",
             borderColor: "border.default",
-            borderRadius: 6,
             borderStyle: "solid",
             borderWidth: "1px",
+            borderTopLeftRadius: 6,
+            borderTopRightRadius: 6,
+            display: "flex",
+            justifyContent: "space-between",
+            padding: 16,
           }}
         >
-          <Box
-            className="Box-header"
-            sx={{
-              backgroundColor: "canvas.subtle",
-              borderTopLeftRadius: 6,
-              borderTopRightRadius: 6,
-              display: "flex",
-              justifyContent: "space-between",
-              padding: 16,
-            }}
-          >
-            <CountByStateNav state={state} />
-            <SelectMenu sx={{ display: "inline-block", position: "relative" }}>
-              <ButtonTableList>Sort</ButtonTableList>
-              <SelectMenu.Modal align="right">
-                <SelectMenu.Header>Sort</SelectMenu.Header>
-                <SelectMenu.List>
-                  <SelectMenu.Item>Recently updated</SelectMenu.Item>
-                  <SelectMenu.Item>Furthest due date</SelectMenu.Item>
-                  <SelectMenu.Item>Closest due date</SelectMenu.Item>
-                  <SelectMenu.Item>Lease complete</SelectMenu.Item>
-                  <SelectMenu.Item>Most complete</SelectMenu.Item>
-                  <SelectMenu.Item>Alphabetically</SelectMenu.Item>
-                  <SelectMenu.Item>Reverse alphabetically</SelectMenu.Item>
-                  <SelectMenu.Item>Most issues</SelectMenu.Item>
-                  <SelectMenu.Item>Least issues</SelectMenu.Item>
-                </SelectMenu.List>
-              </SelectMenu.Modal>
-            </SelectMenu>
-          </Box>
-          <Box className="list" sx={{ color: "text.tertiary" }}>
-            <MilestoneList milestones={nodes} />
-          </Box>
+          <CountByStateNav state={state} />
+          <SelectMenu sx={{ display: "inline-block", position: "relative" }}>
+            <ButtonTableList>Sort</ButtonTableList>
+            <SelectMenu.Modal align="right">
+              <SelectMenu.Header>Sort</SelectMenu.Header>
+              <SelectMenu.List>
+                <SelectMenu.Item>Recently updated</SelectMenu.Item>
+                <SelectMenu.Item>Furthest due date</SelectMenu.Item>
+                <SelectMenu.Item>Closest due date</SelectMenu.Item>
+                <SelectMenu.Item>Lease complete</SelectMenu.Item>
+                <SelectMenu.Item>Most complete</SelectMenu.Item>
+                <SelectMenu.Item>Alphabetically</SelectMenu.Item>
+                <SelectMenu.Item>Reverse alphabetically</SelectMenu.Item>
+                <SelectMenu.Item>Most issues</SelectMenu.Item>
+                <SelectMenu.Item>Least issues</SelectMenu.Item>
+              </SelectMenu.List>
+            </SelectMenu.Modal>
+          </SelectMenu>
         </Box>
-      )}
+        <MilestoneList milestones={nodes} />
+      </Box>
       <Box className="pagination">
         {shouldDisplay(pageInfo.hasNextPage, pageInfo.hasPreviousPage) && (
           <Box sx={{ mb: 5, mt: 4, textAlign: "center" }}>
@@ -284,8 +259,14 @@ export function MilestoneListContainer({ after, before, filter }) {
   );
 }
 
-function CountByStateNav({ state }) {
-  const { data, error, loading } = useQuery(MILESTONES_COUNT_BY_STATE_QUERY);
+function ConditionalBlankslate() {
+  const { login, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(QUERY_COUNT_MILESTONES_BY_STATE, {
+    variables: {
+      name: repositoryName,
+      owner: login,
+    },
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -295,13 +276,61 @@ function CountByStateNav({ state }) {
     return <div>{error.message}</div>;
   }
 
-  const { totalCount: countClosed } = data.closed;
-  const { totalCount: countOpen } = data.open;
+  const { totalCount: countClosed } = data.repository.closed;
+  const { totalCount: countOpen } = data.repository.open;
+
+  return countClosed === 0 && countOpen === 0 ? (
+    <Blankslate
+      icon={MilestoneIcon}
+      title="You haven’t created any Milestones."
+    >
+      Use Milestones to create collections of Issues for a particular or
+      project. Click on the "New milestone" button above to create one.
+    </Blankslate>
+  ) : (
+    <Blankslate icon={MilestoneIcon} title="We couldn’t find anything!">
+      There aren’t any milestones that match. Give it another shot above.
+    </Blankslate>
+  );
+}
+
+export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
+  query GetCountMilestonesByState($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      closed: milestones(states: CLOSED) {
+        totalCount
+      }
+      open: milestones(states: OPEN) {
+        totalCount
+      }
+    }
+  }
+`;
+
+function CountByStateNav({ state }) {
+  const { login, repositoryName } = useParams();
+  const { data, error, loading } = useQuery(QUERY_COUNT_MILESTONES_BY_STATE, {
+    variables: {
+      name: repositoryName,
+      owner: login,
+    },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  const { totalCount: countClosed } = data.repository.closed;
+  const { totalCount: countOpen } = data.repository.open;
 
   return (
     <Box>
       <Link
-        href="/milestones?state=open"
+        href={"/" + login + "/" + repositoryName + "/milestones?state=open"}
         sx={{
           color: !state || state === "open" ? "fg.default" : "fg.muted",
           fontWeight: !state || state === "open" ? 600 : 400,
@@ -316,7 +345,7 @@ function CountByStateNav({ state }) {
         </span>
       </Link>
       <Link
-        href="/milestones?state=closed"
+        href={"/" + login + "/" + repositoryName + "/milestones?state=closed"}
         sx={{
           color: state === "closed" ? "fg.default" : "fg.muted",
           fontWeight: state === "closed" ? 600 : 400,
