@@ -7,11 +7,11 @@ import {
   TextInput,
 } from "@primer/components";
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-export const MILESTONE_UPDATE_MUTATION = gql`
-  mutation UpdateMilestone($updateMilestoneInput: UpdateMilestoneInput!) {
-    updateMilestone(input: $updateMilestoneInput) {
+export const MUTATION_UPDATE_MILESTONE = gql`
+  mutation UpdateMilestone($input: UpdateMilestoneInput) {
+    updateMilestone(input: $input) {
       milestone {
         description
         dueOn
@@ -23,35 +23,30 @@ export const MILESTONE_UPDATE_MUTATION = gql`
 
 export function MilestoneEdit({ milestone }) {
   const history = useHistory();
+  const { login, repositoryName } = useParams();
   const [title, setTitle] = React.useState(milestone.title);
   const [dueOn, setDueOn] = React.useState(
     milestone.dueOn ? milestone.dueOn.split("T")[0] : ""
   );
   const [description, setDescription] = React.useState(milestone.description);
 
-  const [updateMilestone] = useMutation(MILESTONE_UPDATE_MUTATION, {
+  const [updateMilestone] = useMutation(MUTATION_UPDATE_MILESTONE, {
     variables: {
-      updateMilestoneInput: {
+      input: {
+        description: description,
+        dueOn: dueOn ? dueOn : null,
         id: milestone.id,
         title: title,
-        dueOn: dueOn,
-        description: description,
       },
     },
   });
-
-  const handleCanceled = (e) => {
-    e.preventDefault();
-
-    history.push("/milestones");
-  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     await updateMilestone();
 
-    history.push("/milestones");
+    history.push(`/${login}/${repositoryName}/milestones`);
   };
 
   return (
@@ -60,6 +55,7 @@ export function MilestoneEdit({ milestone }) {
         <FormGroup>
           <FormGroup.Label htmlFor="title">Title</FormGroup.Label>
           <TextInput
+            autoFocus
             contrast
             onChange={(e) => {
               setTitle(e.target.value);
@@ -119,7 +115,11 @@ export function MilestoneEdit({ milestone }) {
         }}
       ></Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button onClick={handleCanceled} sx={{ mr: "5px" }}>
+        <Button
+          as="a"
+          href={`/${login}/${repositoryName}/milestones`}
+          sx={{ mr: "5px" }}
+        >
           Cancel
         </Button>
         <Button sx={{ mr: "5px" }}>Close milestone</Button>
