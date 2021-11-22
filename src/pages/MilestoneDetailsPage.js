@@ -1,5 +1,6 @@
 import { Layout } from "../components/Layout";
 import { MilestoneDetails } from "../components/MilestoneDetails";
+import { RepoSubNav } from "../components/RepoSubNav";
 import { gql, useQuery } from "@apollo/client";
 import { Box, SubNav, StyledOcticon, Link, Button } from "@primer/components";
 import { TagIcon, MilestoneIcon } from "@primer/octicons-react";
@@ -17,7 +18,7 @@ export const MILESTONE_BY_NUMBER_QUERY = gql`
 `;
 
 export function MilestoneDetailsPage() {
-  const { number } = useParams();
+  const { login, number, repositoryName } = useParams();
 
   const { data, error, loading } = useQuery(MILESTONE_BY_NUMBER_QUERY, {
     variables: {
@@ -44,20 +45,7 @@ export function MilestoneDetailsPage() {
           mb: "20px",
         }}
       >
-        <SubNav>
-          <SubNav.Links>
-            <SubNav.Link href="/labels">
-              <span>
-                <StyledOcticon icon={TagIcon} /> Labels
-              </span>
-            </SubNav.Link>
-            <SubNav.Link href="/milestones" selected>
-              <span>
-                <StyledOcticon icon={MilestoneIcon} /> Milestones
-              </span>
-            </SubNav.Link>
-          </SubNav.Links>
-        </SubNav>
+        <RepoSubNav />
         <Box
           sx={{
             display: ["none", "none", "block"],
@@ -65,9 +53,12 @@ export function MilestoneDetailsPage() {
             position: "relative",
           }}
         >
-          <Link href={`/milestones/${number}/edit`}>
-            <Button>Edit milestone</Button>
-          </Link>
+          <Button
+            as="a"
+            href={`/${login}/${repositoryName}/milestones/${number}/edit`}
+          >
+            Edit milestone
+          </Button>
         </Box>
       </Box>
       <MilestoneDetails milestone={milestone} />

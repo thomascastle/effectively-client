@@ -38,7 +38,7 @@ export function RestrictedPart() {
         <Route path="/milestones/:number/edit">
           <MilestoneEditPage />
         </Route>
-        <Route path="/milestones/:number">
+        <Route path="/:login/:repositoryName/milestones/:number">
           <MilestoneDetailsPage />
         </Route>
         <Route path="/:login/:repositoryName/milestones">
