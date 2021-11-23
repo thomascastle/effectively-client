@@ -20,12 +20,14 @@ import { formatDistance } from "date-fns";
 export function IssueListItem({ issue, repositoryBaseUrl }) {
   return (
     <Box
-      borderTopColor="border.muted"
-      borderTopStyle="solid"
-      borderTopWidth="1px"
-      display="flex"
-      key={issue.number}
-      position="relative"
+      sx={{
+        borderTopColor: "border.muted",
+        borderTopStyle: "solid",
+        borderTopWidth: "1px",
+        display: "flex",
+        position: "relative",
+        ":first-of-type": { borderTopColor: "transparent" },
+      }}
     >
       <Box flexShrink={0} pl={3} py={2}>
         <input type="checkbox" />
