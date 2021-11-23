@@ -425,6 +425,7 @@ export function IssueListContainer({
 }
 
 function CountByStateNav({ state }) {
+  const { login, repositoryName } = useParams();
   const { data, error, loading } = useQuery(ISSUES_COUNT_BY_STATE_QUERY);
 
   if (loading) {
@@ -441,7 +442,7 @@ function CountByStateNav({ state }) {
   return (
     <Box flex="auto">
       <Link
-        href="/issues?q=is%3Aopen"
+        href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aopen"}
         sx={{
           color: !state || state === "is:open" ? "fg.default" : "fg.muted",
           fontWeight: !state || state === "is:open" ? 600 : 400,
@@ -456,7 +457,7 @@ function CountByStateNav({ state }) {
         </span>
       </Link>
       <Link
-        href="/issues?q=is%3Aclosed"
+        href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aclosed"}
         sx={{
           color: state === "is:closed" ? "fg.default" : "fg.muted",
           fontWeight: state === "is:closed" ? 600 : 400,

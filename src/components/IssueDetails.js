@@ -28,7 +28,7 @@ import {
 } from "@primer/octicons-react";
 import { formatDistance } from "date-fns";
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 export const ISSUES_UPDATE_ASSIGNEES_MUTATION = gql`
   mutation UpdateIssueAssignees($updateIssueInput: UpdateIssueInput!) {
@@ -88,6 +88,7 @@ export const ISSUES_DELETE_MUTATION = gql`
 
 export function IssueDetails({ issue }) {
   const history = useHistory();
+  const { login, repositoryName } = useParams();
   const [editing, setEditing] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [shouldDisable, setShouldDisable] = React.useState(false);
@@ -263,7 +264,10 @@ export function IssueDetails({ issue }) {
               >
                 Edit
               </Button>
-              <Link href="/issues/new" sx={{ ml: 2 }}>
+              <Link
+                href={"/" + login + "/" + repositoryName + "/issues/new"}
+                sx={{ ml: 2 }}
+              >
                 <ButtonPrimary variant="small">New issue</ButtonPrimary>
               </Link>
             </Box>
