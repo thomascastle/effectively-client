@@ -101,7 +101,7 @@ export function SelectLabels({ initial, onChange, onFinish }) {
             ))}
             <SelectMenu.Footer sx={{ textAlign: "left" }}>
               <Link
-                href={"/" + login + "/" + repositoryName + "/issues/labels"}
+                href={"/" + login + "/" + repositoryName + "/labels"}
                 sx={{ color: "fg.muted" }}
               >
                 <StyledOcticon icon={PencilIcon} size={16} sx={{ mr: 1 }} />
