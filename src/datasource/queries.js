@@ -80,3 +80,12 @@ export const QUERY_REPOSITORY_ISSUES = gql`
     }
   }
 `;
+
+export const QUERY_REPOSITORY_VISIBILITY = gql`
+  query GetRepositoryVisibility($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      id
+      visibility
+    }
+  }
+`;

@@ -44,15 +44,18 @@ export function RestrictedPart() {
         <Route path="/:login/:repositoryName/milestones">
           <MilestoneIndexPage />
         </Route>
+        <Route path="/:login/:repositoryName/projects">
+          <ProjectIndexPage />
+        </Route>
+        <Route path="/:login/:repositoryName/settings">
+          <ProjectIndexPage />
+        </Route>
         <Redirect
           from="/:login/:repositoryName"
           to="/:login/:repositoryName/issues"
         />
         <Route path="/new">
           <RepositoryCreatePage />
-        </Route>
-        <Route path="/projects">
-          <ProjectIndexPage />
         </Route>
         <Route path="/">
           <DashboardPage />
