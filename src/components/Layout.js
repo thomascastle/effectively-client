@@ -1,13 +1,8 @@
-import { useAuth } from "../context/auth";
-import { useUser } from "../context/user";
 import { QUERY_REPOSITORY_VISIBILITY } from "../datasource/queries";
-import { ApolloConsumer, useQuery } from "@apollo/client";
+import { AppBar } from "./AppBar";
+import { useQuery } from "@apollo/client";
 import {
-  Avatar,
   Box,
-  ButtonOutline,
-  Dropdown,
-  Header,
   Heading,
   Label,
   Link,
@@ -18,71 +13,18 @@ import {
 import {
   GearIcon,
   IssueOpenedIcon,
-  MarkGithubIcon,
   ProjectIcon,
   RepoIcon,
 } from "@primer/octicons-react";
 import { useLocation, useParams } from "react-router-dom";
 
 export function Layout({ children }) {
-  const { updateToken } = useAuth();
   const location = useLocation();
   const { login, repositoryName } = useParams();
-  const { user } = useUser();
-
-  const token = localStorage.getItem("token");
 
   return (
     <>
-      <Header>
-        <Header.Item>
-          <StyledOcticon icon={MarkGithubIcon} size={32} />
-        </Header.Item>
-        <Header.Item full>
-          <Header.Link href="/issues">Issues</Header.Link>
-        </Header.Item>
-        {token && (
-          <Header.Item sx={{ mr: 0 }}>
-            <Dropdown>
-              <summary>
-                <Avatar
-                  size={30}
-                  src="https://avatars.githubusercontent.com/primer"
-                />
-                <Dropdown.Caret />
-              </summary>
-              <Dropdown.Menu direction="sw">
-                <Dropdown.Item>
-                  <Link href="/">
-                    Signed in as
-                    <br />
-                    <strong>{user.login}</strong>
-                  </Link>
-                </Dropdown.Item>
-                <div className="dropdown-divider"></div>
-                <Dropdown.Item>
-                  <ApolloConsumer>
-                    {(client) => (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-
-                          localStorage.removeItem("token");
-                          updateToken("");
-                        }}
-                      >
-                        <ButtonOutline sx={{ width: "100%" }} type="submit">
-                          Sign out
-                        </ButtonOutline>
-                      </form>
-                    )}
-                  </ApolloConsumer>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Header.Item>
-        )}
-      </Header>
+      <AppBar />
       <Box>
         <main>
           <Box sx={{ backgroundColor: "canvas.subtle", mb: 5, pt: 3 }}>

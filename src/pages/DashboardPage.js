@@ -1,85 +1,21 @@
-import { useAuth } from "../context/auth";
-import { useUser } from "../context/user";
-import { ApolloConsumer, gql, useQuery } from "@apollo/client";
+import { AppBar } from "../components/AppBar";
+import { gql, useQuery } from "@apollo/client";
 import {
   Avatar,
   Box,
   ButtonPrimary,
-  ButtonOutline,
-  Dropdown,
-  Header,
   Heading,
   Link,
   StyledOcticon,
-  UnderlineNav,
   Text,
   TextInput,
 } from "@primer/components";
-import {
-  IssueOpenedIcon,
-  MarkGithubIcon,
-  RepoIcon,
-} from "@primer/octicons-react";
-import { useLocation } from "react-router-dom";
+import { RepoIcon } from "@primer/octicons-react";
 
 export function DashboardPage() {
-  const { updateToken } = useAuth();
-  const location = useLocation();
-  const { user } = useUser();
-
-  const token = localStorage.getItem("token");
-
   return (
     <>
-      <Header>
-        <Header.Item>
-          <StyledOcticon icon={MarkGithubIcon} size={32} />
-        </Header.Item>
-        <Header.Item full>
-          <Header.Link href="/issues">Issues</Header.Link>
-        </Header.Item>
-        {token && (
-          <Header.Item sx={{ mr: 0 }}>
-            <Dropdown>
-              <summary>
-                <Avatar
-                  size={30}
-                  src="https://avatars.githubusercontent.com/primer"
-                />
-                <Dropdown.Caret />
-              </summary>
-              <Dropdown.Menu direction="sw">
-                <Dropdown.Item>
-                  <Link href="/">
-                    Signed in as
-                    <br />
-                    <strong>{user.login}</strong>
-                  </Link>
-                </Dropdown.Item>
-                <div className="dropdown-divider"></div>
-                <Dropdown.Item>
-                  <ApolloConsumer>
-                    {(client) => (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-
-                          localStorage.removeItem("token");
-                          updateToken("");
-                        }}
-                      >
-                        <ButtonOutline sx={{ width: "100%" }} type="submit">
-                          Sign out
-                        </ButtonOutline>
-                      </form>
-                    )}
-                  </ApolloConsumer>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Header.Item>
-        )}
-      </Header>
+      <AppBar />
       <Box class="main">
         <Box
           sx={{
