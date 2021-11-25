@@ -3,7 +3,7 @@ import { MilestoneListContainer } from "../components/MilestoneListContainer";
 import { useQueryParams } from "../hooks";
 import * as React from "react";
 
-export function MilestoneIndexPage() {
+export function RepositoryMilestoneIndexPage() {
   const queryParams = useQueryParams();
 
   const endCursor = queryParams.get("after");

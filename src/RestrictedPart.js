@@ -1,12 +1,12 @@
 import { DashboardPage } from "./pages/DashboardPage";
-import { IssueCreatePage } from "./pages/IssueCreatePage";
-import { IssueDetailsPage } from "./pages/IssueDetailsPage";
-import { IssueIndexPage } from "./pages/IssueIndexPage";
-import { LabelIndexPage } from "./pages/LabelIndexPage";
-import { MilestoneCreatePage } from "./pages/MilestoneCreatePage";
-import { MilestoneDetailsPage } from "./pages/MilestoneDetailsPage";
-import { MilestoneEditPage } from "./pages/MilestoneEditPage";
-import { MilestoneIndexPage } from "./pages/MilestoneIndexPage";
+import { RepositoryIssueCreatePage } from "./pages/RepositoryIssueCreatePage";
+import { RepositoryIssueDetailsPage } from "./pages/RepositoryIssueDetailsPage";
+import { RepositoryIssueIndexPage } from "./pages/RepositoryIssueIndexPage";
+import { RepositoryLabelIndexPage } from "./pages/RepositoryLabelIndexPage";
+import { RepositoryMilestoneCreatePage } from "./pages/RepositoryMilestoneCreatePage";
+import { RepositoryMilestoneDetailsPage } from "./pages/RepositoryMilestoneDetailsPage";
+import { RepositoryMilestoneEditPage } from "./pages/RepositoryMilestoneEditPage";
+import { RepositoryMilestoneIndexPage } from "./pages/RepositoryMilestoneIndexPage";
 import { ProjectIndexPage } from "./pages/ProjectIndexPage";
 import { RepositoryCreatePage } from "./pages/RepositoryCreatePage";
 import {
@@ -21,28 +21,28 @@ export function RestrictedPart() {
     <Router>
       <Switch>
         <Route path="/:login/:repositoryName/issues/new">
-          <IssueCreatePage />
+          <RepositoryIssueCreatePage />
         </Route>
         <Route path="/:login/:repositoryName/issues/:number">
-          <IssueDetailsPage />
+          <RepositoryIssueDetailsPage />
         </Route>
         <Route path="/:login/:repositoryName/issues">
-          <IssueIndexPage />
+          <RepositoryIssueIndexPage />
         </Route>
         <Route path="/:login/:repositoryName/labels">
-          <LabelIndexPage />
+          <RepositoryLabelIndexPage />
         </Route>
         <Route path="/:login/:repositoryName/milestones/new">
-          <MilestoneCreatePage />
+          <RepositoryMilestoneCreatePage />
         </Route>
         <Route path="/:login/:repositoryName/milestones/:number/edit">
-          <MilestoneEditPage />
+          <RepositoryMilestoneEditPage />
         </Route>
         <Route path="/:login/:repositoryName/milestones/:number">
-          <MilestoneDetailsPage />
+          <RepositoryMilestoneDetailsPage />
         </Route>
         <Route path="/:login/:repositoryName/milestones">
-          <MilestoneIndexPage />
+          <RepositoryMilestoneIndexPage />
         </Route>
         <Route path="/:login/:repositoryName/projects">
           <ProjectIndexPage />

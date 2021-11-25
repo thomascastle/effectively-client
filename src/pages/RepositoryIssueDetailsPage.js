@@ -36,7 +36,7 @@ export const QUERY_ISSUE_BY_NUMBER = gql`
   }
 `;
 
-export function IssueDetailsPage() {
+export function RepositoryIssueDetailsPage() {
   const { login, number, repositoryName } = useParams();
   const { data, error, loading } = useQuery(QUERY_ISSUE_BY_NUMBER, {
     variables: {

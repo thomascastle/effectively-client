@@ -1,17 +1,17 @@
-import { IssueCreate } from "../components/IssueCreate";
 import { Layout } from "../components/Layout";
+import { MilestoneCreate } from "../components/MilestoneCreate";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-const QUERY_REPOSITORY = gql`
-  query ($name: String!, $owner: String!) {
+export const QUERY_REPOSITORY = gql`
+  query FindRepository($name: String!, $owner: String!) {
     repository(name: $name, owner: $owner) {
       id
     }
   }
 `;
 
-export function IssueCreatePage() {
+export function RepositoryMilestoneCreatePage() {
   const { login, repositoryName } = useParams();
   const { data, error, loading } = useQuery(QUERY_REPOSITORY, {
     variables: {
@@ -28,15 +28,11 @@ export function IssueCreatePage() {
     return <div>{error.message}</div>;
   }
 
-  const { repository } = data;
+  const { id } = data.repository;
 
   return (
     <Layout>
-      <IssueCreate
-        login={login}
-        repositoryId={repository.id}
-        repositoryName={repositoryName}
-      />
+      <MilestoneCreate repositoryId={id} />
     </Layout>
   );
 }

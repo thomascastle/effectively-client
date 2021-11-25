@@ -14,7 +14,7 @@ export const MILESTONE_BY_NUMBER_QUERY = gql`
   }
 `;
 
-export function MilestoneEditPage() {
+export function RepositoryMilestoneEditPage() {
   const { number } = useParams();
 
   const { data, error, loading } = useQuery(MILESTONE_BY_NUMBER_QUERY, {

@@ -4,7 +4,7 @@ import { useQueryParams } from "../hooks";
 import { gql } from "@apollo/client";
 import * as React from "react";
 
-export function LabelIndexPage() {
+export function RepositoryLabelIndexPage() {
   const queryParams = useQueryParams();
 
   const endCursor = queryParams.get("after");

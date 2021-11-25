@@ -17,7 +17,7 @@ export const MILESTONE_BY_NUMBER_QUERY = gql`
   }
 `;
 
-export function MilestoneDetailsPage() {
+export function RepositoryMilestoneDetailsPage() {
   const { login, number, repositoryName } = useParams();
 
   const { data, error, loading } = useQuery(MILESTONE_BY_NUMBER_QUERY, {
