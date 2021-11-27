@@ -272,6 +272,7 @@ function SignUp() {
               <FormGroup sx={{ mt: 0 }}>
                 <FormGroup.Label>E-mail address</FormGroup.Label>
                 <TextInput
+                  autoFocus
                   onChange={(e) => {
                     setFormData({ ...formData, email: e.target.value });
                   }}
@@ -307,6 +308,21 @@ function SignUp() {
               </ButtonPrimary>
             </form>
           </Box>
+          <Text
+            as="p"
+            sx={{
+              borderColor: "border.default",
+              borderRadius: 6,
+              borderStyle: "solid",
+              borderWidth: "1px",
+              mt: 3,
+              px: 20,
+              py: 15,
+              textAlign: "center",
+            }}
+          >
+            Already have an account? <Link href="/login">Sign in →</Link>
+          </Text>
         </Box>
       </main>
     </>
