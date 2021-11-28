@@ -2,6 +2,7 @@ import { useAuth } from "../context/auth";
 import { useUser } from "../context/user";
 import {
   Avatar,
+  Box,
   ButtonOutline,
   Dropdown,
   Header,
@@ -32,16 +33,16 @@ export function AppBar() {
       {token && (
         <Header.Item sx={{ mr: 0 }}>
           <Dropdown>
-            <summary>
+            <Box as="summary" sx={{ ":hover": { cursor: "pointer" } }}>
               <Avatar
-                size={30}
+                size={20}
                 src="https://avatars.githubusercontent.com/primer"
               />
               <Dropdown.Caret />
-            </summary>
-            <Dropdown.Menu direction="sw">
+            </Box>
+            <Dropdown.Menu direction="sw" sx={{ width: "180px" }}>
               <Dropdown.Item>
-                <Link href="/">
+                <Link href={"/" + user.login}>
                   Signed in as
                   <br />
                   <strong>{user.login}</strong>
@@ -57,9 +58,20 @@ export function AppBar() {
                     updateToken("");
                   }}
                 >
-                  <ButtonOutline sx={{ width: "100%" }} type="submit">
+                  <Link
+                    as="button"
+                    sx={{
+                      background: "none",
+                      color: "fg.default",
+                      border: 0,
+                      textAlign: "left",
+                      width: "100%",
+                      ":hover": { color: "#fff", textDecoration: "none" },
+                    }}
+                    type="submit"
+                  >
                     Sign out
-                  </ButtonOutline>
+                  </Link>
                 </form>
               </Dropdown.Item>
             </Dropdown.Menu>
