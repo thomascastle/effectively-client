@@ -4,11 +4,12 @@ import {
   Button,
   ButtonPrimary,
   FormGroup,
-  Label,
+  IssueLabelToken,
   StyledOcticon,
   TextInput,
 } from "@primer/components";
 import { SyncIcon } from "@primer/octicons-react";
+import generateRandomColor from "randomcolor";
 import * as React from "react";
 
 export const MUTATION_UPDATE_LABELS = gql`
@@ -28,9 +29,21 @@ export const MUTATION_UPDATE_LABELS = gql`
 export function LabelEdit({ label, on, onCancel: cancel }) {
   const [name, setName] = React.useState(label.name);
   const [description, setDescription] = React.useState(label.description ?? "");
-  const [color, setColor] = React.useState(label.color ?? "");
+  const [color, setColor] = React.useState(`#${label.color}` ?? "#ededed");
   const [shouldDisable, setShouldDisable] = React.useState(false);
   const inputColor = React.useRef(null);
+
+  const getProvidedOrDefaultColor = (value) => {
+    return isValidColorHex(value) ? value : "#ededed";
+
+    function isValidColorHex(value) {
+      return /^#([0-9A-F]{3}){1,2}$/i.test(value);
+    }
+  };
+
+  const getNewColor = () => {
+    setColor(generateRandomColor());
+  };
 
   const [updateLabel, { loading }] = useMutation(MUTATION_UPDATE_LABELS, {
     optimisticResponse: {
@@ -80,9 +93,11 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
   return (
     <>
       <Box sx={{ width: ["75%", "75%", "25%"] }}>
-        <Label sx={{}} variant="large">
-          {name}
-        </Label>
+        <IssueLabelToken
+          fillColor={getProvidedOrDefaultColor(color)}
+          text={name}
+          size="large"
+        />
       </Box>
       <Box
         className="f6"
@@ -167,7 +182,10 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
           >
             <FormGroup.Label htmlFor="label-color">Color</FormGroup.Label>
             <Box sx={{ display: "flex" }}>
-              <Button sx={{ flexShrink: 0, mr: 2 }}>
+              <Button
+                onClick={getNewColor}
+                sx={{ flexShrink: 0, mr: 2, px: "7px" }}
+              >
                 <StyledOcticon icon={SyncIcon} />
               </Button>
               <TextInput

@@ -2,7 +2,7 @@ import { LabelEdit } from "./LabelEdit";
 import { gql, useMutation } from "@apollo/client";
 import {
   Box,
-  Label,
+  IssueLabelToken,
   Button,
   Dialog,
   ButtonDanger,
@@ -58,9 +58,11 @@ export function LabelListItem({ label }) {
       ) : (
         <>
           <Box sx={{ width: ["75%", "75%", "25%"] }}>
-            <Label sx={{}} variant="large">
-              {label.name}
-            </Label>
+            <IssueLabelToken
+              size="large"
+              text={label.name}
+              fillColor={`#${label.color}`}
+            />
           </Box>
           <Box
             className="f6"

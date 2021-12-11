@@ -3,12 +3,14 @@ import {
   Box,
   Button,
   ButtonPrimary,
-  Label,
+  IssueLabelToken,
   FormGroup,
   StyledOcticon,
   TextInput,
+  Tooltip,
 } from "@primer/components";
 import { SyncIcon } from "@primer/octicons-react";
+import generateRandomColor from "randomcolor";
 import * as React from "react";
 
 export const MUTATION_CREATE_LABELS = gql`
@@ -30,9 +32,21 @@ export function LabelCreate({ on, onCancel: cancel, repositoryId }) {
   const [name, setName] = React.useState("");
   const [previewName, setPreviewName] = React.useState("Label preview");
   const [description, setDescription] = React.useState("");
-  const [color, setColor] = React.useState("#d93f0b");
+  const [color, setColor] = React.useState(generateRandomColor());
   const [shouldDisable, setShouldDisable] = React.useState(false);
   const colorInputElRef = React.useRef(null);
+
+  const getProvidedOrDefaultColor = (value) => {
+    return isValidColorHex(value) ? value : "#ededed";
+
+    function isValidColorHex(value) {
+      return /^#([0-9A-F]{3}){1,2}$/i.test(value);
+    }
+  };
+
+  const getNewColor = () => {
+    setColor(generateRandomColor());
+  };
 
   const updateName = function (e) {
     const value = e.target.value;
@@ -116,7 +130,11 @@ export function LabelCreate({ on, onCancel: cancel, repositoryId }) {
       }}
     >
       <Box sx={{ mb: 2, mt: 0 }}>
-        <Label outline>{previewName}</Label>
+        <IssueLabelToken
+          fillColor={getProvidedOrDefaultColor(color)}
+          text={previewName}
+          size="large"
+        />
       </Box>
       <Box
         sx={{
@@ -163,9 +181,18 @@ export function LabelCreate({ on, onCancel: cancel, repositoryId }) {
         <FormGroup sx={{ my: [2, 2, 3], width: ["100%", "100%", "16.66667%"] }}>
           <FormGroup.Label htmlFor="label-color">Color</FormGroup.Label>
           <Box sx={{ display: "flex" }}>
-            <Button sx={{ flexShrink: 0, mr: 2 }}>
-              <StyledOcticon icon={SyncIcon} />
-            </Button>
+            <Tooltip aria-label="Get a new color" direction="w">
+              <Button
+                onClick={getNewColor}
+                sx={{
+                  flexShrink: 0,
+                  mr: 2,
+                  px: "7px",
+                }}
+              >
+                <StyledOcticon icon={SyncIcon} />
+              </Button>
+            </Tooltip>
             <TextInput
               autocomplete="off"
               maxLength="7"

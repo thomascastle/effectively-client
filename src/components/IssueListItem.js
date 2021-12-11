@@ -2,7 +2,7 @@ import {
   Avatar,
   AvatarStack,
   Box,
-  Label,
+  IssueLabelToken,
   LabelGroup,
   Link,
   StyledOcticon,
@@ -49,6 +49,7 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
           href={repositoryBaseUrl + "/issues/" + issue.number}
           sx={{
             color: "fg.default",
+            mr: 1,
             ":hover": { color: "accent.fg", textDecoration: "none" },
           }}
         >
@@ -57,16 +58,11 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
         {issue.labels && (
           <LabelGroup>
             {issue.labels.map((label) => (
-              <Label
+              <IssueLabelToken
+                fillColor={`#${label.color}`}
                 key={label.id}
-                sx={{
-                  bg: "prState.closed.bg",
-                  color: "prState.closed.text",
-                  ml: 1,
-                }}
-              >
-                {label.name}
-              </Label>
+                text={label.name}
+              />
             ))}
           </LabelGroup>
         )}

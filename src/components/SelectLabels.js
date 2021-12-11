@@ -1,13 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
 import {
+  Box,
+  IssueLabelToken,
+  LabelGroup,
+  Link,
   SelectMenu,
   StyledOcticon,
-  Box,
   Text,
   Truncate,
-  LabelGroup,
-  Label,
-  Link,
 } from "@primer/components";
 import { GearIcon, PencilIcon } from "@primer/octicons-react";
 import * as React from "react";
@@ -24,6 +24,7 @@ export const ISSUES_AVAILABLE_TO_APPLY_QUERY = gql`
       labels(first: $first) {
         edges {
           node {
+            color
             description
             id
             name
@@ -55,7 +56,10 @@ export function SelectLabels({ initial, onChange, onFinish }) {
       setSelectedLabels(selectedLabels.filter((sl) => sl.id !== l.id));
     } else {
       // No entry; put the item into the list
-      setSelectedLabels([...selectedLabels, { id: l.id, name: l.name }]);
+      setSelectedLabels([
+        ...selectedLabels,
+        { color: l.color, id: l.id, name: l.name },
+      ]);
     }
   };
 
@@ -114,7 +118,11 @@ export function SelectLabels({ initial, onChange, onFinish }) {
       {selectedLabels.length > 0 ? (
         <LabelGroup>
           {selectedLabels.map((sl) => (
-            <Label key={sl.id}>{sl.name}</Label>
+            <IssueLabelToken
+              fillColor={`#${sl.color}`}
+              key={sl.id}
+              text={sl.name}
+            />
           ))}
         </LabelGroup>
       ) : (

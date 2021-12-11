@@ -72,6 +72,7 @@ export const QUERY_REPOSITORY_ISSUES = gql`
           }
           id
           labels {
+            color
             id
             name
           }
