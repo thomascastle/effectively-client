@@ -1,4 +1,5 @@
 import { LayoutDefault } from "../components/LayoutDefault";
+import { MUTATION_CREATE_REPOSITORY } from "../datasource/mutations";
 import { gql, useMutation } from "@apollo/client";
 import {
   Box,
@@ -22,19 +23,6 @@ export function RepositoryCreatePage() {
     </LayoutDefault>
   );
 }
-
-const MUTATION_CREATE_REPOSITORY = gql`
-  mutation CreateRepository($input: CreateRepositoryInput) {
-    createRepository(input: $input) {
-      message
-      repository {
-        name
-        nameWithOwner
-      }
-      success
-    }
-  }
-`;
 
 function Form() {
   const history = useHistory();
