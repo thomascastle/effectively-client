@@ -52,7 +52,7 @@ export function IssueIndexPage() {
   return (
     <>
       <AppBar />
-      <Box class="main">
+      <Box className="main">
         <Box as="main">
           <Box
             sx={{
@@ -296,7 +296,7 @@ function IssueList({ issues }) {
     </Box>
   ) : (
     <Box
-      class="blankslate"
+      className="blankslate"
       sx={{
         px: 40,
         py: 80,

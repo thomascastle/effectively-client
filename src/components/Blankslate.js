@@ -48,7 +48,7 @@ export function Blankslate({ icon, title, children }) {
     >
       <Box sx={{ maxWidth: 768, mx: "auto" }}>
         <Box
-          class="blankslate blankslate-large blankslate-spacious"
+          className="blankslate blankslate-large blankslate-spacious"
           sx={{ position: "relative", px: 40, py: 80, textAlign: "center" }}
         >
           {icon && (

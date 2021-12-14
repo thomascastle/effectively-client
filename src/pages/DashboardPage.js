@@ -16,7 +16,7 @@ export function DashboardPage() {
   return (
     <>
       <AppBar />
-      <Box class="main">
+      <Box className="main">
         <Box
           sx={{
             backgroundColor: "canvas.inset",
@@ -97,8 +97,8 @@ export function DashboardPage() {
                   }}
                 >
                   <Box as="main" sx={{ flex: "auto" }}>
-                    <Box class="dashboard" id="dashboard">
-                      <Box class="news">
+                    <Box className="dashboard" id="dashboard">
+                      <Box className="news">
                         <Heading
                           sx={{
                             fontSize: [16, null, 16],

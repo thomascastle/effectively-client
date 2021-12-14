@@ -18,7 +18,7 @@ export function IssueList({ issues }) {
     </Box>
   ) : (
     <Box
-      class="blankslate"
+      className="blankslate"
       sx={{
         px: 40,
         py: 80,
