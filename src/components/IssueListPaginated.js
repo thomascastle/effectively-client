@@ -192,6 +192,10 @@ export function IssueListPaginated({ after, before, filter }) {
               {pageInfo.hasPreviousPage ? (
                 <Link
                   href={
+                    "/" +
+                    login +
+                    "/" +
+                    repositoryName +
                     "/issues?before=" +
                     pageInfo.startCursor +
                     "&state=" +
@@ -239,6 +243,10 @@ export function IssueListPaginated({ after, before, filter }) {
               {pageInfo.hasNextPage ? (
                 <Link
                   href={
+                    "/" +
+                    login +
+                    "/" +
+                    repositoryName +
                     "/issues?after=" +
                     pageInfo.endCursor +
                     "&state=" +

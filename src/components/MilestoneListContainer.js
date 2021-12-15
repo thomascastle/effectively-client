@@ -128,6 +128,10 @@ export function MilestoneListContainer({ after, before, filter }) {
               {pageInfo.hasPreviousPage ? (
                 <Link
                   href={
+                    "/" +
+                    login +
+                    "/" +
+                    repositoryName +
                     "/milestones?before=" +
                     pageInfo.startCursor +
                     "&state=" +
@@ -175,6 +179,10 @@ export function MilestoneListContainer({ after, before, filter }) {
               {pageInfo.hasNextPage ? (
                 <Link
                   href={
+                    "/" +
+                    login +
+                    "/" +
+                    repositoryName +
                     "/milestones?after=" +
                     pageInfo.endCursor +
                     "&state=" +

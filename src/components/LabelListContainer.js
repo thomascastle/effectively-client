@@ -86,14 +86,13 @@ export function LabelListContainer({ after, before }) {
       </Box>
       {onFormLabelCreate && (
         <LabelCreate
-          on={onFormLabelCreate}
           onCancel={displayFormLabelCreate}
           repositoryId={repositoryId}
         />
       )}
       {nodes.length < 1 && (
         <Blankslate icon={TagIcon} title="No labels!">
-          There aren’t any labels for this repository quite yet. Click on the
+          There aren't any labels for this repository quite yet. Click on the
           "New label" button above to create one.
         </Blankslate>
       )}
@@ -149,7 +148,7 @@ export function LabelListContainer({ after, before }) {
             >
               {pageInfo.hasPreviousPage ? (
                 <Link
-                  href={"/labels?before=" + pageInfo.startCursor}
+                  href={`/${login}/${repositoryName}/labels?before=${pageInfo.startCursor}`}
                   rel="prev"
                   sx={{
                     border: "1px solid",
@@ -191,7 +190,7 @@ export function LabelListContainer({ after, before }) {
               )}
               {pageInfo.hasNextPage ? (
                 <Link
-                  href={"/labels?after=" + pageInfo.endCursor}
+                  href={`/${login}/${repositoryName}/labels?after=${pageInfo.endCursor}`}
                   rel="next"
                   sx={{
                     border: "1px solid",
