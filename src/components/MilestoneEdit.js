@@ -1,4 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
+import { MUTATION_UPDATE_MILESTONE } from "../datasource/mutations";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   Button,
@@ -8,18 +9,6 @@ import {
 } from "@primer/components";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";
-
-export const MUTATION_UPDATE_MILESTONE = gql`
-  mutation UpdateMilestone($input: UpdateMilestoneInput) {
-    updateMilestone(input: $input) {
-      milestone {
-        description
-        dueOn
-        title
-      }
-    }
-  }
-`;
 
 export function MilestoneEdit({ milestone }) {
   const history = useHistory();

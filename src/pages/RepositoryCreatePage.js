@@ -1,6 +1,6 @@
 import { LayoutDefault } from "../components/LayoutDefault";
 import { MUTATION_CREATE_REPOSITORY } from "../datasource/mutations";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,

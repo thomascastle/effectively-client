@@ -1,8 +1,9 @@
+import { QUERY_REPOSITORY_LABELS } from "../datasource/queries";
 import { Blankslate } from "./Blankslate";
 import { LabelCreate } from "./LabelCreate";
 import { LabelList } from "./LabelList";
 import { RepoSubNav } from "./RepoSubNav";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,
@@ -11,51 +12,21 @@ import {
   Link,
   SelectMenu,
   StyledOcticon,
-  SubNav,
   Text,
   TextInput,
 } from "@primer/components";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  MilestoneIcon,
   SearchIcon,
   TagIcon,
 } from "@primer/octicons-react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-export const QUERY_PAGINATED_LABELS = gql`
-  query GetPaginatedLabels(
-    $after: String
-    $before: String
-    $name: String!
-    $owner: String!
-  ) {
-    repository(name: $name, owner: $owner) {
-      id
-      labels(after: $after, before: $before) {
-        nodes {
-          color
-          description
-          id
-          name
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-          hasPreviousPage
-          startCursor
-        }
-        totalCount
-      }
-    }
-  }
-`;
-
 export function LabelListContainer({ after, before }) {
   const { login, repositoryName } = useParams();
-  const { data, error, loading } = useQuery(QUERY_PAGINATED_LABELS, {
+  const { data, error, loading } = useQuery(QUERY_REPOSITORY_LABELS, {
     variables: {
       after: after,
       before: before,

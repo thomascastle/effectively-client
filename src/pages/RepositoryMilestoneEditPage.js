@@ -1,25 +1,17 @@
 import { MilestoneEdit } from "../components/MilestoneEdit";
 import { Layout } from "../components/Layout";
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY_MILESTONE } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-export const MILESTONE_BY_NUMBER_QUERY = gql`
-  query GetMilestoneByNumber($milestoneNumber: Int!) {
-    milestone(number: $milestoneNumber) {
-      description
-      dueOn
-      id
-      title
-    }
-  }
-`;
-
 export function RepositoryMilestoneEditPage() {
-  const { number } = useParams();
+  const { login, number, repositoryName } = useParams();
 
-  const { data, error, loading } = useQuery(MILESTONE_BY_NUMBER_QUERY, {
+  const { data, error, loading } = useQuery(QUERY_REPOSITORY_MILESTONE, {
     variables: {
       milestoneNumber: parseInt(number),
+      name: repositoryName,
+      owner: login,
     },
   });
 
@@ -31,7 +23,7 @@ export function RepositoryMilestoneEditPage() {
     return <p>Loading...</p>;
   }
 
-  const { milestone } = data;
+  const { milestone } = data.repository;
 
   return (
     <Layout>

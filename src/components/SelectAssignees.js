@@ -1,32 +1,19 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { QUERY_USERS_AVAILABLE_TO_ASSIGN } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import {
-  Avatar,
   Box,
   Button,
-  ButtonPrimary,
   Dialog,
   Link,
   SelectMenu,
   StyledOcticon,
-  TabNav,
   Text,
-  TextInput,
 } from "@primer/components";
-import { GearIcon, MarkdownIcon } from "@primer/octicons-react";
+import { GearIcon } from "@primer/octicons-react";
 import * as React from "react";
 
-export const USERS_AVAILABLE_TO_ASSIGN_QUERY = gql`
-  query GetUsersAvailableToAssign {
-    users {
-      id
-      login
-      name
-    }
-  }
-`;
-
 export function SelectAssignees({ initial, onChange, onFinish }) {
-  const { data, error, loading } = useQuery(USERS_AVAILABLE_TO_ASSIGN_QUERY);
+  const { data, error, loading } = useQuery(QUERY_USERS_AVAILABLE_TO_ASSIGN);
   const [assignees, setAssignees] = React.useState(initial ?? []);
   const [isOpen, setIsOpen] = React.useState(false);
 

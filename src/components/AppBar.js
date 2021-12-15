@@ -3,7 +3,6 @@ import { useUser } from "../context/user";
 import {
   Avatar,
   Box,
-  ButtonOutline,
   Dropdown,
   Header,
   Link,

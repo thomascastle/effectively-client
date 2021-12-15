@@ -1,4 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
+import { MUTATION_UPDATE_LABEL } from "../datasource/mutations";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   Button,
@@ -11,20 +12,6 @@ import {
 import { SyncIcon } from "@primer/octicons-react";
 import generateRandomColor from "randomcolor";
 import * as React from "react";
-
-export const MUTATION_UPDATE_LABELS = gql`
-  mutation UpdateLabel($updateLabelInput: UpdateLabelInput!) {
-    updateLabel(input: $updateLabelInput) {
-      label {
-        __typename
-        color
-        description
-        id
-        name
-      }
-    }
-  }
-`;
 
 export function LabelEdit({ label, on, onCancel: cancel }) {
   const [name, setName] = React.useState(label.name);
@@ -45,7 +32,7 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
     setColor(generateRandomColor());
   };
 
-  const [updateLabel, { loading }] = useMutation(MUTATION_UPDATE_LABELS, {
+  const [updateLabel, { loading }] = useMutation(MUTATION_UPDATE_LABEL, {
     optimisticResponse: {
       updateLabel: {
         label: {

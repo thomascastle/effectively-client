@@ -1,15 +1,8 @@
 import { IssueCreate } from "../components/IssueCreate";
 import { Layout } from "../components/Layout";
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-
-const QUERY_REPOSITORY = gql`
-  query ($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      id
-    }
-  }
-`;
 
 export function RepositoryIssueCreatePage() {
   const { login, repositoryName } = useParams();

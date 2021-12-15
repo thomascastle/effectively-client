@@ -13,19 +13,6 @@ export const QUERY_COUNT_ISSUES_BY_STATES = gql`
   }
 `;
 
-export const QUERY_COUNT_VIEWER_ISSUES_BY_STATES = gql`
-  query GetCountViewerIssuesByState {
-    viewer {
-      closed: issues(states: CLOSED) {
-        totalCount
-      }
-      open: issues(states: OPEN) {
-        totalCount
-      }
-    }
-  }
-`;
-
 export const QUERY_COUNT_LABELS = gql`
   query GetCountLabels($name: String!, $owner: String!) {
     repository(name: $name, owner: $owner) {
@@ -44,6 +31,74 @@ export const QUERY_COUNT_LABELS_AND_OPEN_MILESTONES = gql`
       }
       milestones(states: OPEN) {
         totalCount
+      }
+    }
+  }
+`;
+
+export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
+  query GetCountMilestonesByState($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      closed: milestones(states: CLOSED) {
+        totalCount
+      }
+      open: milestones(states: OPEN) {
+        totalCount
+      }
+    }
+  }
+`;
+
+export const QUERY_COUNT_VIEWER_ISSUES_BY_STATES = gql`
+  query GetCountViewerIssuesByState {
+    viewer {
+      closed: issues(states: CLOSED) {
+        totalCount
+      }
+      open: issues(states: OPEN) {
+        totalCount
+      }
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY = gql`
+  query FindRepository($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      id
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_ISSUE = gql`
+  query FindRepositoryIssue($name: String!, $owner: String!, $number: Int!) {
+    repository(name: $name, owner: $owner) {
+      id
+      issue(number: $number) {
+        assignees {
+          id
+          name
+          login
+        }
+        createdAt
+        createdBy {
+          login
+        }
+        id
+        labels {
+          color
+          description
+          id
+          name
+        }
+        milestone {
+          dueOn
+          id
+          title
+        }
+        number
+        state
+        title
       }
     }
   }
@@ -91,6 +146,124 @@ export const QUERY_REPOSITORY_ISSUES = gql`
           startCursor
         }
       }
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_LABELS = gql`
+  query GetPaginatedLabels(
+    $after: String
+    $before: String
+    $name: String!
+    $owner: String!
+  ) {
+    repository(name: $name, owner: $owner) {
+      id
+      labels(after: $after, before: $before) {
+        nodes {
+          color
+          description
+          id
+          name
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_LABELS_AVAILABLE_TO_APPLY = gql`
+  query GetLabelsAvailableToApply($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      id
+      labels(first: 100) {
+        edges {
+          node {
+            color
+            description
+            id
+            name
+          }
+        }
+      }
+      name
+      nameWithOwner
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_MILESTONE = gql`
+  query GetMilestoneByNumber(
+    $milestoneNumber: Int!
+    $name: String!
+    $owner: String!
+  ) {
+    repository(name: $name, owner: $owner) {
+      milestone(number: $milestoneNumber) {
+        description
+        dueOn
+        id
+        title
+      }
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_MILESTONES = gql`
+  query GetRepositoryMilestones(
+    $after: String
+    $before: String
+    $milestonesStates: [MilestoneState!]
+    $name: String!
+    $owner: String!
+  ) {
+    repository(name: $name, owner: $owner) {
+      id
+      milestones(after: $after, before: $before, states: $milestonesStates) {
+        nodes {
+          closed
+          closedAt
+          createdAt
+          description
+          dueOn
+          id
+          number
+          title
+          updatedAt
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
+export const QUERY_REPOSITORY_MILESTONES_AVAILABLE_TO_SET = gql`
+  query GetMilestonesAvailableToSet($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+      id
+      milestones(first: 100) {
+        edges {
+          node {
+            dueOn
+            id
+            title
+          }
+        }
+      }
+      name
+      nameWithOwner
     }
   }
 `;
@@ -152,6 +325,34 @@ export const QUERY_VIEWER_ISSUES = gql`
         totalCount
       }
       login
+    }
+  }
+`;
+
+export const QUERY_VIEWER_REPOSITORIES = gql`
+  query GetRepositories {
+    viewer {
+      login
+      repositories {
+        id
+        isPrivate
+        name
+        nameWithOwner
+        owner {
+          login
+        }
+        visibility
+      }
+    }
+  }
+`;
+
+export const QUERY_USERS_AVAILABLE_TO_ASSIGN = gql`
+  query GetUsersAvailableToAssign {
+    users {
+      id
+      login
+      name
     }
   }
 `;

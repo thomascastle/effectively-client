@@ -1,8 +1,9 @@
 import { useUser } from "../context/user";
+import { MUTATION_CREATE_ISSUE } from "../datasource/mutations";
 import { SelectAssignees } from "./SelectAssignees";
 import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Avatar,
   Box,
@@ -18,17 +19,6 @@ import { GearIcon, MarkdownIcon } from "@primer/octicons-react";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
 
-export const ISSUES_CREATE_MUTATION = gql`
-  mutation CreateIssue($input: CreateIssueInput) {
-    createIssue(input: $input) {
-      issue {
-        id
-        number
-      }
-    }
-  }
-`;
-
 export function IssueCreate({ login, repositoryId, repositoryName }) {
   const history = useHistory();
   const inputTitle = React.useRef(null);
@@ -40,7 +30,7 @@ export function IssueCreate({ login, repositoryId, repositoryName }) {
   const [shouldDisable, setShouldDisable] = React.useState(false);
   const { user } = useUser();
 
-  const [createIssue] = useMutation(ISSUES_CREATE_MUTATION, {
+  const [createIssue] = useMutation(MUTATION_CREATE_ISSUE, {
     variables: {
       input: {
         assigneeIds: assignees,

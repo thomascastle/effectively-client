@@ -1,7 +1,8 @@
+import { MUTATION_UPDATE_ISSUE } from "../datasource/mutations";
 import { SelectAssignees } from "./SelectAssignees";
 import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import {
   Avatar,
   Box,
@@ -15,7 +16,6 @@ import {
   SelectMenu,
   StateLabel,
   StyledOcticon,
-  TabNav,
   Text,
   TextInput,
 } from "@primer/components";
@@ -30,54 +30,6 @@ import { formatDistance } from "date-fns";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-export const ISSUES_UPDATE_ASSIGNEES_MUTATION = gql`
-  mutation UpdateIssueAssignees($updateIssueInput: UpdateIssueInput!) {
-    updateIssue(input: $updateIssueInput) {
-      issue {
-        id
-      }
-    }
-  }
-`;
-
-export const ISSUES_UPDATE_TITLE_MUTATION = gql`
-  mutation UpdateIssueTitle($updateIssueInput: UpdateIssueInput!) {
-    updateIssue(input: $updateIssueInput) {
-      issue {
-        __typename
-        id
-        title
-      }
-    }
-  }
-`;
-
-export const ISSUES_UPDATE_LABLES_MUTATION = gql`
-  mutation UpdateIssueLabels($updateIssueInput: UpdateIssueInput!) {
-    updateIssue(input: $updateIssueInput) {
-      issue {
-        id
-        labels {
-          color
-          description
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-export const ISSUES_UPDATE_MILESTONE_MUTATION = gql`
-  mutation UpdateIssueLabels($updateIssueInput: UpdateIssueInput!) {
-    updateIssue(input: $updateIssueInput) {
-      issue {
-        id
-      }
-    }
-  }
-`;
-
 export const ISSUES_DELETE_MUTATION = gql`
   mutation ($deleteIssueId: ID!) {
     deleteIssue(id: $deleteIssueId) {
@@ -86,7 +38,7 @@ export const ISSUES_DELETE_MUTATION = gql`
   }
 `;
 
-export function IssueDetails({ issue }) {
+export function IssueDetails({ issue, repositoryId }) {
   const history = useHistory();
   const { login, repositoryName } = useParams();
   const [editing, setEditing] = React.useState(false);
@@ -101,7 +53,7 @@ export function IssueDetails({ issue }) {
     issue.milestone ? issue.milestone.id : null
   );
 
-  const [updateIssueAssignees] = useMutation(ISSUES_UPDATE_ASSIGNEES_MUTATION, {
+  const [updateIssueAssignees] = useMutation(MUTATION_UPDATE_ISSUE, {
     variables: {
       updateIssueInput: {
         id: issue.id,
@@ -110,28 +62,33 @@ export function IssueDetails({ issue }) {
     },
   });
 
-  const [updateIssueTitle, { loading }] = useMutation(
-    ISSUES_UPDATE_TITLE_MUTATION,
-    {
-      optimisticResponse: {
-        updateIssue: {
-          issue: {
-            __typename: "Issue",
-            id: issue.id,
-            title: title,
-          },
-        },
-      },
-      variables: {
-        updateIssueInput: {
+  const [updateIssueTitle, { loading }] = useMutation(MUTATION_UPDATE_ISSUE, {
+    optimisticResponse: {
+      updateIssue: {
+        issue: {
+          __typename: "Issue",
           id: issue.id,
           title: title,
         },
       },
-    }
-  );
+    },
+    update: (cache, { data: { updateIssue } }) => {
+      cache.modify({
+        id: "Repository:" + repositoryId,
+        fields: {
+          issues(existingIssues = []) {},
+        },
+      });
+    },
+    variables: {
+      updateIssueInput: {
+        id: issue.id,
+        title: title,
+      },
+    },
+  });
 
-  const [updateIssueLabels] = useMutation(ISSUES_UPDATE_LABLES_MUTATION, {
+  const [updateIssueLabels] = useMutation(MUTATION_UPDATE_ISSUE, {
     variables: {
       updateIssueInput: {
         id: issue.id,
@@ -140,7 +97,7 @@ export function IssueDetails({ issue }) {
     },
   });
 
-  const [updateIssueMilestone] = useMutation(ISSUES_UPDATE_MILESTONE_MUTATION, {
+  const [updateIssueMilestone] = useMutation(MUTATION_UPDATE_ISSUE, {
     variables: {
       updateIssueInput: {
         id: issue.id,

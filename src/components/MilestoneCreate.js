@@ -1,4 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
+import { MUTATION_CREATE_MILESTONE } from "../datasource/mutations";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,
@@ -8,15 +9,6 @@ import {
 } from "@primer/components";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";
-
-export const MUTATION_CREATE_MILESTONE = gql`
-  mutation CreateMilestone($input: CreateMilestoneInput) {
-    createMilestone(input: $input) {
-      message
-      success
-    }
-  }
-`;
 
 export function MilestoneCreate({ repositoryId }) {
   const history = useHistory();

@@ -1,28 +1,19 @@
 import { Layout } from "../components/Layout";
 import { MilestoneDetails } from "../components/MilestoneDetails";
 import { RepoSubNav } from "../components/RepoSubNav";
-import { gql, useQuery } from "@apollo/client";
-import { Box, SubNav, StyledOcticon, Link, Button } from "@primer/components";
-import { TagIcon, MilestoneIcon } from "@primer/octicons-react";
+import { QUERY_REPOSITORY_MILESTONE } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
+import { Box, Button } from "@primer/components";
 import { useParams } from "react-router-dom";
-
-export const MILESTONE_BY_NUMBER_QUERY = gql`
-  query GetMilestoneByNumber($milestoneNumber: Int!) {
-    milestone(number: $milestoneNumber) {
-      description
-      dueOn
-      id
-      title
-    }
-  }
-`;
 
 export function RepositoryMilestoneDetailsPage() {
   const { login, number, repositoryName } = useParams();
 
-  const { data, error, loading } = useQuery(MILESTONE_BY_NUMBER_QUERY, {
+  const { data, error, loading } = useQuery(QUERY_REPOSITORY_MILESTONE, {
     variables: {
       milestoneNumber: parseInt(number),
+      name: repositoryName,
+      owner: login,
     },
   });
 
@@ -34,7 +25,7 @@ export function RepositoryMilestoneDetailsPage() {
     return <div>{error.message}</div>;
   }
 
-  const { milestone } = data;
+  const { milestone } = data.repository;
 
   return (
     <Layout>

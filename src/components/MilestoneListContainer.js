@@ -1,14 +1,17 @@
+import {
+  QUERY_COUNT_MILESTONES_BY_STATE,
+  QUERY_REPOSITORY_MILESTONES,
+} from "../datasource/queries";
 import { Blankslate } from "./Blankslate";
 import { MilestoneList } from "./MilestoneList";
 import { RepoSubNav } from "./RepoSubNav";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,
   ButtonTableList,
   Link,
   SelectMenu,
-  SubNav,
   StyledOcticon,
   Text,
 } from "@primer/components";
@@ -17,49 +20,14 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MilestoneIcon,
-  TagIcon,
 } from "@primer/octicons-react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-export const QUERY_PAGINATED_MILESTONES = gql`
-  query GetPaginatedMilestones(
-    $after: String
-    $before: String
-    $milestonesStates: [MilestoneState!]
-    $name: String!
-    $owner: String!
-  ) {
-    repository(name: $name, owner: $owner) {
-      id
-      milestones(after: $after, before: $before, states: $milestonesStates) {
-        nodes {
-          closed
-          closedAt
-          createdAt
-          description
-          dueOn
-          id
-          number
-          title
-          updatedAt
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-          hasPreviousPage
-          startCursor
-        }
-        totalCount
-      }
-    }
-  }
-`;
-
 export function MilestoneListContainer({ after, before, filter }) {
   const { state } = filter;
   const { login, repositoryName } = useParams();
-  const { data, error, loading } = useQuery(QUERY_PAGINATED_MILESTONES, {
+  const { data, error, loading } = useQuery(QUERY_REPOSITORY_MILESTONES, {
     variables: {
       after: after,
       before: before,
@@ -293,19 +261,6 @@ function ConditionalBlankslate() {
     </Blankslate>
   );
 }
-
-export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
-  query GetCountMilestonesByState($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      closed: milestones(states: CLOSED) {
-        totalCount
-      }
-      open: milestones(states: OPEN) {
-        totalCount
-      }
-    }
-  }
-`;
 
 function CountByStateNav({ state }) {
   const { login, repositoryName } = useParams();

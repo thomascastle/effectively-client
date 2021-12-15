@@ -4,7 +4,7 @@ import {
 } from "../datasource/queries";
 import { Blankslate } from "./Blankslate";
 import { IssueListPaginated } from "./IssueListPaginated";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   Box,
   ButtonPrimary,
@@ -23,14 +23,6 @@ import {
   TagIcon,
 } from "@primer/octicons-react";
 import { useParams } from "react-router-dom";
-
-export const MILESTONES_OPEN_COUNT_QUERY = gql`
-  query GetMilestonesOpenCount {
-    milestones(states: OPEN) {
-      totalCount
-    }
-  }
-`;
 
 export function IssueListContainer({
   after,

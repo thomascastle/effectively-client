@@ -1,4 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY_LABELS_AVAILABLE_TO_APPLY } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import {
   Box,
   IssueLabelToken,
@@ -13,39 +14,17 @@ import { GearIcon, PencilIcon } from "@primer/octicons-react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-export const ISSUES_AVAILABLE_TO_APPLY_QUERY = gql`
-  query GetLabelsAvailableToApply(
-    $name: String!
-    $owner: String!
-    $first: Int
-  ) {
-    repository(name: $name, owner: $owner) {
-      id
-      labels(first: $first) {
-        edges {
-          node {
-            color
-            description
-            id
-            name
-          }
-        }
-      }
-      name
-      nameWithOwner
-    }
-  }
-`;
-
 export function SelectLabels({ initial, onChange, onFinish }) {
   const { login, repositoryName } = useParams();
-  const { data, error, loading } = useQuery(ISSUES_AVAILABLE_TO_APPLY_QUERY, {
-    variables: {
-      name: repositoryName,
-      first: 100,
-      owner: login,
-    },
-  });
+  const { data, error, loading } = useQuery(
+    QUERY_REPOSITORY_LABELS_AVAILABLE_TO_APPLY,
+    {
+      variables: {
+        name: repositoryName,
+        owner: login,
+      },
+    }
+  );
   const [selectedLabels, setSelectedLabels] = React.useState(initial ?? []);
 
   const handleItemSelected = (e, l) => {

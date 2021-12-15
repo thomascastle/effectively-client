@@ -1,53 +1,29 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY_MILESTONES_AVAILABLE_TO_SET } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import {
-  Avatar,
   Box,
-  ButtonPrimary,
   Link,
   ProgressBar,
   SelectMenu,
   StyledOcticon,
-  TabNav,
   Text,
-  TextInput,
 } from "@primer/components";
-import { CalendarIcon, GearIcon, MarkdownIcon } from "@primer/octicons-react";
+import { CalendarIcon, GearIcon } from "@primer/octicons-react";
 import { format } from "date-fns";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-export const MILESTONES_AVAILABLE_TO_SET_QUERY = gql`
-  query GetMilestonesAvailableToSet(
-    $name: String!
-    $owner: String!
-    $first: Int
-  ) {
-    repository(name: $name, owner: $owner) {
-      id
-      milestones(first: $first) {
-        edges {
-          node {
-            dueOn
-            id
-            title
-          }
-        }
-      }
-      name
-      nameWithOwner
-    }
-  }
-`;
-
 export function SelectMilestone({ initial, onChange }) {
   const { login, repositoryName } = useParams();
-  const { data, error, loading } = useQuery(MILESTONES_AVAILABLE_TO_SET_QUERY, {
-    variables: {
-      name: repositoryName,
-      first: 100,
-      owner: login,
-    },
-  });
+  const { data, error, loading } = useQuery(
+    QUERY_REPOSITORY_MILESTONES_AVAILABLE_TO_SET,
+    {
+      variables: {
+        name: repositoryName,
+        owner: login,
+      },
+    }
+  );
   const [milestone, setMilestone] = React.useState(initial);
 
   const handleItemSelected = (e, m) => {

@@ -1,7 +1,6 @@
 import { LabelListContainer } from "../components/LabelListContainer";
 import { Layout } from "../components/Layout";
 import { useQueryParams } from "../hooks";
-import { gql } from "@apollo/client";
 import * as React from "react";
 
 export function RepositoryLabelIndexPage() {

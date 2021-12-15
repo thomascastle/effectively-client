@@ -1,15 +1,8 @@
 import { Layout } from "../components/Layout";
 import { MilestoneCreate } from "../components/MilestoneCreate";
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-
-export const QUERY_REPOSITORY = gql`
-  query FindRepository($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      id
-    }
-  }
-`;
 
 export function RepositoryMilestoneCreatePage() {
   const { login, repositoryName } = useParams();

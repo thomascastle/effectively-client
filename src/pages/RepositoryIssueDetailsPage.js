@@ -1,44 +1,12 @@
 import { IssueDetails } from "../components/IssueDetails";
 import { Layout } from "../components/Layout";
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_REPOSITORY_ISSUE } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-
-export const QUERY_ISSUE_BY_NUMBER = gql`
-  query findIssueByNumber($name: String!, $owner: String!, $number: Int!) {
-    repository(name: $name, owner: $owner) {
-      issue(number: $number) {
-        assignees {
-          id
-          name
-          login
-        }
-        createdAt
-        createdBy {
-          login
-        }
-        id
-        labels {
-          color
-          description
-          id
-          name
-        }
-        milestone {
-          dueOn
-          id
-          title
-        }
-        number
-        state
-        title
-      }
-    }
-  }
-`;
 
 export function RepositoryIssueDetailsPage() {
   const { login, number, repositoryName } = useParams();
-  const { data, error, loading } = useQuery(QUERY_ISSUE_BY_NUMBER, {
+  const { data, error, loading } = useQuery(QUERY_REPOSITORY_ISSUE, {
     variables: {
       name: repositoryName,
       owner: login,
@@ -54,11 +22,11 @@ export function RepositoryIssueDetailsPage() {
     return <div>{error.message}</div>;
   }
 
-  const { issue } = data.repository;
+  const { id, issue } = data.repository;
 
   return (
     <Layout>
-      <IssueDetails issue={issue} />
+      <IssueDetails issue={issue} repositoryId={id} />
     </Layout>
   );
 }

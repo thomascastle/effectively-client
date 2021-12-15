@@ -1,28 +1,11 @@
+import { QUERY_COUNT_MILESTONES_BY_STATE } from "../datasource/queries";
 import { Blankslate } from "./Blankslate";
 import { MilestoneListItem } from "./MilestoneListItem";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Box } from "@primer/components";
 import { MilestoneIcon } from "@primer/octicons-react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
-
-export const MILESTONES_QUERY = gql`
-  query GetMilestones($milestonesStates: [MilestoneState!]) {
-    milestones(states: $milestonesStates) {
-      nodes {
-        closed
-        closedAt
-        createdAt
-        description
-        dueOn
-        id
-        number
-        title
-        updatedAt
-      }
-    }
-  }
-`;
 
 export function MilestoneList({ milestones }) {
   return (
@@ -80,16 +63,3 @@ function ConditionalBlankslate() {
     </Blankslate>
   );
 }
-
-export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
-  query GetCountMilestonesByState($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      closed: milestones(states: CLOSED) {
-        totalCount
-      }
-      open: milestones(states: OPEN) {
-        totalCount
-      }
-    }
-  }
-`;

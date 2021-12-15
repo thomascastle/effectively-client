@@ -1,5 +1,6 @@
 import { AppBar } from "../components/AppBar";
-import { gql, useQuery } from "@apollo/client";
+import { QUERY_VIEWER_REPOSITORIES } from "../datasource/queries";
+import { useQuery } from "@apollo/client";
 import {
   Avatar,
   Box,
@@ -145,26 +146,8 @@ export function DashboardPage() {
   );
 }
 
-const QUERY_REPOSITORIES = gql`
-  query GetRepositories {
-    viewer {
-      login
-      repositories {
-        id
-        isPrivate
-        name
-        nameWithOwner
-        owner {
-          login
-        }
-        visibility
-      }
-    }
-  }
-`;
-
 function Repositories() {
-  const { data, error, loading } = useQuery(QUERY_REPOSITORIES);
+  const { data, error, loading } = useQuery(QUERY_VIEWER_REPOSITORIES);
 
   return <RepositoryList data={data} error={error} loading={loading} />;
 }

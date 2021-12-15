@@ -1,4 +1,3 @@
-import { MILESTONES_QUERY } from "./MilestoneList";
 import { gql, useMutation } from "@apollo/client";
 import {
   Box,
@@ -7,7 +6,6 @@ import {
   StyledOcticon,
   Text,
   ProgressBar,
-  ButtonInvisible,
   Dialog,
   Flash,
   ButtonDanger,
@@ -50,21 +48,21 @@ export function MilestoneListItem({ milestone }) {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const [closeMilestone] = useMutation(MILESTONES_CLOSE_MUTATION, {
-    refetchQueries: [MILESTONES_QUERY],
+    refetchQueries: ["GetRepositoryMilestones"],
     variables: {
       closeMilestoneId: milestone.id,
     },
   });
 
   const [deleteMilestone] = useMutation(MILESTONES_DELETE_MUTATION, {
-    refetchQueries: [MILESTONES_QUERY],
+    refetchQueries: ["GetRepositoryMilestones"],
     variables: {
       deleteMilestoneId: milestone.id,
     },
   });
 
   const [reopenMilestone] = useMutation(MILESTONES_REOPEN_MUTATION, {
-    refetchQueries: [MILESTONES_QUERY],
+    refetchQueries: ["GetRepositoryMilestones"],
     variables: {
       reopenMilestoneId: milestone.id,
     },
