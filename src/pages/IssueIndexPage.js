@@ -7,6 +7,14 @@ import {
 import { useQueryParams } from "../hooks";
 import { useQuery } from "@apollo/client";
 import {
+  CheckIcon,
+  CommentIcon,
+  IssueClosedIcon,
+  IssueOpenedIcon,
+  MilestoneIcon,
+  SearchIcon,
+} from "@primer/octicons-react";
+import {
   Avatar,
   AvatarStack,
   Box,
@@ -21,15 +29,7 @@ import {
   Text,
   TextInput,
   Tooltip,
-} from "@primer/components";
-import {
-  CheckIcon,
-  CommentIcon,
-  IssueClosedIcon,
-  IssueOpenedIcon,
-  MilestoneIcon,
-  SearchIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { formatDistance } from "date-fns";
 import { useParams } from "react-router-dom";
 

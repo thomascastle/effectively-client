@@ -1,4 +1,10 @@
 import {
+  CalendarIcon,
+  CheckIcon,
+  CommentIcon,
+  IssueOpenedIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   StyledOcticon,
   Link,
@@ -7,13 +13,7 @@ import {
   Text,
   Tooltip,
   Label,
-} from "@primer/components";
-import {
-  CalendarIcon,
-  CheckIcon,
-  CommentIcon,
-  IssueOpenedIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { format, formatDistance } from "date-fns";
 
 export function MilestoneDetails({ milestone }) {

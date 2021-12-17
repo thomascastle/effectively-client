@@ -6,6 +6,12 @@ import { Blankslate } from "./Blankslate";
 import { IssueListPaginated } from "./IssueListPaginated";
 import { useQuery } from "@apollo/client";
 import {
+  IssueOpenedIcon,
+  MilestoneIcon,
+  SearchIcon,
+  TagIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   ButtonPrimary,
   CounterLabel,
@@ -15,13 +21,7 @@ import {
   StyledOcticon,
   SubNav,
   TextInput,
-} from "@primer/components";
-import {
-  IssueOpenedIcon,
-  MilestoneIcon,
-  SearchIcon,
-  TagIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { useParams } from "react-router-dom";
 
 export function IssueListContainer({

@@ -1,5 +1,6 @@
 import { MUTATION_UPDATE_LABEL } from "../datasource/mutations";
 import { useMutation } from "@apollo/client";
+import { SyncIcon } from "@primer/octicons-react";
 import {
   Box,
   Button,
@@ -8,8 +9,7 @@ import {
   IssueLabelToken,
   StyledOcticon,
   TextInput,
-} from "@primer/components";
-import { SyncIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import generateRandomColor from "randomcolor";
 import * as React from "react";
 

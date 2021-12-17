@@ -1,5 +1,6 @@
 import { useAuth } from "./context/auth";
 import { gql, useMutation } from "@apollo/client";
+import { MarkGithubIcon } from "@primer/octicons-react";
 import {
   Box,
   ButtonPrimary,
@@ -9,8 +10,7 @@ import {
   StyledOcticon,
   Text,
   TextInput,
-} from "@primer/components";
-import { MarkGithubIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 import {
   BrowserRouter as Router,

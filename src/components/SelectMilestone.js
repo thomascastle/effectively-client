@@ -1,5 +1,6 @@
 import { QUERY_REPOSITORY_MILESTONES_AVAILABLE_TO_SET } from "../datasource/queries";
 import { useQuery } from "@apollo/client";
+import { CalendarIcon, GearIcon } from "@primer/octicons-react";
 import {
   Box,
   Link,
@@ -7,8 +8,7 @@ import {
   SelectMenu,
   StyledOcticon,
   Text,
-} from "@primer/components";
-import { CalendarIcon, GearIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import { format } from "date-fns";
 import * as React from "react";
 import { useParams } from "react-router-dom";

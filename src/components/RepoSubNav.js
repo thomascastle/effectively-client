@@ -1,5 +1,5 @@
-import { StyledOcticon, SubNav } from "@primer/components";
 import { MilestoneIcon, TagIcon } from "@primer/octicons-react";
+import { StyledOcticon, SubNav } from "@primer/react";
 import * as React from "react";
 import { useLocation, useParams } from "react-router-dom";
 

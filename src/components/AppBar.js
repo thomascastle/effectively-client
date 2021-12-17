@@ -1,5 +1,6 @@
 import { useAuth } from "../context/auth";
 import { useUser } from "../context/user";
+import { MarkGithubIcon } from "@primer/octicons-react";
 import {
   Avatar,
   Box,
@@ -7,8 +8,7 @@ import {
   Header,
   Link,
   StyledOcticon,
-} from "@primer/components";
-import { MarkGithubIcon } from "@primer/octicons-react";
+} from "@primer/react";
 
 export function AppBar() {
   const { updateToken } = useAuth();

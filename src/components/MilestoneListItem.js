@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { CalendarIcon, ClockIcon } from "@primer/octicons-react";
 import {
   Box,
   Heading,
@@ -9,8 +10,7 @@ import {
   Dialog,
   Flash,
   ButtonDanger,
-} from "@primer/components";
-import { CalendarIcon, ClockIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import { format, formatDistance } from "date-fns";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";

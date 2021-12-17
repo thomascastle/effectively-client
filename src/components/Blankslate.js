@@ -1,5 +1,5 @@
-import { Box, Heading, StyledOcticon, Text } from "@primer/components";
 import { MilestoneIcon } from "@primer/octicons-react";
+import { Box, Heading, StyledOcticon, Text } from "@primer/react";
 
 function BlankslateDefault() {
   return (

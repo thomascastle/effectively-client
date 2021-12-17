@@ -1,4 +1,10 @@
 import {
+  CommentIcon,
+  IssueClosedIcon,
+  IssueOpenedIcon,
+  MilestoneIcon,
+} from "@primer/octicons-react";
+import {
   Avatar,
   AvatarStack,
   Box,
@@ -8,13 +14,7 @@ import {
   StyledOcticon,
   Text,
   Tooltip,
-} from "@primer/components";
-import {
-  CommentIcon,
-  IssueClosedIcon,
-  IssueOpenedIcon,
-  MilestoneIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { formatDistance } from "date-fns";
 
 export function IssueListItem({ issue, repositoryBaseUrl }) {

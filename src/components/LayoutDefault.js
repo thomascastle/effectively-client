@@ -1,5 +1,5 @@
 import { AppBar } from "./AppBar";
-import { Box } from "@primer/components";
+import { Box } from "@primer/react";
 
 export function LayoutDefault({ children }) {
   return (

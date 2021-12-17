@@ -7,6 +7,12 @@ import { MilestoneList } from "./MilestoneList";
 import { RepoSubNav } from "./RepoSubNav";
 import { useQuery } from "@apollo/client";
 import {
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MilestoneIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   ButtonPrimary,
   ButtonTableList,
@@ -14,13 +20,7 @@ import {
   SelectMenu,
   StyledOcticon,
   Text,
-} from "@primer/components";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MilestoneIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 

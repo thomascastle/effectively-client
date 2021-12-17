@@ -8,7 +8,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { BaseStyles, ThemeProvider } from "@primer/components";
+import { BaseStyles, ThemeProvider } from "@primer/react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { AuthProvider } from "./context/auth";

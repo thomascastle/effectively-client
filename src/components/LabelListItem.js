@@ -7,7 +7,7 @@ import {
   Dialog,
   ButtonDanger,
   Text,
-} from "@primer/components";
+} from "@primer/react";
 import * as React from "react";
 
 export const MUTATION_DELETE_LABELS = gql`

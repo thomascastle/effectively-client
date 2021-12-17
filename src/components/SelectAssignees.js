@@ -1,5 +1,6 @@
 import { QUERY_USERS_AVAILABLE_TO_ASSIGN } from "../datasource/queries";
 import { useQuery } from "@apollo/client";
+import { GearIcon } from "@primer/octicons-react";
 import {
   Box,
   Button,
@@ -8,8 +9,7 @@ import {
   SelectMenu,
   StyledOcticon,
   Text,
-} from "@primer/components";
-import { GearIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 
 export function SelectAssignees({ initial, onChange, onFinish }) {

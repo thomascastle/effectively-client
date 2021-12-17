@@ -2,8 +2,8 @@ import { QUERY_COUNT_MILESTONES_BY_STATE } from "../datasource/queries";
 import { Blankslate } from "./Blankslate";
 import { MilestoneListItem } from "./MilestoneListItem";
 import { useQuery } from "@apollo/client";
-import { Box } from "@primer/components";
 import { MilestoneIcon } from "@primer/octicons-react";
+import { Box } from "@primer/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 

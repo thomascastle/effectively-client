@@ -3,7 +3,7 @@ import { MilestoneDetails } from "../components/MilestoneDetails";
 import { RepoSubNav } from "../components/RepoSubNav";
 import { QUERY_REPOSITORY_MILESTONE } from "../datasource/queries";
 import { useQuery } from "@apollo/client";
-import { Box, Button } from "@primer/components";
+import { Box, Button } from "@primer/react";
 import { useParams } from "react-router-dom";
 
 export function RepositoryMilestoneDetailsPage() {

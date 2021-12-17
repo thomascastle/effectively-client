@@ -4,6 +4,13 @@ import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
 import { gql, useMutation } from "@apollo/client";
 import {
+  CircleSlashIcon,
+  GearIcon,
+  KebabHorizontalIcon,
+  SmileyIcon,
+  TrashIcon,
+} from "@primer/octicons-react";
+import {
   Avatar,
   Box,
   Button,
@@ -18,14 +25,7 @@ import {
   StyledOcticon,
   Text,
   TextInput,
-} from "@primer/components";
-import {
-  CircleSlashIcon,
-  GearIcon,
-  KebabHorizontalIcon,
-  SmileyIcon,
-  TrashIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { formatDistance } from "date-fns";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";

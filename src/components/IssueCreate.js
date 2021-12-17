@@ -4,6 +4,7 @@ import { SelectAssignees } from "./SelectAssignees";
 import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
 import { useMutation } from "@apollo/client";
+import { GearIcon, MarkdownIcon } from "@primer/octicons-react";
 import {
   Avatar,
   Box,
@@ -14,8 +15,7 @@ import {
   TabNav,
   Text,
   TextInput,
-} from "@primer/components";
-import { GearIcon, MarkdownIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
 

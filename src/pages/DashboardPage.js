@@ -1,6 +1,7 @@
 import { AppBar } from "../components/AppBar";
 import { QUERY_VIEWER_REPOSITORIES } from "../datasource/queries";
 import { useQuery } from "@apollo/client";
+import { RepoIcon } from "@primer/octicons-react";
 import {
   Avatar,
   Box,
@@ -10,8 +11,7 @@ import {
   StyledOcticon,
   Text,
   TextInput,
-} from "@primer/components";
-import { RepoIcon } from "@primer/octicons-react";
+} from "@primer/react";
 
 export function DashboardPage() {
   return (

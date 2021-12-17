@@ -1,5 +1,6 @@
 import { QUERY_REPOSITORY_LABELS_AVAILABLE_TO_APPLY } from "../datasource/queries";
 import { useQuery } from "@apollo/client";
+import { GearIcon, PencilIcon } from "@primer/octicons-react";
 import {
   Box,
   IssueLabelToken,
@@ -9,8 +10,7 @@ import {
   StyledOcticon,
   Text,
   Truncate,
-} from "@primer/components";
-import { GearIcon, PencilIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 

@@ -1,6 +1,7 @@
 import { LayoutDefault } from "../components/LayoutDefault";
 import { MUTATION_CREATE_REPOSITORY } from "../datasource/mutations";
 import { useMutation } from "@apollo/client";
+import { RepoIcon } from "@primer/octicons-react";
 import {
   Box,
   ButtonPrimary,
@@ -9,8 +10,7 @@ import {
   StyledOcticon,
   Text,
   TextInput,
-} from "@primer/components";
-import { RepoIcon } from "@primer/octicons-react";
+} from "@primer/react";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 

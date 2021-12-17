@@ -1,6 +1,7 @@
 import { MUTATION_CREATE_LABEL } from "../datasource/mutations";
 import { QUERY_REPOSITORY_LABEL } from "../datasource/queries";
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { SyncIcon } from "@primer/octicons-react";
 import {
   Box,
   Button,
@@ -12,7 +13,6 @@ import {
   Tooltip,
   PointerBox,
 } from "@primer/react";
-import { SyncIcon } from "@primer/octicons-react";
 import generateRandomColor from "randomcolor";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";

@@ -5,6 +5,12 @@ import { LabelList } from "./LabelList";
 import { RepoSubNav } from "./RepoSubNav";
 import { useQuery } from "@apollo/client";
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  TagIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   ButtonPrimary,
   ButtonTableList,
@@ -14,13 +20,7 @@ import {
   StyledOcticon,
   Text,
   TextInput,
-} from "@primer/components";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  SearchIcon,
-  TagIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 

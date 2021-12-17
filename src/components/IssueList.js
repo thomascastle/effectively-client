@@ -1,6 +1,6 @@
 import { IssueListItem } from "./IssueListItem";
-import { Box, Heading, StyledOcticon, Text } from "@primer/components";
 import { IssueOpenedIcon } from "@primer/octicons-react";
+import { Box, Heading, StyledOcticon, Text } from "@primer/react";
 import { useParams } from "react-router-dom";
 
 export function IssueList({ issues }) {

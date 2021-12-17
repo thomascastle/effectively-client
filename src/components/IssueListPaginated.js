@@ -5,19 +5,19 @@ import {
 import { IssueList } from "./IssueList";
 import { useQuery } from "@apollo/client";
 import {
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  IssueOpenedIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   ButtonTableList,
   Link,
   SelectMenu,
   StyledOcticon,
   Text,
-} from "@primer/components";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  IssueOpenedIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { useParams } from "react-router-dom";
 
 export function IssueListPaginated({ after, before, filter }) {

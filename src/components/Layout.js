@@ -2,6 +2,12 @@ import { QUERY_REPOSITORY_VISIBILITY } from "../datasource/queries";
 import { AppBar } from "./AppBar";
 import { useQuery } from "@apollo/client";
 import {
+  GearIcon,
+  IssueOpenedIcon,
+  ProjectIcon,
+  RepoIcon,
+} from "@primer/octicons-react";
+import {
   Box,
   Heading,
   Label,
@@ -9,13 +15,7 @@ import {
   StyledOcticon,
   Text,
   UnderlineNav,
-} from "@primer/components";
-import {
-  GearIcon,
-  IssueOpenedIcon,
-  ProjectIcon,
-  RepoIcon,
-} from "@primer/octicons-react";
+} from "@primer/react";
 import { useLocation, useParams } from "react-router-dom";
 
 export function Layout({ children }) {
