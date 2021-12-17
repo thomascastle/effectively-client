@@ -150,6 +150,21 @@ export const QUERY_REPOSITORY_ISSUES = gql`
   }
 `;
 
+export const QUERY_REPOSITORY_LABEL = gql`
+  query FindRepositoryLabel(
+    $labelName: String!
+    $name: String!
+    $owner: String!
+  ) {
+    repository(name: $name, owner: $owner) {
+      label(name: $labelName) {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const QUERY_REPOSITORY_LABELS = gql`
   query GetPaginatedLabels(
     $after: String
