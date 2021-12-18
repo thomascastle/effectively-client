@@ -12,15 +12,39 @@ import {
   TextInput,
 } from "@primer/react";
 import generateRandomColor from "randomcolor";
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function LabelEdit({ label, on, onCancel: cancel }) {
-  const [name, setName] = React.useState(label.name);
-  const [description, setDescription] = React.useState(label.description ?? "");
-  const [color, setColor] = React.useState(`#${label.color}` ?? "#ededed");
-  const [shouldDisable, setShouldDisable] = React.useState(false);
-  const inputColor = React.useRef(null);
-  const [placeholder, setPlaceholder] = React.useState(label.name);
+  const [formData, setFormData] = useState({
+    color: `#${label.color}` ?? "#ededed",
+    description: label.description ?? "",
+    name: label.name,
+  });
+  const inputColor = useRef(null);
+  const [placeholder, setPlaceholder] = useState(label.name);
+  const [shouldDisable, setShouldDisable] = useState(false);
+
+  const changeColor = function (e) {
+    const value = e.target.value;
+
+    setFormData({ ...formData, color: value });
+    if (!value.match(/^#/)) {
+      setFormData({ ...formData, color: `#${value}` });
+    }
+  };
+
+  const changeDescription = (e) => {
+    const value = e.target.value;
+
+    setFormData({ ...formData, description: value });
+  };
+
+  const changeName = (e) => {
+    const value = e.target.value;
+
+    setFormData({ ...formData, name: value });
+    setPlaceholder(value.length > 0 ? value : "Label preview");
+  };
 
   const getProvidedOrDefaultColor = (value) => {
     return isValidColorHex(value) ? value : "#ededed";
@@ -31,7 +55,7 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
   };
 
   const getNewColor = () => {
-    setColor(generateRandomColor());
+    setFormData({ ...formData, color: generateRandomColor() });
   };
 
   const [updateLabel, { error, loading }] = useMutation(MUTATION_UPDATE_LABEL, {
@@ -39,19 +63,19 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
       updateLabel: {
         label: {
           __typename: "Label",
-          color: color,
-          description: description,
+          color: formData.color,
+          description: formData.description,
           id: label.id,
-          name: name,
+          name: formData.name,
         },
       },
     },
     variables: {
       updateLabelInput: {
-        color: color,
-        description: description,
+        color: formData.color,
+        description: formData.description,
         id: label.id,
-        name: name,
+        name: formData.name,
       },
     },
   });
@@ -68,29 +92,20 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
     cancel();
   };
 
-  const handleColorChanged = function (e) {
-    const value = e.target.value;
-
-    setColor(value);
-    if (!value.match(/^#/)) {
-      setColor(`#${value}`);
-    }
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     setShouldDisable(
       inputColor.current.validity.valueMissing ||
         inputColor.current.validity.patternMismatch ||
-        !name ||
+        !formData.name ||
         loading
     );
-  }, [color, loading, name]);
+  }, [formData.color, loading, formData.name]);
 
   return (
     <>
       <Box sx={{ width: ["75%", "75%", "25%"] }}>
         <IssueLabelToken
-          fillColor={getProvidedOrDefaultColor(color)}
+          fillColor={getProvidedOrDefaultColor(formData.color)}
           text={placeholder}
           size="large"
         />
@@ -153,17 +168,13 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
                 Label name
               </FormGroup.Label>
               <TextInput
-                onChange={(e) => {
-                  setName(e.target.value);
-                  setPlaceholder(
-                    e.target.value.length > 0 ? e.target.value : "Label preview"
-                  );
-                }}
+                autoFocus
+                onChange={changeName}
                 placeholder="Label name"
                 required
                 sx={{ width: "100%" }}
                 validationStatus={error ? "error" : "none"}
-                value={name}
+                value={formData.name}
               />
               {error ? (
                 <PointerBox
@@ -194,12 +205,10 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
                 Description
               </FormGroup.Label>
               <TextInput
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
+                onChange={changeDescription}
                 placeholder="Description (optional)"
                 sx={{ width: "100%" }}
-                value={description}
+                value={formData.description}
               />
             </FormGroup>
             <FormGroup
@@ -217,12 +226,12 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
                 <TextInput
                   autocomplete="off"
                   maxLength="7"
-                  onChange={handleColorChanged}
+                  onChange={changeColor}
                   pattern="#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})"
                   ref={inputColor}
                   required
                   title="Hex colors should only contain numbers and letters from a-f"
-                  value={color}
+                  value={formData.color}
                 />
               </Box>
             </FormGroup>
