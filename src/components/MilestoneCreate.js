@@ -5,6 +5,7 @@ import {
   ButtonPrimary,
   FormGroup,
   Heading,
+  PointerBox,
   TextInput,
 } from "@primer/react";
 import * as React from "react";
@@ -17,7 +18,7 @@ export function MilestoneCreate({ repositoryId }) {
   const [dueDate, setDueDate] = React.useState("");
   const [description, setDescription] = React.useState("");
 
-  const [createMilestone] = useMutation(MUTATION_CREATE_MILESTONE, {
+  const [createMilestone, { error }] = useMutation(MUTATION_CREATE_MILESTONE, {
     variables: {
       input: {
         description: description === "" ? null : description, // Quick fix!!!
@@ -30,8 +31,12 @@ export function MilestoneCreate({ repositoryId }) {
 
   const handleFormSubmitted = async (e) => {
     e.preventDefault();
-
-    await createMilestone();
+    try {
+      await createMilestone();
+    } catch (e) {
+      // Is it a good call?
+      return null;
+    }
 
     history.push("/" + login + "/" + repositoryName + "/milestones");
   };
@@ -75,7 +80,14 @@ export function MilestoneCreate({ repositoryId }) {
       <form method="post" onSubmit={handleFormSubmitted}>
         <Box sx={{ width: "66.66667%" }}>
           <FormGroup>
-            <FormGroup.Label htmlFor="title">Title</FormGroup.Label>
+            <FormGroup.Label
+              htmlFor="title"
+              sx={{
+                color: error ? "danger.fg" : "fg.default",
+              }}
+            >
+              Title
+            </FormGroup.Label>
             <TextInput
               autoFocus
               contrast
@@ -83,9 +95,27 @@ export function MilestoneCreate({ repositoryId }) {
                 setTitle(e.target.value);
               }}
               placeholder="Title"
+              required
               sx={{ width: "440px" }}
+              validationStatus={error ? "error" : "none"}
               value={title}
             />
+            {error ? (
+              <PointerBox
+                bg="danger.subtle"
+                borderColor="danger.muted"
+                caret="top-left"
+                sx={{
+                  mt: 2,
+                  mx: 0,
+                  position: "absolute",
+                  px: 2,
+                  py: 1,
+                }}
+              >
+                {error.message}
+              </PointerBox>
+            ) : null}
           </FormGroup>
           <FormGroup>
             <FormGroup.Label htmlFor="due-date">

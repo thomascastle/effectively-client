@@ -5,6 +5,7 @@ import {
   Button,
   ButtonPrimary,
   FormGroup,
+  PointerBox,
   TextInput,
 } from "@primer/react";
 import * as React from "react";
@@ -19,7 +20,7 @@ export function MilestoneEdit({ milestone }) {
   );
   const [description, setDescription] = React.useState(milestone.description);
 
-  const [updateMilestone] = useMutation(MUTATION_UPDATE_MILESTONE, {
+  const [updateMilestone, { error }] = useMutation(MUTATION_UPDATE_MILESTONE, {
     variables: {
       input: {
         description: description,
@@ -33,7 +34,12 @@ export function MilestoneEdit({ milestone }) {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    await updateMilestone();
+    try {
+      await updateMilestone();
+    } catch (e) {
+      // Is it a good call?
+      return null;
+    }
 
     history.push(`/${login}/${repositoryName}/milestones`);
   };
@@ -42,7 +48,14 @@ export function MilestoneEdit({ milestone }) {
     <form method="post" onSubmit={handleFormSubmit}>
       <Box sx={{ width: "66.66667%" }}>
         <FormGroup>
-          <FormGroup.Label htmlFor="title">Title</FormGroup.Label>
+          <FormGroup.Label
+            htmlFor="title"
+            sx={{
+              color: error ? "danger.fg" : "fg.default",
+            }}
+          >
+            Title
+          </FormGroup.Label>
           <TextInput
             autoFocus
             contrast
@@ -50,9 +63,27 @@ export function MilestoneEdit({ milestone }) {
               setTitle(e.target.value);
             }}
             placeholder="Title"
+            required
             sx={{ width: "440px" }}
+            validationStatus={error ? "error" : "none"}
             value={title}
           />
+          {error ? (
+            <PointerBox
+              bg="danger.subtle"
+              borderColor="danger.muted"
+              caret="top-left"
+              sx={{
+                mt: 2,
+                mx: 0,
+                position: "absolute",
+                px: 2,
+                py: 1,
+              }}
+            >
+              {error.message}
+            </PointerBox>
+          ) : null}
         </FormGroup>
         <FormGroup>
           <FormGroup.Label htmlFor="due-date">
