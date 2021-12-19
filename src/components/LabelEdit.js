@@ -72,7 +72,7 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
     },
     variables: {
       updateLabelInput: {
-        color: formData.color,
+        color: formatColor(formData.color),
         description: formData.description,
         id: label.id,
         name: formData.name,
@@ -270,4 +270,8 @@ export function LabelEdit({ label, on, onCancel: cancel }) {
       </Box>
     </>
   );
+}
+
+function formatColor(value) {
+  return value.slice(1);
 }

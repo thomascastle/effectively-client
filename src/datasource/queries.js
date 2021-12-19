@@ -166,7 +166,7 @@ export const QUERY_REPOSITORY_LABEL = gql`
 `;
 
 export const QUERY_REPOSITORY_LABELS = gql`
-  query GetPaginatedLabels(
+  query GetRepositoryLabels(
     $after: String
     $before: String
     $name: String!

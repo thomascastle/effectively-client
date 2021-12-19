@@ -31,6 +31,7 @@ export function LabelCreate({ onCancel: cancel, repositoryId }) {
   const [createLabel, { data, error, loading }] = useMutation(
     MUTATION_CREATE_LABEL,
     {
+      refetchQueries: ["GetRepositoryLabels"],
       update: (cache, { data: { createLabel } }) => {
         cache.modify({
           id: "Repository:" + repositoryId,
@@ -51,7 +52,7 @@ export function LabelCreate({ onCancel: cancel, repositoryId }) {
       },
       variables: {
         input: {
-          color: formData.color,
+          color: formatColor(formData.color),
           description: formData.description,
           name: formData.name,
           repositoryId,
@@ -278,4 +279,8 @@ export function LabelCreate({ onCancel: cancel, repositoryId }) {
       </form>
     </Box>
   );
+}
+
+function formatColor(value) {
+  return value.slice(1);
 }
