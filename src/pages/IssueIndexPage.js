@@ -20,7 +20,7 @@ import {
   Box,
   ButtonTableList,
   Heading,
-  Label,
+  IssueLabelToken,
   LabelGroup,
   Link,
   SelectMenu,
@@ -364,6 +364,7 @@ function IssueListItem({ issue }) {
           href={`/${issue.repository.nameWithOwner}/issues/${issue.number}`}
           sx={{
             color: "fg.default",
+            mr: 1,
             ":hover": { color: "accent.fg", textDecoration: "none" },
           }}
         >
@@ -372,16 +373,11 @@ function IssueListItem({ issue }) {
         {issue.labels && (
           <LabelGroup>
             {issue.labels.map((label) => (
-              <Label
+              <IssueLabelToken
+                fillColor={`#${label.color}`}
                 key={label.id}
-                sx={{
-                  bg: "prState.closed.bg",
-                  color: "prState.closed.text",
-                  ml: 1,
-                }}
-              >
-                {label.name}
-              </Label>
+                text={label.name}
+              />
             ))}
           </LabelGroup>
         )}

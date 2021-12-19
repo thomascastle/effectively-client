@@ -313,6 +313,7 @@ export const QUERY_VIEWER_ISSUES = gql`
             }
             id
             labels {
+              color
               id
               name
             }
