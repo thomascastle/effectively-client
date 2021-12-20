@@ -8,6 +8,8 @@ import { useQueryParams } from "../hooks";
 import { useQuery } from "@apollo/client";
 import {
   CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CommentIcon,
   IssueClosedIcon,
   IssueOpenedIcon,
@@ -107,6 +109,33 @@ export function IssueIndexPage() {
           </Box>
         </Box>
       </Box>
+      <Box
+        className="footer"
+        sx={{
+          maxWidth: "1012px",
+          mx: "auto",
+          px: ["16px", "40px", null, "16px"],
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            borderTopColor: "border.default",
+            borderTopStyle: "solid",
+            borderTopWidth: "1px",
+            color: "fg.muted",
+            display: "flex",
+            flexDirection: [null, null, null, "row"],
+            flexWrap: ["wrap", null, null, "nowrap"],
+            fontSize: "12px",
+            justifyContent: ["center", null, null, "space-between"],
+            mt: 6,
+            pb: 2,
+            position: "relative",
+            pt: 6,
+          }}
+        ></Box>
+      </Box>
     </>
   );
 }
@@ -173,12 +202,16 @@ function CountByStateNav() {
 function IssueListPaginated() {
   const queryParams = useQueryParams();
 
+  const after = queryParams.get("after");
+  const before = queryParams.get("before");
   const q = queryParams.get("q");
 
   const state = q;
 
   const { data, error, loading } = useQuery(QUERY_VIEWER_ISSUES, {
     variables: {
+      after: after,
+      before: before,
       states: state === "is:closed" ? "CLOSED" : "OPEN",
     },
   });
@@ -191,93 +224,203 @@ function IssueListPaginated() {
     return <div>{error.message}</div>;
   }
 
-  const { edges } = data.viewer.issues;
-
-  console.log(edges);
+  const { edges, pageInfo } = data.viewer.issues;
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "canvas.default",
-        borderColor: ["border.default", "border.default"],
-        borderRadius: [6, 6],
-        borderStyle: ["solid", "solid"],
-        borderWidth: ["1px", "1px"],
-        mx: [15, 0],
-      }}
-    >
+    <>
       <Box
-        className="Box-header"
         sx={{
-          backgroundColor: "canvas.subtle",
-          borderColor: "border.default",
-          borderStyle: "solid",
-          borderWidth: "1px",
-          borderTopLeftRadius: 6,
-          borderTopRightRadius: 6,
-          display: "flex",
-          justifyContent: "space-between",
-          mt: "-1px",
-          mx: "-1px",
-          p: 3,
+          backgroundColor: "canvas.default",
+          borderColor: ["border.default", "border.default"],
+          borderRadius: [6, 6],
+          borderStyle: ["solid", "solid"],
+          borderWidth: ["1px", "1px"],
+          mx: [15, 0],
         }}
       >
-        <Box display="flex" flex="auto" minWidth="0">
-          <CountByStateNav state={state} />
-          <Box
-            display="flex"
-            flex="auto"
-            justifyContent={["flex-start", "space-between", "flex-end"]}
-          >
-            <Box display="inline-block" position="relative">
-              <SelectMenu display="inline-block" px={3}>
-                <ButtonTableList>Visibility</ButtonTableList>
-                <SelectMenu.Modal align="right">
-                  <SelectMenu.Header>Repository visibility</SelectMenu.Header>
-                  <SelectMenu.List>
-                    <SelectMenu.Item>Private repositories only</SelectMenu.Item>
-                    <SelectMenu.Item>Public repositories only</SelectMenu.Item>
-                  </SelectMenu.List>
-                </SelectMenu.Modal>
-              </SelectMenu>
-            </Box>
-            <Box display="inline-block" position="relative">
-              <SelectMenu display="inline-block" px={3}>
-                <ButtonTableList>Organization</ButtonTableList>
-                <SelectMenu.Modal align="right">
-                  <SelectMenu.Header>Filter by owner</SelectMenu.Header>
-                  <SelectMenu.Filter
-                    onChange={(e) => e.preventDefault()}
-                    placeholder="Filter owners"
-                    value=""
-                  ></SelectMenu.Filter>
-                  <SelectMenu.List>
-                    <SelectMenu.Item>Owner name</SelectMenu.Item>
-                  </SelectMenu.List>
-                </SelectMenu.Modal>
-              </SelectMenu>
-            </Box>
-            <Box display="inline-block" position="relative">
-              <SelectMenu pl={3} pr="0">
-                <ButtonTableList>Sort</ButtonTableList>
-                <SelectMenu.Modal align="right">
-                  <SelectMenu.Header>Sort by</SelectMenu.Header>
-                  <SelectMenu.List>
-                    <SelectMenu.Item>Newest</SelectMenu.Item>
-                    <SelectMenu.Item>Oldest</SelectMenu.Item>
-                    <SelectMenu.Item>Most commented</SelectMenu.Item>
-                    <SelectMenu.Item>Least commented</SelectMenu.Item>
-                    <SelectMenu.Item>Recently updated</SelectMenu.Item>
-                    <SelectMenu.Item>Least recently updated</SelectMenu.Item>
-                  </SelectMenu.List>
-                </SelectMenu.Modal>
-              </SelectMenu>
+        <Box
+          className="Box-header"
+          sx={{
+            backgroundColor: "canvas.subtle",
+            borderColor: "border.default",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderTopLeftRadius: 6,
+            borderTopRightRadius: 6,
+            display: "flex",
+            justifyContent: "space-between",
+            mt: "-1px",
+            mx: "-1px",
+            p: 3,
+          }}
+        >
+          <Box display="flex" flex="auto" minWidth="0">
+            <CountByStateNav state={state} />
+            <Box
+              display="flex"
+              flex="auto"
+              justifyContent={["flex-start", "space-between", "flex-end"]}
+            >
+              <Box display="inline-block" position="relative">
+                <SelectMenu display="inline-block" px={3}>
+                  <ButtonTableList>Visibility</ButtonTableList>
+                  <SelectMenu.Modal align="right">
+                    <SelectMenu.Header>Repository visibility</SelectMenu.Header>
+                    <SelectMenu.List>
+                      <SelectMenu.Item>
+                        Private repositories only
+                      </SelectMenu.Item>
+                      <SelectMenu.Item>
+                        Public repositories only
+                      </SelectMenu.Item>
+                    </SelectMenu.List>
+                  </SelectMenu.Modal>
+                </SelectMenu>
+              </Box>
+              <Box display="inline-block" position="relative">
+                <SelectMenu display="inline-block" px={3}>
+                  <ButtonTableList>Organization</ButtonTableList>
+                  <SelectMenu.Modal align="right">
+                    <SelectMenu.Header>Filter by owner</SelectMenu.Header>
+                    <SelectMenu.Filter
+                      onChange={(e) => e.preventDefault()}
+                      placeholder="Filter owners"
+                      value=""
+                    ></SelectMenu.Filter>
+                    <SelectMenu.List>
+                      <SelectMenu.Item>Owner name</SelectMenu.Item>
+                    </SelectMenu.List>
+                  </SelectMenu.Modal>
+                </SelectMenu>
+              </Box>
+              <Box display="inline-block" position="relative">
+                <SelectMenu pl={3} pr="0">
+                  <ButtonTableList>Sort</ButtonTableList>
+                  <SelectMenu.Modal align="right">
+                    <SelectMenu.Header>Sort by</SelectMenu.Header>
+                    <SelectMenu.List>
+                      <SelectMenu.Item>Newest</SelectMenu.Item>
+                      <SelectMenu.Item>Oldest</SelectMenu.Item>
+                      <SelectMenu.Item>Most commented</SelectMenu.Item>
+                      <SelectMenu.Item>Least commented</SelectMenu.Item>
+                      <SelectMenu.Item>Recently updated</SelectMenu.Item>
+                      <SelectMenu.Item>Least recently updated</SelectMenu.Item>
+                    </SelectMenu.List>
+                  </SelectMenu.Modal>
+                </SelectMenu>
+              </Box>
             </Box>
           </Box>
         </Box>
+        <IssueList issues={edges} />
       </Box>
-      <IssueList issues={edges} />
-    </Box>
+      <Box className="pagination">
+        {shouldDisplay(pageInfo.hasNextPage, pageInfo.hasPreviousPage) && (
+          <Box sx={{ mb: 5, mt: 4, textAlign: "center" }}>
+            <Box
+              aria-label="Navigation"
+              role="navigation"
+              sx={{ display: "inline-block" }}
+            >
+              {pageInfo.hasPreviousPage ? (
+                <Link
+                  href={
+                    "/issues?before=" +
+                    pageInfo.startCursor +
+                    "&state=" +
+                    (state ?? "")
+                  }
+                  rel="prev"
+                  sx={{
+                    border: "1px solid",
+                    borderColor: "transparent",
+                    borderRadius: "6px",
+                    display: "inline-block",
+                    fontStyle: "normal",
+                    lineHeight: "20px",
+                    minWidth: "32px",
+                    padding: "5px 10px",
+                    transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
+                    verticalAlign: "middle",
+                    ":hover": {
+                      borderColor: "border.muted",
+                      textDecoration: "none",
+                    },
+                  }}
+                >
+                  <StyledOcticon icon={ChevronLeftIcon} /> Previous
+                </Link>
+              ) : (
+                <Text
+                  sx={{
+                    border: "1px solid",
+                    borderColor: "transparent",
+                    borderRadius: "6px",
+                    color: "text.disabled",
+                    cursor: "default",
+                    display: "inline-block",
+                    fontStyle: "normal",
+                    lineHeight: "20px",
+                    minWidth: "32px",
+                    padding: "5px 10px",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <StyledOcticon icon={ChevronLeftIcon} /> Previous
+                </Text>
+              )}
+              {pageInfo.hasNextPage ? (
+                <Link
+                  href={
+                    "/issues?after=" +
+                    pageInfo.endCursor +
+                    "&state=" +
+                    (state ?? "")
+                  }
+                  rel="next"
+                  sx={{
+                    border: "1px solid",
+                    borderColor: "transparent",
+                    borderRadius: "6px",
+                    display: "inline-block",
+                    fontStyle: "normal",
+                    lineHeight: "20px",
+                    minWidth: "32px",
+                    padding: "5px 10px",
+                    transition: "border-color .2s cubic-bezier(0.3, 0, 0.5, 1)",
+                    verticalAlign: "middle",
+                    ":hover": {
+                      borderColor: "border.muted",
+                      textDecoration: "none",
+                    },
+                  }}
+                >
+                  Next <StyledOcticon icon={ChevronRightIcon} />
+                </Link>
+              ) : (
+                <Text
+                  sx={{
+                    border: "1px solid",
+                    borderColor: "transparent",
+                    borderRadius: "6px",
+                    color: "text.disabled",
+                    cursor: "default",
+                    display: "inline-block",
+                    fontStyle: "normal",
+                    lineHeight: "20px",
+                    minWidth: "32px",
+                    padding: "5px 10px",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Next <StyledOcticon icon={ChevronRightIcon} />
+                </Text>
+              )}
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 }
 
@@ -500,4 +643,8 @@ function IssueListItem({ issue }) {
       </Box>
     </Box>
   );
+}
+
+function shouldDisplay(hasNextPage, hasPreviousPage) {
+  return hasNextPage || hasPreviousPage;
 }

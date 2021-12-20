@@ -293,10 +293,14 @@ export const QUERY_REPOSITORY_VISIBILITY = gql`
 `;
 
 export const QUERY_VIEWER_ISSUES = gql`
-  query GetViewerIssues($states: [IssueState!]) {
+  query GetViewerIssues(
+    $after: String
+    $before: String
+    $states: [IssueState!]
+  ) {
     viewer {
       id
-      issues(first: 100, states: $states) {
+      issues(after: $after, before: $before, first: 10, states: $states) {
         edges {
           node {
             assignees {
@@ -337,7 +341,6 @@ export const QUERY_VIEWER_ISSUES = gql`
           hasPreviousPage
           startCursor
         }
-
         totalCount
       }
       login
