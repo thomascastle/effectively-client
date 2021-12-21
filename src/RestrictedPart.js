@@ -30,6 +30,9 @@ export function RestrictedPart() {
         <Route path="/:login/:repositoryName/issues">
           <RepositoryIssueIndexPage />
         </Route>
+        <Route path="/:login/:repositoryName/labels/:labelName">
+          <RepositoryIssueIndexPage />
+        </Route>
         <Route path="/:login/:repositoryName/labels">
           <RepositoryLabelIndexPage />
         </Route>

@@ -1,12 +1,16 @@
 import { gql } from "@apollo/client";
 
 export const QUERY_COUNT_ISSUES_BY_STATES = gql`
-  query GetCountIssuesByState($name: String!, $owner: String!) {
+  query GetCountIssuesByState(
+    $labels: [String!]
+    $name: String!
+    $owner: String!
+  ) {
     repository(name: $name, owner: $owner) {
-      closed: issues(states: CLOSED) {
+      closed: issues(labels: $labels, states: CLOSED) {
         totalCount
       }
-      open: issues(states: OPEN) {
+      open: issues(labels: $labels, states: OPEN) {
         totalCount
       }
     }
@@ -108,12 +112,13 @@ export const QUERY_REPOSITORY_ISSUES = gql`
   query GetRepositoryIssues(
     $after: String
     $before: String
-    $issuesStates: [IssueState!]
+    $labels: [String!]
     $name: String!
     $owner: String!
+    $states: [IssueState!]
   ) {
     repository(name: $name, owner: $owner) {
-      issues(after: $after, before: $before, states: $issuesStates) {
+      issues(after: $after, before: $before, labels: $labels, states: $states) {
         nodes {
           closed
           closedAt

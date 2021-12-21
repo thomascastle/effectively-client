@@ -4,7 +4,7 @@ import { useQueryParams } from "../hooks";
 import { useParams } from "react-router-dom";
 
 export function RepositoryIssueIndexPage() {
-  const { login, repositoryName } = useParams();
+  const { labelName, login, repositoryName } = useParams();
   const queryParams = useQueryParams();
 
   const endCursor = queryParams.get("after");
@@ -16,7 +16,7 @@ export function RepositoryIssueIndexPage() {
       <IssueListContainer
         after={endCursor}
         before={startCursor}
-        filter={{ state: q }}
+        filter={{ labelName, state: q }}
         login={login}
         repositoryName={repositoryName}
       />

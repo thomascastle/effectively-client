@@ -8,7 +8,8 @@ import {
   ButtonDanger,
   Text,
 } from "@primer/react";
-import * as React from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export const MUTATION_DELETE_LABELS = gql`
   mutation DeleteLabel($deleteLabelId: ID!) {
@@ -20,8 +21,9 @@ export const MUTATION_DELETE_LABELS = gql`
 `;
 
 export function LabelListItem({ label }) {
-  const [editing, setEditing] = React.useState(false);
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const location = useLocation();
+  const [editing, setEditing] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const cancelEdit = () => {
     setEditing(false);
@@ -59,6 +61,8 @@ export function LabelListItem({ label }) {
         <>
           <Box sx={{ width: ["75%", "75%", "25%"] }}>
             <IssueLabelToken
+              as="a"
+              href={location.pathname + "/" + label.name}
               size="large"
               text={label.name}
               fillColor={`#${label.color}`}

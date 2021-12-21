@@ -21,15 +21,16 @@ import {
 import { useParams } from "react-router-dom";
 
 export function IssueListPaginated({ after, before, filter }) {
-  const { state } = filter;
+  const { labelName, state } = filter;
   const { login, repositoryName } = useParams();
   const { data, loading, error } = useQuery(QUERY_REPOSITORY_ISSUES, {
     variables: {
       after: after,
       before: before,
-      issuesStates: state === "is:closed" ? "CLOSED" : "OPEN",
+      labels: labelName ? [labelName] : null,
       name: repositoryName,
       owner: login,
+      states: state === "is:closed" ? "CLOSED" : "OPEN",
     },
   });
 
@@ -76,7 +77,7 @@ export function IssueListPaginated({ after, before, filter }) {
             <input type="checkbox" />
           </Box>
           <Box display="flex" flex="auto" minWidth="0">
-            <CountByStateNav state={state} />
+            <CountByStateNav labelName={labelName} state={state} />
             <Box
               display="flex"
               flex="auto"
@@ -299,10 +300,11 @@ export function IssueListPaginated({ after, before, filter }) {
   );
 }
 
-function CountByStateNav({ state }) {
+function CountByStateNav({ labelName, state }) {
   const { login, repositoryName } = useParams();
   const { data, error, loading } = useQuery(QUERY_COUNT_ISSUES_BY_STATES, {
     variables: {
+      labels: labelName ? [labelName] : null,
       name: repositoryName,
       owner: login,
     },
