@@ -27,7 +27,7 @@ import { useParams } from "react-router-dom";
 export function IssueListContainer({
   after,
   before,
-  filter,
+  filters,
   login,
   repositoryName,
 }) {
@@ -94,11 +94,11 @@ export function IssueListContainer({
         </Box>
       </Box>
       {countClosed > 0 || countOpen > 0 ? (
-        <IssueListPaginated after={after} before={before} filter={filter} />
+        <IssueListPaginated after={after} before={before} filters={filters} />
       ) : (
         <Blankslate icon={IssueOpenedIcon} title="Welcome to Issues!">
           Issues are used to track todos, bugs, feature requests, and more. As
-          issues are created, they’ll appear here in a searchable and filterable
+          issues are created, they'll appear here in a searchable and filterable
           list. To get started, you should{" "}
           <Link href={"/" + login + "/" + repositoryName + "/issues/new"}>
             create an issue

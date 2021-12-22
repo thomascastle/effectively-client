@@ -11,15 +11,45 @@ export function RepositoryIssueIndexPage() {
   const startCursor = queryParams.get("before");
   const q = queryParams.get("q");
 
+  const searchParams = parseQueryParams(q);
+
   return (
     <Layout>
       <IssueListContainer
         after={endCursor}
         before={startCursor}
-        filter={{ labelName, state: q }}
+        filters={{
+          labelName: searchParams["label"]
+            ? [...searchParams["label"], labelName].filter((p) => p)
+            : null,
+          state: searchParams["is"]
+            ? [...searchParams["is"]].filter((p) => p)
+            : null,
+        }}
         login={login}
         repositoryName={repositoryName}
       />
     </Layout>
   );
+}
+
+function parseQueryParams(queryParams) {
+  if (!queryParams) {
+    return {};
+  }
+
+  const pairs = queryParams.split(" ");
+  const obj = {};
+
+  for (let i = 0; i < pairs.length; i++) {
+    const keyValue = pairs[i].split(":");
+
+    if (obj[keyValue[0]]) {
+      obj[keyValue[0]] = [...obj[keyValue[0]], keyValue[1]];
+    } else {
+      obj[keyValue[0]] = [keyValue[1]];
+    }
+  }
+
+  return obj;
 }

@@ -2,6 +2,7 @@ import {
   QUERY_COUNT_ISSUES_BY_STATES,
   QUERY_REPOSITORY_ISSUES,
 } from "../datasource/queries";
+import { useQueryParams } from "../hooks";
 import { IssueList } from "./IssueList";
 import { useQuery } from "@apollo/client";
 import {
@@ -20,19 +21,22 @@ import {
 } from "@primer/react";
 import { useParams } from "react-router-dom";
 
-export function IssueListPaginated({ after, before, filter }) {
-  const { labelName, state } = filter;
+export function IssueListPaginated({ after, before, filters }) {
+  const { labelName, state } = filters;
   const { login, repositoryName } = useParams();
   const { data, loading, error } = useQuery(QUERY_REPOSITORY_ISSUES, {
     variables: {
       after: after,
       before: before,
-      labels: labelName ? [labelName] : null,
+      labels: labelName && labelName.length > 0 ? [...labelName] : null,
       name: repositoryName,
       owner: login,
-      states: state === "is:closed" ? "CLOSED" : "OPEN",
+      states: getStates(state),
     },
   });
+  const queryParams = useQueryParams().get("q");
+
+  const q = queryParams ? queryParams : "";
 
   if (loading) {
     return <div>Loading...</div>;
@@ -77,7 +81,7 @@ export function IssueListPaginated({ after, before, filter }) {
             <input type="checkbox" />
           </Box>
           <Box display="flex" flex="auto" minWidth="0">
-            <CountByStateNav labelName={labelName} state={state} />
+            <CountByStateNav labelName={labelName} state={getStates(state)} />
             <Box
               display="flex"
               flex="auto"
@@ -199,8 +203,8 @@ export function IssueListPaginated({ after, before, filter }) {
                     repositoryName +
                     "/issues?before=" +
                     pageInfo.startCursor +
-                    "&state=" +
-                    (state ?? "")
+                    "&q=" +
+                    encodeURIComponent(q).replace(/\s|%20/g, "+")
                   }
                   rel="prev"
                   sx={{
@@ -250,8 +254,8 @@ export function IssueListPaginated({ after, before, filter }) {
                     repositoryName +
                     "/issues?after=" +
                     pageInfo.endCursor +
-                    "&state=" +
-                    (state ?? "")
+                    "&q=" +
+                    encodeURIComponent(q).replace(/\s|%20/g, "+")
                   }
                   rel="next"
                   sx={{
@@ -304,7 +308,7 @@ function CountByStateNav({ labelName, state }) {
   const { login, repositoryName } = useParams();
   const { data, error, loading } = useQuery(QUERY_COUNT_ISSUES_BY_STATES, {
     variables: {
-      labels: labelName ? [labelName] : null,
+      labels: labelName && labelName.length > 0 ? [...labelName] : null,
       name: repositoryName,
       owner: login,
     },
@@ -326,8 +330,8 @@ function CountByStateNav({ labelName, state }) {
       <Link
         href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aopen"}
         sx={{
-          color: !state || state === "is:open" ? "fg.default" : "fg.muted",
-          fontWeight: !state || state === "is:open" ? 600 : 400,
+          color: !state || state.includes("OPEN") ? "fg.default" : "fg.muted",
+          fontWeight: !state || state.includes("OPEN") ? 600 : 400,
           ":hover": {
             color: "fg.default",
             textDecoration: "none",
@@ -341,8 +345,8 @@ function CountByStateNav({ labelName, state }) {
       <Link
         href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aclosed"}
         sx={{
-          color: state === "is:closed" ? "fg.default" : "fg.muted",
-          fontWeight: state === "is:closed" ? 600 : 400,
+          color: state.includes("CLOSED") ? "fg.default" : "fg.muted",
+          fontWeight: state.includes("CLOSED") ? 600 : 400,
           ml: "10px",
           ":hover": {
             color: "fg.default",
@@ -356,6 +360,28 @@ function CountByStateNav({ labelName, state }) {
       </Link>
     </Box>
   );
+}
+
+function getStates(state) {
+  if (!state) {
+    return ["OPEN"];
+  }
+
+  let states = [];
+
+  if (state && state.length > 0) {
+    for (let i = 0; i < state.length; i++) {
+      if (state[i].toLowerCase() === "closed") {
+        states = [...states, "CLOSED"];
+      }
+
+      if (state[i].toLowerCase() === "open") {
+        states = [...states, "OPEN"];
+      }
+    }
+  }
+
+  return states;
 }
 
 function shouldDisplay(hasNextPage, hasPreviousPage) {
