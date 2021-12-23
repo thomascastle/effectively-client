@@ -33,9 +33,12 @@ import {
   Tooltip,
 } from "@primer/react";
 import { formatDistance } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 export function IssueIndexPage() {
+  const q = useQueryParams().get("q");
+  const searchParams = parseQueryParams(q);
+
   const { data, error, loading } = useQuery(
     QUERY_COUNT_VIEWER_ISSUES_BY_STATES
   );
@@ -99,7 +102,16 @@ export function IssueIndexPage() {
               </Box>
             </Box>
             {countClosed > 0 || countOpen > 0 ? (
-              <IssueListPaginated />
+              <IssueListPaginated
+                filters={{
+                  labelName: searchParams["label"]
+                    ? [...searchParams["label"]].filter((p) => p)
+                    : null,
+                  state: searchParams["is"]
+                    ? [...searchParams["is"]].filter((p) => p)
+                    : null,
+                }}
+              />
             ) : (
               <Blankslate icon={IssueOpenedIcon} title="Welcome to Issues!">
                 Issues are used to track todos, bugs, feature requests, and
@@ -140,15 +152,14 @@ export function IssueIndexPage() {
   );
 }
 
-function CountByStateNav() {
-  const queryParams = useQueryParams();
-
-  const q = queryParams.get("q");
-
-  const state = q;
-
+function CountByStateNav({ labelName, state }) {
   const { data, error, loading } = useQuery(
-    QUERY_COUNT_VIEWER_ISSUES_BY_STATES
+    QUERY_COUNT_VIEWER_ISSUES_BY_STATES,
+    {
+      variables: {
+        labels: labelName && labelName.length > 0 ? [...labelName] : null,
+      },
+    }
   );
 
   if (loading) {
@@ -167,8 +178,8 @@ function CountByStateNav() {
       <Link
         href="/issues?q=is%3Aopen"
         sx={{
-          color: !state || state === "is:open" ? "fg.default" : "fg.muted",
-          fontWeight: !state || state === "is:open" ? 600 : 400,
+          color: !state || state.includes("OPEN") ? "fg.default" : "fg.muted",
+          fontWeight: !state || state.includes("OPEN") ? 600 : 400,
           ":hover": {
             color: "fg.default",
             textDecoration: "none",
@@ -182,8 +193,8 @@ function CountByStateNav() {
       <Link
         href="/issues?q=is%3Aclosed"
         sx={{
-          color: state === "is:closed" ? "fg.default" : "fg.muted",
-          fontWeight: state === "is:closed" ? 600 : 400,
+          color: state.includes("CLOSED") ? "fg.default" : "fg.muted",
+          fontWeight: state.includes("CLOSED") ? 600 : 400,
           ml: "10px",
           ":hover": {
             color: "fg.default",
@@ -199,20 +210,21 @@ function CountByStateNav() {
   );
 }
 
-function IssueListPaginated() {
-  const queryParams = useQueryParams();
+function IssueListPaginated({ filters }) {
+  const { labelName, state } = filters;
 
-  const after = queryParams.get("after");
-  const before = queryParams.get("before");
-  const q = queryParams.get("q");
+  const after = useQueryParams().get("after");
+  const before = useQueryParams().get("before");
+  const queryParams = useQueryParams().get("q");
 
-  const state = q;
+  const q = queryParams ? queryParams : "";
 
   const { data, error, loading } = useQuery(QUERY_VIEWER_ISSUES, {
     variables: {
       after: after,
       before: before,
-      states: state === "is:closed" ? "CLOSED" : "OPEN",
+      labels: labelName && labelName.length > 0 ? [...labelName] : null,
+      states: getStates(state),
     },
   });
 
@@ -255,7 +267,7 @@ function IssueListPaginated() {
           }}
         >
           <Box display="flex" flex="auto" minWidth="0">
-            <CountByStateNav state={state} />
+            <CountByStateNav labelName={labelName} state={getStates(state)} />
             <Box
               display="flex"
               flex="auto"
@@ -327,8 +339,8 @@ function IssueListPaginated() {
                   href={
                     "/issues?before=" +
                     pageInfo.startCursor +
-                    "&state=" +
-                    (state ?? "")
+                    "&q=" +
+                    encodeURIComponent(q)
                   }
                   rel="prev"
                   sx={{
@@ -374,8 +386,8 @@ function IssueListPaginated() {
                   href={
                     "/issues?after=" +
                     pageInfo.endCursor +
-                    "&state=" +
-                    (state ?? "")
+                    "&q=" +
+                    encodeURIComponent(q)
                   }
                   rel="next"
                   sx={{
@@ -466,6 +478,9 @@ function IssueList({ issues }) {
 }
 
 function IssueListItem({ issue }) {
+  const location = useLocation();
+  const q = useQueryParams().get("q");
+
   return (
     <Box
       sx={{
@@ -517,7 +532,15 @@ function IssueListItem({ issue }) {
           <LabelGroup>
             {issue.labels.map((label) => (
               <IssueLabelToken
+                as="a"
                 fillColor={`#${label.color}`}
+                href={
+                  location.pathname +
+                  "?" +
+                  defaultQueryString(q) +
+                  "+label%3A" +
+                  label.name
+                }
                 key={label.id}
                 text={label.name}
               />
@@ -643,6 +666,62 @@ function IssueListItem({ issue }) {
       </Box>
     </Box>
   );
+}
+
+// NOTE Duplicate code
+function defaultQueryString(q) {
+  if (q === null || q === "") {
+    return "q=is%3Aopen";
+  }
+
+  if (/is:closed/.test(q)) {
+    return "q=is%3Aclosed";
+  }
+
+  return "q=is%3Aopen";
+}
+
+function getStates(state) {
+  if (!state) {
+    return ["OPEN"];
+  }
+
+  let states = [];
+
+  if (state && state.length > 0) {
+    for (let i = 0; i < state.length; i++) {
+      if (state[i].toLowerCase() === "closed") {
+        states = [...states, "CLOSED"];
+      }
+
+      if (state[i].toLowerCase() === "open") {
+        states = [...states, "OPEN"];
+      }
+    }
+  }
+
+  return states;
+}
+
+function parseQueryParams(queryParams) {
+  if (!queryParams) {
+    return {};
+  }
+
+  const pairs = queryParams.split(" ");
+  const obj = {};
+
+  for (let i = 0; i < pairs.length; i++) {
+    const keyValue = pairs[i].split(":");
+
+    if (obj[keyValue[0]]) {
+      obj[keyValue[0]] = [...obj[keyValue[0]], keyValue[1]];
+    } else {
+      obj[keyValue[0]] = [keyValue[1]];
+    }
+  }
+
+  return obj;
 }
 
 function shouldDisplay(hasNextPage, hasPreviousPage) {

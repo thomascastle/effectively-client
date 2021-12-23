@@ -54,12 +54,12 @@ export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
 `;
 
 export const QUERY_COUNT_VIEWER_ISSUES_BY_STATES = gql`
-  query GetCountViewerIssuesByState {
+  query GetCountViewerIssuesByState($labels: [String!]) {
     viewer {
-      closed: issues(states: CLOSED) {
+      closed: issues(labels: $labels, states: CLOSED) {
         totalCount
       }
-      open: issues(states: OPEN) {
+      open: issues(labels: $labels, states: OPEN) {
         totalCount
       }
     }
@@ -301,11 +301,18 @@ export const QUERY_VIEWER_ISSUES = gql`
   query GetViewerIssues(
     $after: String
     $before: String
+    $labels: [String!]
     $states: [IssueState!]
   ) {
     viewer {
       id
-      issues(after: $after, before: $before, first: 10, states: $states) {
+      issues(
+        after: $after
+        before: $before
+        first: 10
+        labels: $labels
+        states: $states
+      ) {
         edges {
           node {
             assignees {

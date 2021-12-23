@@ -1,3 +1,4 @@
+import useQueryParams from "../hooks/QueryParams";
 import {
   CommentIcon,
   IssueClosedIcon,
@@ -16,8 +17,12 @@ import {
   Tooltip,
 } from "@primer/react";
 import { formatDistance } from "date-fns";
+import { useLocation } from "react-router-dom";
 
 export function IssueListItem({ issue, repositoryBaseUrl }) {
+  const location = useLocation();
+  const q = useQueryParams().get("q");
+
   return (
     <Box
       sx={{
@@ -59,7 +64,15 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
           <LabelGroup>
             {issue.labels.map((label) => (
               <IssueLabelToken
+                as="a"
                 fillColor={`#${label.color}`}
+                href={
+                  location.pathname +
+                  "?" +
+                  defaultQueryString(q) +
+                  "+label%3A" +
+                  label.name
+                }
                 key={label.id}
                 text={label.name}
               />
@@ -185,4 +198,16 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
       </Box>
     </Box>
   );
+}
+
+function defaultQueryString(q) {
+  if (q === null || q === "") {
+    return "q=is%3Aopen";
+  }
+
+  if (/is:closed/.test(q)) {
+    return "q=is%3Aclosed";
+  }
+
+  return "q=is%3Aopen";
 }

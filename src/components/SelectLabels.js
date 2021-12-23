@@ -96,11 +96,13 @@ export function SelectLabels({ initial, onChange, onFinish }) {
       </SelectMenu>
       {selectedLabels.length > 0 ? (
         <LabelGroup>
-          {selectedLabels.map((sl) => (
+          {selectedLabels.map((l) => (
             <IssueLabelToken
-              fillColor={`#${sl.color}`}
-              key={sl.id}
-              text={sl.name}
+              as="a"
+              fillColor={`#${l.color}`}
+              href={"/" + login + "/" + repositoryName + "/labels/" + l.name}
+              key={l.id}
+              text={l.name}
             />
           ))}
         </LabelGroup>
