@@ -17,10 +17,8 @@ import {
   Tooltip,
 } from "@primer/react";
 import { formatDistance } from "date-fns";
-import { useLocation } from "react-router-dom";
 
 export function IssueListItem({ issue, repositoryBaseUrl }) {
-  const location = useLocation();
   const q = useQueryParams().get("q");
 
   return (
@@ -67,7 +65,8 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
                 as="a"
                 fillColor={`#${label.color}`}
                 href={
-                  location.pathname +
+                  repositoryBaseUrl +
+                  "/issues" +
                   "?" +
                   defaultQueryString(q) +
                   "+label%3A" +
