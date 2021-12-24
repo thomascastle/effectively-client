@@ -21,6 +21,8 @@ export function RepositoryIssueIndexPage() {
         filters={{
           labelName: searchParams["label"]
             ? [...searchParams["label"], labelName].filter((p) => p)
+            : labelName
+            ? [labelName]
             : null,
           state: searchParams["is"]
             ? [...searchParams["is"]].filter((p) => p)
