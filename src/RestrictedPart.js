@@ -1,5 +1,6 @@
 import { DashboardPage } from "./pages/DashboardPage";
 import { IssueIndexPage } from "./pages/IssueIndexPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import { RepositoryIssueCreatePage } from "./pages/RepositoryIssueCreatePage";
 import { RepositoryIssueDetailsPage } from "./pages/RepositoryIssueDetailsPage";
 import { RepositoryIssueIndexPage } from "./pages/RepositoryIssueIndexPage";
@@ -21,6 +22,9 @@ export function RestrictedPart() {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          <DashboardPage />
+        </Route>
         <Route path="/:login/:repositoryName/issues/new">
           <RepositoryIssueCreatePage />
         </Route>
@@ -64,8 +68,8 @@ export function RestrictedPart() {
         <Route path="/new">
           <RepositoryCreatePage />
         </Route>
-        <Route path="/">
-          <DashboardPage />
+        <Route path="*">
+          <NotFoundPage />
         </Route>
       </Switch>
     </Router>
