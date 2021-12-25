@@ -190,7 +190,11 @@ export function MilestoneListItem({ milestone }) {
           py: "15px",
         }}
       >
-        <ProgressBar progress={0} sx={{ mb: 2, mt: 1 }} />
+        <ProgressBar
+          barSize="large"
+          progress={milestone.progressPercentage}
+          sx={{ mb: 2, mt: 1 }}
+        />
         <Box>
           <Box
             sx={{
@@ -201,7 +205,7 @@ export function MilestoneListItem({ milestone }) {
               whiteSpace: "nowrap",
             }}
           >
-            <Text>0%</Text>
+            <Text>{Math.round(milestone.progressPercentage)}%</Text>
             <Text sx={{ fontWeight: 400 }}> complete</Text>
           </Box>
           <Box

@@ -125,7 +125,10 @@ export function SelectMilestone({ initial, onChange }) {
       </SelectMenu>
       {milestone ? (
         <>
-          <ProgressBar progress={40} sx={{ mb: 2, mt: 1 }} />
+          <ProgressBar
+            progress={milestone.progressPercentage}
+            sx={{ mb: 2, mt: 1 }}
+          />
           <Link
             href="/somewhere"
             sx={{

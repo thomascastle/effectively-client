@@ -20,7 +20,10 @@ export function MilestoneList({ milestones }) {
     >
       {milestones.length > 0 ? (
         milestones.map((milestone) => (
-          <MilestoneListItem key={milestone.id} milestone={milestone} />
+          <MilestoneListItem
+            key={milestone.node.id}
+            milestone={milestone.node}
+          />
         ))
       ) : (
         <ConditionalBlankslate />

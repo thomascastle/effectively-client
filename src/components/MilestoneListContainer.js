@@ -50,7 +50,7 @@ export function MilestoneListContainer({ after, before, filter }) {
     );
   }
 
-  const { nodes, pageInfo } = data.repository.milestones;
+  const { edges, pageInfo } = data.repository.milestones;
 
   return (
     <Box className="list-container">
@@ -115,7 +115,7 @@ export function MilestoneListContainer({ after, before, filter }) {
             </SelectMenu.Modal>
           </SelectMenu>
         </Box>
-        <MilestoneList milestones={nodes} />
+        <MilestoneList milestones={edges} />
       </Box>
       <Box className="pagination">
         {shouldDisplay(pageInfo.hasNextPage, pageInfo.hasPreviousPage) && (

@@ -31,7 +31,11 @@ export function MilestoneDetails({ milestone }) {
           {milestone.title}
         </Heading>
         <Box sx={{ width: "75%" }}>
-          <ProgressBar barSize="large" sx={{ mb: 2, mt: 1, width: "420px" }} />
+          <ProgressBar
+            barSize="large"
+            progress={milestone.progressPercentage}
+            sx={{ mb: 2, mt: 1, width: "420px" }}
+          />
           <Text as="span" sx={{ color: "fg.default", mr: 3 }}>
             {milestone.dueOn ? (
               <>
@@ -45,7 +49,8 @@ export function MilestoneDetails({ milestone }) {
             )}
           </Text>
           <Text as="span" sx={{ color: "fg.default" }}>
-            <strong>0%</strong> complete
+            <strong>{Math.round(milestone.progressPercentage)}%</strong>{" "}
+            complete
           </Text>
           <Box sx={{ color: "fg.muted", mt: "5px" }}>
             <Text>{milestone.description}</Text>

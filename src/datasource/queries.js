@@ -98,6 +98,7 @@ export const QUERY_REPOSITORY_ISSUE = gql`
         milestone {
           dueOn
           id
+          progressPercentage
           title
         }
         number
@@ -229,6 +230,7 @@ export const QUERY_REPOSITORY_MILESTONE = gql`
         description
         dueOn
         id
+        progressPercentage
         title
       }
     }
@@ -246,16 +248,19 @@ export const QUERY_REPOSITORY_MILESTONES = gql`
     repository(name: $name, owner: $owner) {
       id
       milestones(after: $after, before: $before, states: $milestonesStates) {
-        nodes {
-          closed
-          closedAt
-          createdAt
-          description
-          dueOn
-          id
-          number
-          title
-          updatedAt
+        edges {
+          node {
+            closed
+            closedAt
+            createdAt
+            description
+            dueOn
+            id
+            number
+            progressPercentage
+            title
+            updatedAt
+          }
         }
         pageInfo {
           endCursor
@@ -278,6 +283,7 @@ export const QUERY_REPOSITORY_MILESTONES_AVAILABLE_TO_SET = gql`
           node {
             dueOn
             id
+            progressPercentage
             title
           }
         }
