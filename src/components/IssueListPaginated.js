@@ -328,7 +328,15 @@ function CountByStateNav({ labelName, state }) {
   return (
     <Box flex="auto">
       <Link
-        href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aopen"}
+        href={
+          "/" +
+          login +
+          "/" +
+          repositoryName +
+          "/issues?q=" +
+          filterLabel(labelName) +
+          "is%3Aopen"
+        }
         sx={{
           color: !state || state.includes("OPEN") ? "fg.default" : "fg.muted",
           fontWeight: !state || state.includes("OPEN") ? 600 : 400,
@@ -343,7 +351,15 @@ function CountByStateNav({ labelName, state }) {
         </span>
       </Link>
       <Link
-        href={"/" + login + "/" + repositoryName + "/issues?q=is%3Aclosed"}
+        href={
+          "/" +
+          login +
+          "/" +
+          repositoryName +
+          "/issues?q=" +
+          filterLabel(labelName) +
+          "is%3Aclosed"
+        }
         sx={{
           color: state.includes("CLOSED") ? "fg.default" : "fg.muted",
           fontWeight: state.includes("CLOSED") ? 600 : 400,
@@ -360,6 +376,14 @@ function CountByStateNav({ labelName, state }) {
       </Link>
     </Box>
   );
+}
+
+function filterLabel(labelNames) {
+  if (labelNames && labelNames.length > 0) {
+    return "label%3A" + labelNames[0] + "+";
+  }
+
+  return "";
 }
 
 function getStates(state) {
