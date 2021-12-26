@@ -53,6 +53,25 @@ export const QUERY_COUNT_MILESTONES_BY_STATE = gql`
   }
 `;
 
+export const QUERY_COUNT_MILESTONE_ISSUES_BY_STATES = gql`
+  query GetCountMilestoneIssuesByStates(
+    $name: String!
+    $number: Int!
+    $owner: String!
+  ) {
+    repository(name: $name, owner: $owner) {
+      milestone(number: $number) {
+        closedIssues: issues(states: CLOSED) {
+          totalCount
+        }
+        openIssues: issues(states: OPEN) {
+          totalCount
+        }
+      }
+    }
+  }
+`;
+
 export const QUERY_COUNT_VIEWER_ISSUES_BY_STATES = gql`
   query GetCountViewerIssuesByState($labels: [String!]) {
     viewer {
@@ -224,12 +243,48 @@ export const QUERY_REPOSITORY_MILESTONE = gql`
     $milestoneNumber: Int!
     $name: String!
     $owner: String!
+    $states: [IssueState!]
   ) {
     repository(name: $name, owner: $owner) {
       milestone(number: $milestoneNumber) {
         description
         dueOn
         id
+        issues(first: 50, states: $states) {
+          edges {
+            node {
+              closed
+              closedAt
+              assignees {
+                id
+                login
+              }
+              createdAt
+              createdBy {
+                login
+              }
+              id
+              labels {
+                color
+                id
+                name
+              }
+              milestone {
+                id
+                number
+                title
+              }
+              number
+              title
+            }
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
+        }
         progressPercentage
         title
       }
