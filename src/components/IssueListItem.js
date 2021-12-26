@@ -86,7 +86,13 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
             <span className="closed-at">
               #{issue.number} by{" "}
               <Link
-                href="/issues?q=author%Athomascastle"
+                href={
+                  repositoryBaseUrl +
+                  "/issues?" +
+                  defaultQueryString(q) +
+                  "+author%3A" +
+                  issue.createdBy.login
+                }
                 sx={{
                   color: "inherit",
                   ":hover": {
@@ -120,7 +126,13 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
               </time>{" "}
               by{" "}
               <Link
-                href="/issues?q=author%Athomascastle"
+                href={
+                  repositoryBaseUrl +
+                  "/issues?" +
+                  defaultQueryString(q) +
+                  "+author%3A" +
+                  issue.createdBy.login
+                }
                 sx={{
                   color: "inherit",
                   ":hover": {
@@ -139,7 +151,9 @@ export function IssueListItem({ issue, repositoryBaseUrl }) {
               sx={{ display: ["none", null, "inline"], maxWidth: 240, ml: 2 }}
             >
               <Link
-                href={"/milestones/" + issue.milestone.number}
+                href={
+                  repositoryBaseUrl + "/milestones/" + issue.milestone.number
+                }
                 sx={{
                   color: "fg.muted",
                   ":hover": {
