@@ -256,6 +256,12 @@ export const QUERY_REPOSITORY_MILESTONES = gql`
             description
             dueOn
             id
+            closedIssues: issues(first: 100, states: CLOSED) {
+              totalCount
+            }
+            openIssues: issues(first: 100, states: OPEN) {
+              totalCount
+            }
             number
             progressPercentage
             title

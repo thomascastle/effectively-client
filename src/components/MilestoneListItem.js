@@ -218,7 +218,7 @@ export function MilestoneListItem({ milestone }) {
               ml: 3,
             }}
           >
-            <Text>0</Text>
+            <Text>{milestone.openIssues.totalCount}</Text>
             <Text sx={{ fontWeight: 400 }}> open</Text>
           </Box>
           <Box
@@ -231,7 +231,7 @@ export function MilestoneListItem({ milestone }) {
               ml: 3,
             }}
           >
-            <Text>0</Text>
+            <Text>{milestone.closedIssues.totalCount}</Text>
             <Text sx={{ fontWeight: 400 }}> closed</Text>
           </Box>
         </Box>

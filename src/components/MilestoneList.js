@@ -55,14 +55,14 @@ function ConditionalBlankslate() {
   return countClosed === 0 && countOpen === 0 ? (
     <Blankslate
       icon={MilestoneIcon}
-      title="You haven’t created any Milestones."
+      title="You haven't created any Milestones."
     >
       Use Milestones to create collections of Issues for a particular or
       project. Click on the "New milestone" button above to create one.
     </Blankslate>
   ) : (
-    <Blankslate icon={MilestoneIcon} title="We couldn’t find anything!">
-      There aren’t any milestones that match. Give it another shot above.
+    <Blankslate icon={MilestoneIcon} title="We couldn't find anything!">
+      There aren't any milestones that match. Give it another shot above.
     </Blankslate>
   );
 }
