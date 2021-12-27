@@ -73,12 +73,15 @@ export const QUERY_COUNT_MILESTONE_ISSUES_BY_STATES = gql`
 `;
 
 export const QUERY_COUNT_VIEWER_ISSUES_BY_STATES = gql`
-  query GetCountViewerIssuesByState($labels: [String!]) {
+  query GetCountViewerIssuesByState(
+    $filterBy: IssueFilters
+    $labels: [String!]
+  ) {
     viewer {
-      closed: issues(labels: $labels, states: CLOSED) {
+      closed: issues(filterBy: $filterBy, labels: $labels, states: CLOSED) {
         totalCount
       }
-      open: issues(labels: $labels, states: OPEN) {
+      open: issues(filterBy: $filterBy, labels: $labels, states: OPEN) {
         totalCount
       }
     }
@@ -368,6 +371,7 @@ export const QUERY_VIEWER_ISSUES = gql`
   query GetViewerIssues(
     $after: String
     $before: String
+    $filterBy: IssueFilters
     $labels: [String!]
     $states: [IssueState!]
   ) {
@@ -376,6 +380,7 @@ export const QUERY_VIEWER_ISSUES = gql`
       issues(
         after: $after
         before: $before
+        filterBy: $filterBy
         first: 10
         labels: $labels
         states: $states

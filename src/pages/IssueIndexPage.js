@@ -1,5 +1,6 @@
 import { AppBar } from "../components/AppBar";
 import { Blankslate } from "../components/Blankslate";
+import { useUser } from "../context/user";
 import {
   QUERY_COUNT_VIEWER_ISSUES_BY_STATES,
   QUERY_VIEWER_ISSUES,
@@ -36,6 +37,7 @@ import { formatDistance } from "date-fns";
 import { useLocation, useParams } from "react-router-dom";
 
 export function IssueIndexPage() {
+  const location = useLocation();
   const q = useQueryParams().get("q");
   const searchParams = parseQueryParams(q);
 
@@ -77,11 +79,28 @@ export function IssueIndexPage() {
             >
               <SubNav>
                 <SubNav.Links>
-                  <SubNav.Link href="/" selected>
+                  <SubNav.Link
+                    href="/issues"
+                    selected={location.pathname === "/issues" ? true : false}
+                  >
                     Created
                   </SubNav.Link>
-                  <SubNav.Link href="/">Assigned</SubNav.Link>
-                  <SubNav.Link href="/">Mentioned</SubNav.Link>
+                  <SubNav.Link
+                    href="/issues/assigned"
+                    selected={
+                      location.pathname.slice(-8) === "assigned" ? true : false
+                    }
+                  >
+                    Assigned
+                  </SubNav.Link>
+                  <SubNav.Link
+                    href="/issues/mentioned"
+                    selected={
+                      location.pathname.slice(-9) === "mentioned" ? true : false
+                    }
+                  >
+                    Mentioned
+                  </SubNav.Link>
                 </SubNav.Links>
               </SubNav>
               <Box sx={{ flex: "auto", minWidth: 0 }}>
@@ -153,10 +172,19 @@ export function IssueIndexPage() {
 }
 
 function CountByStateNav({ labelName, state }) {
+  const location = useLocation();
+  const { user } = useUser();
   const { data, error, loading } = useQuery(
     QUERY_COUNT_VIEWER_ISSUES_BY_STATES,
     {
       variables: {
+        filterBy: {
+          assignee:
+            location.pathname.slice(-8) === "assigned" ? user.login : null,
+          createdBy: location.pathname === "/issues" ? user.login : null,
+          mentioned:
+            location.pathname.slice(-9) === "mentioned" ? user.login : null,
+        },
         labels: labelName && labelName.length > 0 ? [...labelName] : null,
       },
     }
@@ -176,7 +204,7 @@ function CountByStateNav({ labelName, state }) {
   return (
     <Box flex="auto">
       <Link
-        href="/issues?q=is%3Aopen"
+        href={location.pathname + "?q=is%3Aopen"}
         sx={{
           color: !state || state.includes("OPEN") ? "fg.default" : "fg.muted",
           fontWeight: !state || state.includes("OPEN") ? 600 : 400,
@@ -191,7 +219,7 @@ function CountByStateNav({ labelName, state }) {
         </span>
       </Link>
       <Link
-        href="/issues?q=is%3Aclosed"
+        href={location.pathname + "?q=is%3Aclosed"}
         sx={{
           color: state.includes("CLOSED") ? "fg.default" : "fg.muted",
           fontWeight: state.includes("CLOSED") ? 600 : 400,
@@ -213,9 +241,11 @@ function CountByStateNav({ labelName, state }) {
 function IssueListPaginated({ filters }) {
   const { labelName, state } = filters;
 
+  const location = useLocation();
   const after = useQueryParams().get("after");
   const before = useQueryParams().get("before");
   const queryParams = useQueryParams().get("q");
+  const { user } = useUser();
 
   const q = queryParams ? queryParams : "";
 
@@ -223,6 +253,13 @@ function IssueListPaginated({ filters }) {
     variables: {
       after: after,
       before: before,
+      filterBy: {
+        assignee:
+          location.pathname.slice(-8) === "assigned" ? user.login : null,
+        createdBy: location.pathname === "/issues" ? user.login : null,
+        mentioned:
+          location.pathname.slice(-9) === "mentioned" ? user.login : null,
+      },
       labels: labelName && labelName.length > 0 ? [...labelName] : null,
       states: getStates(state),
     },

@@ -25,6 +25,18 @@ export function RestrictedPart() {
         <Route exact path="/">
           <DashboardPage />
         </Route>
+        <Route exact path="/issues">
+          <IssueIndexPage />
+        </Route>
+        <Route exact path="/new">
+          <RepositoryCreatePage />
+        </Route>
+        <Route path="/issues/assigned">
+          <IssueIndexPage />
+        </Route>
+        <Route path="/issues/mentioned">
+          <IssueIndexPage />
+        </Route>
         <Route path="/:login/:repositoryName/issues/new">
           <RepositoryIssueCreatePage />
         </Route>
@@ -62,12 +74,6 @@ export function RestrictedPart() {
           from="/:login/:repositoryName"
           to="/:login/:repositoryName/issues"
         />
-        <Route path="/issues">
-          <IssueIndexPage />
-        </Route>
-        <Route path="/new">
-          <RepositoryCreatePage />
-        </Route>
         <Route path="*">
           <NotFoundPage />
         </Route>
