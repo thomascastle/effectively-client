@@ -367,6 +367,42 @@ export const QUERY_REPOSITORY_VISIBILITY = gql`
   }
 `;
 
+export const QUERY_USER_MINIMUM_PROFILE = gql`
+  query GetUserMinimumProfile($login: String!) {
+    user(login: $login) {
+      login
+      name
+    }
+  }
+`;
+
+export const QUERY_USER_POPULAR_REPOSITORIES = gql`
+  query GetUserPopularRepositories($login: String!) {
+    user(login: $login) {
+      repositories {
+        description
+        id
+        name
+        visibility
+      }
+    }
+  }
+`;
+
+export const QUERY_USER_REPOSITORIES = gql`
+  query GetUserRepositories($login: String!) {
+    user(login: $login) {
+      repositories {
+        description
+        id
+        name
+        updatedAt
+        visibility
+      }
+    }
+  }
+`;
+
 export const QUERY_VIEWER_ISSUES = gql`
   query GetViewerIssues(
     $after: String

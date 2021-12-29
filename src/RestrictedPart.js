@@ -1,6 +1,7 @@
 import { DashboardPage } from "./pages/DashboardPage";
 import { IssueIndexPage } from "./pages/IssueIndexPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { RepositoryIssueCreatePage } from "./pages/RepositoryIssueCreatePage";
 import { RepositoryIssueDetailsPage } from "./pages/RepositoryIssueDetailsPage";
 import { RepositoryIssueIndexPage } from "./pages/RepositoryIssueIndexPage";
@@ -74,6 +75,9 @@ export function RestrictedPart() {
           from="/:login/:repositoryName"
           to="/:login/:repositoryName/issues"
         />
+        <Route path="/:login">
+          <ProfilePage />
+        </Route>
         <Route path="*">
           <NotFoundPage />
         </Route>
