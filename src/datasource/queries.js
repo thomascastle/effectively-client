@@ -377,27 +377,35 @@ export const QUERY_USER_MINIMUM_PROFILE = gql`
 `;
 
 export const QUERY_USER_POPULAR_REPOSITORIES = gql`
-  query GetUserPopularRepositories($login: String!) {
+  query GetUserPopularRepositories($login: String!, $orderBy: RepositoryOrder) {
     user(login: $login) {
-      repositories {
-        description
-        id
-        name
-        visibility
+      repositories(orderBy: $orderBy) {
+        edges {
+          node {
+            description
+            id
+            name
+            visibility
+          }
+        }
       }
     }
   }
 `;
 
 export const QUERY_USER_REPOSITORIES = gql`
-  query GetUserRepositories($login: String!) {
+  query GetUserRepositories($login: String!, $orderBy: RepositoryOrder) {
     user(login: $login) {
-      repositories {
-        description
-        id
-        name
-        updatedAt
-        visibility
+      repositories(orderBy: $orderBy) {
+        edges {
+          node {
+            description
+            id
+            name
+            updatedAt
+            visibility
+          }
+        }
       }
     }
   }
@@ -469,18 +477,22 @@ export const QUERY_VIEWER_ISSUES = gql`
 `;
 
 export const QUERY_VIEWER_REPOSITORIES = gql`
-  query GetRepositories {
+  query GetRepositories($orderBy: RepositoryOrder) {
     viewer {
       login
-      repositories {
-        id
-        isPrivate
-        name
-        nameWithOwner
-        owner {
-          login
+      repositories(orderBy: $orderBy) {
+        edges {
+          node {
+            id
+            isPrivate
+            name
+            nameWithOwner
+            owner {
+              login
+            }
+            visibility
+          }
         }
-        visibility
       }
     }
   }

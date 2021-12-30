@@ -352,6 +352,10 @@ function Popular() {
   const { data, error, loading } = useQuery(QUERY_USER_POPULAR_REPOSITORIES, {
     variables: {
       login,
+      orderBy: {
+        direction: "DESC",
+        field: "CREATED_AT",
+      },
     },
   });
 
@@ -363,7 +367,7 @@ function Popular() {
     return <div>Error loading data!</div>;
   }
 
-  const { repositories } = data.user;
+  const { edges } = data.user.repositories;
 
   return (
     <Box
@@ -376,8 +380,8 @@ function Popular() {
         mx: -2,
       }}
     >
-      {repositories.map((r) => (
-        <PopularRepositoryListItem key={r.id} repository={r} />
+      {edges.map((r) => (
+        <PopularRepositoryListItem key={r.node.id} repository={r.node} />
       ))}
     </Box>
   );
@@ -468,6 +472,10 @@ function RepositoryListContainer() {
   const { data, error, loading } = useQuery(QUERY_USER_REPOSITORIES, {
     variables: {
       login,
+      orderBy: {
+        direction: "DESC",
+        field: "UPDATED_AT",
+      },
     },
   });
 
@@ -479,7 +487,7 @@ function RepositoryListContainer() {
     return <div>Error loading data!</div>;
   }
 
-  const { repositories } = data.user;
+  const { edges } = data.user.repositories;
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -621,7 +629,7 @@ function RepositoryListContainer() {
         </Box>
       </Box>
       <Box>
-        <RepositoryList list={repositories} />
+        <RepositoryList list={edges} />
       </Box>
     </Box>
   );
@@ -631,7 +639,7 @@ function RepositoryList({ list }) {
   return (
     <Box as="ul">
       {list.map((r) => (
-        <RepositoryListItem key={r.id} repository={r} />
+        <RepositoryListItem key={r.node.id} repository={r.node} />
       ))}
     </Box>
   );

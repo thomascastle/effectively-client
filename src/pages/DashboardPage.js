@@ -147,7 +147,14 @@ export function DashboardPage() {
 }
 
 function Repositories() {
-  const { data, error, loading } = useQuery(QUERY_VIEWER_REPOSITORIES);
+  const { data, error, loading } = useQuery(QUERY_VIEWER_REPOSITORIES, {
+    variables: {
+      orderBy: {
+        direction: "DESC",
+        field: "CREATED_AT",
+      },
+    },
+  });
 
   return <RepositoryList data={data} error={error} loading={loading} />;
 }
@@ -161,12 +168,12 @@ function RepositoryList({ data, error, loading }) {
     return <div>{error.message}</div>;
   }
 
-  const { viewer } = data;
+  const { edges } = data.viewer.repositories;
 
   return (
     <ul style={{ listStyle: "none" }}>
-      {viewer.repositories.map((repo) => (
-        <RepositoryListItem key={repo.id} repo={repo} />
+      {edges.map((repo) => (
+        <RepositoryListItem key={repo.node.id} repo={repo.node} />
       ))}
     </ul>
   );
