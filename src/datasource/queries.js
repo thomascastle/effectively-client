@@ -250,6 +250,8 @@ export const QUERY_REPOSITORY_MILESTONE = gql`
   ) {
     repository(name: $name, owner: $owner) {
       milestone(number: $milestoneNumber) {
+        closed
+        closedAt
         description
         dueOn
         id

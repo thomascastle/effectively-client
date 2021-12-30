@@ -1,3 +1,7 @@
+import {
+  MUTATION_CLOSE_MILESTONE,
+  MUTATION_REOPEN_MILESTONE,
+} from "../datasource/mutations";
 import { gql, useMutation } from "@apollo/client";
 import { CalendarIcon, ClockIcon } from "@primer/octicons-react";
 import {
@@ -15,27 +19,9 @@ import { format, formatDistance } from "date-fns";
 import * as React from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-export const MILESTONES_CLOSE_MUTATION = gql`
-  mutation ($closeMilestoneId: ID!) {
-    closeMilestone(id: $closeMilestoneId) {
-      message
-      success
-    }
-  }
-`;
-
 export const MILESTONES_DELETE_MUTATION = gql`
   mutation DeleteMilestone($deleteMilestoneId: ID!) {
     deleteMilestone(id: $deleteMilestoneId) {
-      message
-      success
-    }
-  }
-`;
-
-export const MILESTONES_REOPEN_MUTATION = gql`
-  mutation ($reopenMilestoneId: ID!) {
-    reopenMilestone(id: $reopenMilestoneId) {
       message
       success
     }
@@ -47,8 +33,8 @@ export function MilestoneListItem({ milestone }) {
   const { login, repositoryName } = useParams();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
-  const [closeMilestone] = useMutation(MILESTONES_CLOSE_MUTATION, {
-    refetchQueries: ["GetRepositoryMilestones"],
+  const [closeMilestone] = useMutation(MUTATION_CLOSE_MILESTONE, {
+    refetchQueries: ["GetRepositoryMilestones", "GetCountMilestonesByState"],
     variables: {
       closeMilestoneId: milestone.id,
     },
@@ -61,7 +47,7 @@ export function MilestoneListItem({ milestone }) {
     },
   });
 
-  const [reopenMilestone] = useMutation(MILESTONES_REOPEN_MUTATION, {
+  const [reopenMilestone] = useMutation(MUTATION_REOPEN_MILESTONE, {
     refetchQueries: ["GetRepositoryMilestones"],
     variables: {
       reopenMilestoneId: milestone.id,
@@ -72,10 +58,6 @@ export function MilestoneListItem({ milestone }) {
     e.preventDefault();
 
     await closeMilestone();
-
-    history.push(
-      "/" + login + "/" + repositoryName + "/milestones?state=closed"
-    );
   };
 
   const handleDeleted = async () => {

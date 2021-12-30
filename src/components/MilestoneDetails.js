@@ -44,15 +44,25 @@ export function MilestoneDetails({ milestone }) {
             sx={{ mb: 2, mt: 1, width: "420px" }}
           />
           <Text as="span" sx={{ color: "fg.default", mr: 3 }}>
-            {milestone.dueOn ? (
-              <>
-                <StyledOcticon icon={CalendarIcon} /> Due on{" "}
-                <span>
-                  {format(new Date(milestone.dueOn), "MMMM dd, yyyy")}
-                </span>
-              </>
+            {milestone.closed ? (
+              <Text sx={{ color: "fg.default", mr: 3 }}>
+                <strong>Closed </strong>
+                <time
+                  dateTime={milestone.closedAt}
+                  title={new Date(milestone.closedAt).toString()}
+                >
+                  {formatDistance(new Date(milestone.closedAt), new Date(), {
+                    addSuffix: true,
+                  })}
+                </time>
+              </Text>
+            ) : milestone.dueOn ? (
+              <Text sx={{ color: "fg.default", mr: 3 }}>
+                <StyledOcticon icon={CalendarIcon} /> Due by{" "}
+                {format(new Date(milestone.dueOn), "MMMM dd, yyyy")}
+              </Text>
             ) : (
-              "No due date"
+              <Text sx={{ color: "fg.default", mr: 3 }}>No due date</Text>
             )}
           </Text>
           <Text as="span" sx={{ color: "fg.default" }}>
