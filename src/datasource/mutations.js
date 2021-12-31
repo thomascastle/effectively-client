@@ -1,7 +1,19 @@
 import { gql } from "@apollo/client";
 
+export const MUTATION_CLOSE_ISSUE = gql`
+  mutation CloseIssue($closeIssueId: ID!) {
+    closeIssue(id: $closeIssueId) {
+      issue {
+        closed
+        closedAt
+        id
+      }
+    }
+  }
+`;
+
 export const MUTATION_CLOSE_MILESTONE = gql`
-  mutation ($closeMilestoneId: ID!) {
+  mutation CloseMilestone($closeMilestoneId: ID!) {
     closeMilestone(id: $closeMilestoneId) {
       message
       success
@@ -57,8 +69,20 @@ export const MUTATION_CREATE_REPOSITORY = gql`
   }
 `;
 
+export const MUTATION_REOPEN_ISSUE = gql`
+  mutation ReopenIssue($reopenIssueId: ID!) {
+    reopenIssue(id: $reopenIssueId) {
+      issue {
+        closed
+        closedAt
+        id
+      }
+    }
+  }
+`;
+
 export const MUTATION_REOPEN_MILESTONE = gql`
-  mutation ($reopenMilestoneId: ID!) {
+  mutation ReopenMilestone($reopenMilestoneId: ID!) {
     reopenMilestone(id: $reopenMilestoneId) {
       message
       success

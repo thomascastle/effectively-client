@@ -1,4 +1,8 @@
-import { MUTATION_UPDATE_ISSUE } from "../datasource/mutations";
+import {
+  MUTATION_CLOSE_ISSUE,
+  MUTATION_REOPEN_ISSUE,
+  MUTATION_UPDATE_ISSUE,
+} from "../datasource/mutations";
 import { SelectAssignees } from "./SelectAssignees";
 import { SelectLabels } from "./SelectLabels";
 import { SelectMilestone } from "./SelectMilestone";
@@ -6,6 +10,7 @@ import { gql, useMutation } from "@apollo/client";
 import {
   CircleSlashIcon,
   GearIcon,
+  IssueClosedIcon,
   KebabHorizontalIcon,
   SmileyIcon,
   TrashIcon,
@@ -52,6 +57,20 @@ export function IssueDetails({ issue, repositoryId }) {
   const [milestone, setMilestone] = React.useState(
     issue.milestone ? issue.milestone.id : null
   );
+
+  const [closeIssue] = useMutation(MUTATION_CLOSE_ISSUE, {
+    refetchQueries: ["FindRepositoryIssue"],
+    variables: {
+      closeIssueId: issue.id,
+    },
+  });
+
+  const [reopenIssue] = useMutation(MUTATION_REOPEN_ISSUE, {
+    refetchQueries: ["FindRepositoryIssue"],
+    variables: {
+      reopenIssueId: issue.id,
+    },
+  });
 
   const [updateIssueAssignees] = useMutation(MUTATION_UPDATE_ISSUE, {
     variables: {
@@ -149,6 +168,14 @@ export function IssueDetails({ issue, repositoryId }) {
     await updateIssueTitle();
 
     setEditing(false);
+  };
+
+  const handleIssueClosing = async () => {
+    await closeIssue();
+  };
+
+  const handleIssueReopening = async () => {
+    await reopenIssue();
   };
 
   const handleIssueDeleted = async () => {
@@ -468,6 +495,23 @@ export function IssueDetails({ issue, repositoryId }) {
                         </Text>
                       </Box>
                     </Box>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}
+                  >
+                    {issue.state === "OPEN" ? (
+                      <Button onClick={handleIssueClosing}>
+                        <StyledOcticon
+                          icon={IssueClosedIcon}
+                          sx={{ color: "done.fg" }}
+                        />{" "}
+                        Close issue
+                      </Button>
+                    ) : (
+                      <Button onClick={handleIssueReopening}>
+                        Reopen issue
+                      </Button>
+                    )}
                   </Box>
                 </Box>
               </Box>
